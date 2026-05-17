@@ -32,6 +32,19 @@
     html { scroll-behavior: smooth; }
     body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; transition: background 0.35s, color 0.35s; }
     nav { position: sticky; top: 0; z-index: 200; display: flex; align-items: center; justify-content: space-between; padding: 0 48px; height: 62px; background: var(--nav-bg); border-bottom: 1px solid var(--border); backdrop-filter: blur(20px); }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 6px; background: none; border: none; }
+    .hamburger span { display: block; width: 22px; height: 2px; background: var(--text); border-radius: 2px; transition: all 0.3s; }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    .mobile-menu { display: none; position: fixed; top: 62px; left: 0; right: 0; bottom: 0; background: var(--bg); z-index: 199; flex-direction: column; padding: 24px; gap: 8px; overflow-y: auto; }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a { font-size: 18px; font-weight: 600; color: var(--text); padding: 14px 0; border-bottom: 1px solid var(--border); cursor: pointer; text-decoration: none; }
+    .mobile-menu .mob-btns { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
+    .mobile-menu .mob-btns button { padding: 14px; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+    .mobile-menu .mob-mode { background: var(--bg3); border: 1px solid var(--border2); color: var(--text2); }
+    .mobile-menu .mob-giris { background: transparent; border: 1px solid var(--border2); color: var(--text2); }
+    .mobile-menu .mob-ilan { background: var(--blue); border: none; color: #fff; }
     .logo { cursor: pointer; display: flex; flex-direction: column; line-height: 1; text-decoration: none; }
     .logo-main { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 800; letter-spacing: -1px; color: var(--text); display: flex; align-items: flex-end; gap: 0; }
     .logo-main em { color: var(--blue); font-style: normal; }
@@ -334,6 +347,8 @@
     @media (max-width: 768px) {
       nav { padding: 0 20px; }
       .nav-links { display: none; }
+      .nav-right { display: none; }
+      .hamburger { display: flex; }
       .hero { padding: 60px 20px 44px; }
       .hero h1 { font-size: 36px; }
       .main { padding: 32px 20px; }
@@ -345,13 +360,20 @@
       .stats-grid { grid-template-columns: repeat(2,1fr); }
       .ilan-grid { grid-template-columns: 1fr; }
       .profile-hero { flex-direction: column; }
+      .stats-bar { flex-wrap: wrap; }
+      .stat-item { min-width: 50%; }
+      .ilan-page { padding: 24px 16px 60px; }
+      .teklifler-page { padding: 24px 16px 60px; }
+      .profil-page { padding: 24px 16px 60px; }
+      .frow { grid-template-columns: 1fr; }
+      .cat-grid { grid-template-columns: repeat(2,1fr); }
     }
   </style>
 </head>
 <body>
 
 <nav>
-  <div class="logo" onclick="showPage('home')">
+  <div class="logo" onclick="showPage('home');closeMobileMenu()">
     <div class="logo-main">arı<em>yorum</em></div>
     <div class="logo-underline"><span class="u1"></span><span class="u2"></span></div>
     <div class="logo-slogan">Sen ara, teklifler gelsin</div>
@@ -367,7 +389,22 @@
     <button class="btn-outline" onclick="showPage('profil')">Giriş yap</button>
     <button class="btn-primary" onclick="showPage('ilan')">+ İlan ver</button>
   </div>
+  <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+
+<div class="mobile-menu" id="mobile-menu">
+  <a onclick="showPage('home');closeMobileMenu()">İlanlar</a>
+  <a onclick="showPage('nasil');closeMobileMenu()">Nasıl çalışır?</a>
+  <a onclick="showPage('nasil');closeMobileMenu()">Güvenlik</a>
+  <a onclick="showPage('profil');closeMobileMenu()">Profilim</a>
+  <div class="mob-btns">
+    <button class="mob-btns mob-mode" onclick="toggleMode()">🌙 Gece / Gündüz modu</button>
+    <button class="mob-btns mob-giris" onclick="showPage('profil');closeMobileMenu()">Giriş yap</button>
+    <button class="mob-btns mob-ilan" onclick="showPage('ilan');closeMobileMenu()">+ İlan ver</button>
+  </div>
+</div>
 
 <!-- ANA SAYFA -->
 <div id="page-home" class="page active">
@@ -591,6 +628,16 @@
     document.body.classList.toggle('light', isLight);
     document.getElementById('mode-ico').textContent = isLight ? '☀️' : '🌙';
     document.getElementById('mode-lbl').textContent = isLight ? 'Gündüz modu' : 'Gece modu';
+  }
+  function toggleMobileMenu() {
+    const menu = document.getElementById('mobile-menu');
+    const burger = document.getElementById('hamburger');
+    menu.classList.toggle('open');
+    burger.classList.toggle('open');
+  }
+  function closeMobileMenu() {
+    document.getElementById('mobile-menu').classList.remove('open');
+    document.getElementById('hamburger').classList.remove('open');
   }
   function showPage(id) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
