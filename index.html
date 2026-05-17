@@ -32,8 +32,13 @@
     html { scroll-behavior: smooth; }
     body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; transition: background 0.35s, color 0.35s; }
     nav { position: sticky; top: 0; z-index: 200; display: flex; align-items: center; justify-content: space-between; padding: 0 48px; height: 62px; background: var(--nav-bg); border-bottom: 1px solid var(--border); backdrop-filter: blur(20px); }
-    .logo { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; letter-spacing: -0.5px; color: var(--text); cursor: pointer; }
-    .logo em { color: var(--blue); font-style: normal; }
+    .logo { cursor: pointer; display: flex; flex-direction: column; line-height: 1; text-decoration: none; }
+    .logo-main { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 800; letter-spacing: -1px; color: var(--text); display: flex; align-items: flex-end; gap: 0; }
+    .logo-main em { color: var(--blue); font-style: normal; }
+    .logo-underline { display: flex; margin-top: 3px; }
+    .logo-underline .u1 { height: 3px; width: 26px; border-radius: 2px; background: var(--text); }
+    .logo-underline .u2 { height: 3px; width: 48px; border-radius: 2px; background: var(--blue); }
+    .logo-slogan { font-size: 8px; font-weight: 500; letter-spacing: 1.5px; color: var(--text3); text-transform: uppercase; margin-top: 4px; font-family: 'DM Sans', sans-serif; }
     .nav-links { display: flex; gap: 28px; list-style: none; }
     .nav-links a { font-size: 13.5px; font-weight: 500; color: var(--text2); text-decoration: none; cursor: pointer; transition: color 0.2s; }
     .nav-links a:hover { color: var(--text); }
@@ -346,7 +351,11 @@
 <body>
 
 <nav>
-  <div class="logo" onclick="showPage('home')">arı<em>yorum</em></div>
+  <div class="logo" onclick="showPage('home')">
+    <div class="logo-main">arı<em>yorum</em></div>
+    <div class="logo-underline"><span class="u1"></span><span class="u2"></span></div>
+    <div class="logo-slogan">Sen ara, teklifler gelsin</div>
+  </div>
   <ul class="nav-links">
     <li><a onclick="showPage('home')">İlanlar</a></li>
     <li><a onclick="showPage('nasil')">Nasıl çalışır?</a></li>
@@ -394,7 +403,7 @@
     </div>
   </div>
   <div class="cta-section"><div><h3>Sen de ilan ver, teklifleri bekle</h3><p>Ücretsiz ilan aç — satıcılar sana ulaşsın, en iyisini seç</p></div><button class="btn-primary" onclick="showPage('ilan')" style="padding:13px 28px;font-size:14px;position:relative;z-index:1">+ İlan oluştur</button></div>
-  <footer><div class="logo">arı<em>yorum</em></div><p>© 2025 arıyorum. Tüm hakları saklıdır.</p></footer>
+  <footer><div class="logo"><div class="logo-main">arı<em>yorum</em></div><div class="logo-underline"><span class="u1"></span><span class="u2"></span></div><div class="logo-slogan">Sen ara, teklifler gelsin</div></div><p>© 2025 arıyorum. Tüm hakları saklıdır.</p></footer>
 </div>
 
 <!-- İLAN OLUŞTUR -->
