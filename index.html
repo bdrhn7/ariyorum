@@ -7,459 +7,324 @@
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --bg: #09090f;
-      --bg2: #111118;
-      --bg3: #1a1a24;
-      --text: #f2f2f5;
-      --text2: rgba(242,242,245,0.45);
-      --text3: rgba(242,242,245,0.2);
-      --border: rgba(255,255,255,0.07);
-      --border2: rgba(255,255,255,0.13);
-      --blue: #4f8ef7;
-      --blue2: #3a7be0;
-      --blue-bg: rgba(79,142,247,0.1);
-      --blue-border: rgba(79,142,247,0.3);
-      --green: #34c782;
-      --green-bg: rgba(52,199,130,0.1);
-      --amber: #f59e0b;
-      --amber-bg: rgba(245,158,11,0.1);
-      --purple: #a78bfa;
-      --purple-bg: rgba(167,139,250,0.1);
-      --nav-bg: rgba(9,9,15,0.9);
-      --glow: rgba(79,142,247,0.08);
-      --shadow: 0 24px 64px rgba(0,0,0,0.4);
+      --bg: #09090f; --bg2: #111118; --bg3: #1a1a24;
+      --text: #f2f2f5; --text2: rgba(242,242,245,0.45); --text3: rgba(242,242,245,0.2);
+      --border: rgba(255,255,255,0.07); --border2: rgba(255,255,255,0.13);
+      --blue: #4f8ef7; --blue2: #3a7be0; --blue-bg: rgba(79,142,247,0.1); --blue-border: rgba(79,142,247,0.3);
+      --green: #34c782; --green-bg: rgba(52,199,130,0.1); --green-border: rgba(52,199,130,0.3);
+      --red: #f87171; --red-bg: rgba(248,113,113,0.1); --red-border: rgba(248,113,113,0.3);
+      --amber: #f59e0b; --amber-bg: rgba(245,158,11,0.1);
+      --purple: #a78bfa; --purple-bg: rgba(167,139,250,0.1);
+      --nav-bg: rgba(9,9,15,0.92); --glow: rgba(79,142,247,0.08); --shadow: 0 24px 64px rgba(0,0,0,0.4);
     }
-
     body.light {
-      --bg: #f0f1f8;
-      --bg2: #ffffff;
-      --bg3: #e8eaf4;
-      --text: #0c0c18;
-      --text2: #5a6070;
-      --text3: #9ca3af;
-      --border: #e2e4ef;
-      --border2: #c8ccde;
-      --blue: #2457d9;
-      --blue2: #1a46c2;
-      --blue-bg: rgba(36,87,217,0.07);
-      --blue-border: rgba(36,87,217,0.22);
-      --green: #059669;
-      --green-bg: rgba(5,150,105,0.08);
-      --amber: #d97706;
-      --amber-bg: rgba(217,119,6,0.08);
-      --purple: #7c3aed;
-      --purple-bg: rgba(124,58,237,0.08);
-      --nav-bg: rgba(240,241,248,0.92);
-      --glow: rgba(36,87,217,0.06);
-      --shadow: 0 24px 64px rgba(0,0,80,0.08);
+      --bg: #f0f1f8; --bg2: #ffffff; --bg3: #e8eaf4;
+      --text: #0c0c18; --text2: #5a6070; --text3: #9ca3af;
+      --border: #e2e4ef; --border2: #c8ccde;
+      --blue: #2457d9; --blue2: #1a46c2; --blue-bg: rgba(36,87,217,0.07); --blue-border: rgba(36,87,217,0.22);
+      --green: #059669; --green-bg: rgba(5,150,105,0.08); --green-border: rgba(5,150,105,0.3);
+      --red: #dc2626; --red-bg: rgba(220,38,38,0.07); --red-border: rgba(220,38,38,0.25);
+      --amber: #d97706; --amber-bg: rgba(217,119,6,0.08);
+      --purple: #7c3aed; --purple-bg: rgba(124,58,237,0.08);
+      --nav-bg: rgba(240,241,248,0.95); --glow: rgba(36,87,217,0.05); --shadow: 0 24px 64px rgba(0,0,80,0.08);
     }
-
     html { scroll-behavior: smooth; }
-
-    body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      transition: background 0.35s, color 0.35s;
-    }
-
-    /* NAV */
-    nav {
-      position: sticky; top: 0; z-index: 200;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0 48px; height: 62px;
-      background: var(--nav-bg);
-      border-bottom: 1px solid var(--border);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-    }
-
-    .logo {
-      font-family: 'Syne', sans-serif;
-      font-size: 22px; font-weight: 800;
-      letter-spacing: -0.5px;
-      color: var(--text);
-      text-decoration: none;
-    }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; transition: background 0.35s, color 0.35s; }
+    nav { position: sticky; top: 0; z-index: 200; display: flex; align-items: center; justify-content: space-between; padding: 0 48px; height: 62px; background: var(--nav-bg); border-bottom: 1px solid var(--border); backdrop-filter: blur(20px); }
+    .logo { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; letter-spacing: -0.5px; color: var(--text); cursor: pointer; }
     .logo em { color: var(--blue); font-style: normal; }
-
-    .nav-links {
-      display: flex; gap: 32px; list-style: none;
-    }
-    .nav-links a {
-      font-size: 13.5px; font-weight: 500;
-      color: var(--text2); text-decoration: none;
-      transition: color 0.2s;
-    }
+    .nav-links { display: flex; gap: 28px; list-style: none; }
+    .nav-links a { font-size: 13.5px; font-weight: 500; color: var(--text2); text-decoration: none; cursor: pointer; transition: color 0.2s; }
     .nav-links a:hover { color: var(--text); }
-
     .nav-right { display: flex; gap: 10px; align-items: center; }
-
-    .mode-toggle {
-      display: flex; align-items: center; gap: 7px;
-      padding: 6px 14px; border: 1px solid var(--border2);
-      border-radius: 999px; background: var(--bg3);
-      cursor: pointer; font-family: 'DM Sans', sans-serif;
-      font-size: 12px; color: var(--text2);
-      transition: all 0.2s;
-    }
-    .mode-toggle:hover { border-color: var(--blue-border); color: var(--blue); }
-
-    .btn-outline {
-      padding: 8px 18px; border: 1px solid var(--border2);
-      border-radius: 9px; background: transparent;
-      color: var(--text2); font-size: 13px; font-weight: 500;
-      cursor: pointer; font-family: 'DM Sans', sans-serif;
-      transition: all 0.2s;
-    }
-    .btn-outline:hover { border-color: var(--border); color: var(--text); }
-
-    .btn-primary {
-      padding: 8px 20px; border: none;
-      border-radius: 9px; background: var(--blue);
-      color: #fff; font-size: 13px; font-weight: 600;
-      cursor: pointer; font-family: 'DM Sans', sans-serif;
-      transition: background 0.2s;
-    }
+    .mode-toggle { display: flex; align-items: center; gap: 7px; padding: 6px 14px; border: 1px solid var(--border2); border-radius: 999px; background: var(--bg3); cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 12px; color: var(--text2); }
+    .btn-outline { padding: 8px 18px; border: 1px solid var(--border2); border-radius: 9px; background: transparent; color: var(--text2); font-size: 13px; font-weight: 500; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+    .btn-primary { padding: 8px 20px; border: none; border-radius: 9px; background: var(--blue); color: #fff; font-size: 13px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; }
     .btn-primary:hover { background: var(--blue2); }
+    .page { display: none; }
+    .page.active { display: block; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
 
-    /* HERO */
-    .hero {
-      padding: 88px 48px 64px;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero-glow {
-      position: absolute; top: -60px; left: 50%; transform: translateX(-50%);
-      width: 700px; height: 500px;
-      background: radial-gradient(ellipse at center, var(--glow) 0%, transparent 65%);
-      pointer-events: none;
-    }
-
-    .hero-badge {
-      display: inline-flex; align-items: center; gap: 7px;
-      padding: 5px 16px; margin-bottom: 22px;
-      border: 1px solid var(--blue-border); border-radius: 999px;
-      font-size: 12px; font-weight: 600; color: var(--blue);
-      background: var(--blue-bg); letter-spacing: 0.3px;
-    }
-    .hero-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--blue); animation: pulse 2s infinite; }
-    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
-
-    .hero h1 {
-      font-family: 'Syne', sans-serif;
-      font-size: 56px; font-weight: 800;
-      letter-spacing: -2px; line-height: 1.05;
-      color: var(--text); margin-bottom: 18px;
-    }
-    .hero h1 em { color: var(--blue); font-style: normal; }
-
-    .hero p {
-      font-size: 16px; color: var(--text2);
-      max-width: 420px; margin: 0 auto 36px;
-      line-height: 1.7; font-weight: 400;
-    }
-
-    .search-bar {
-      display: flex; max-width: 560px; margin: 0 auto 22px;
-      background: var(--bg2); border: 1px solid var(--border2);
-      border-radius: 14px; overflow: hidden;
-      box-shadow: var(--shadow);
-      transition: border-color 0.2s;
-    }
-    .search-bar:focus-within { border-color: var(--blue); }
-    .search-bar input {
-      flex: 1; padding: 15px 20px;
-      background: transparent; border: none; outline: none;
-      font-size: 14px; color: var(--text);
-      font-family: 'DM Sans', sans-serif;
-    }
-    .search-bar input::placeholder { color: var(--text3); }
-    .search-bar button {
-      margin: 6px; padding: 9px 22px;
-      background: var(--blue); border: none; border-radius: 9px;
-      color: #fff; font-size: 13px; font-weight: 600;
-      cursor: pointer; font-family: 'DM Sans', sans-serif;
-    }
-
-    .filter-cats {
-      display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;
-    }
-    .filter-cat {
-      padding: 6px 16px; border: 1px solid var(--border);
-      border-radius: 999px; font-size: 13px; font-weight: 500;
-      color: var(--text2); background: var(--bg2);
-      cursor: pointer; font-family: 'DM Sans', sans-serif;
-      transition: all 0.2s;
-    }
-    .filter-cat:hover { border-color: var(--border2); color: var(--text); }
-    .filter-cat.active {
-      background: var(--blue-bg); border-color: var(--blue-border); color: var(--blue);
-    }
-
-    /* STATS */
-    .stats-bar {
-      display: flex; justify-content: center; gap: 0;
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-      margin: 0;
-    }
-    .stat-item {
-      flex: 1; max-width: 200px; padding: 24px 0; text-align: center;
-      border-right: 1px solid var(--border);
-    }
-    .stat-item:last-child { border-right: none; }
-    .stat-num {
-      font-family: 'Syne', sans-serif;
-      font-size: 26px; font-weight: 800;
-      color: var(--text); letter-spacing: -0.5px;
-    }
-    .stat-lbl { font-size: 12px; color: var(--text3); margin-top: 3px; font-weight: 500; }
-
-    /* MAIN */
-    .main { padding: 44px 48px; }
-
-    .section-head {
-      display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px;
-    }
-    .section-head h2 {
-      font-family: 'Syne', sans-serif;
-      font-size: 19px; font-weight: 700; color: var(--text);
-    }
-    .see-all { font-size: 13px; color: var(--blue); text-decoration: none; font-weight: 500; }
-
-    .cards-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(248px, 1fr));
-      gap: 14px;
-    }
-
-    .card {
-      background: var(--bg2); border: 1px solid var(--border);
-      border-radius: 16px; padding: 20px;
-      cursor: pointer; transition: all 0.22s;
-      position: relative; overflow: hidden;
-    }
-    .card::before {
-      content: ''; position: absolute; inset: 0;
-      background: linear-gradient(135deg, transparent 60%, var(--blue-bg));
-      opacity: 0; transition: opacity 0.3s;
-    }
-    .card:hover { border-color: var(--border2); transform: translateY(-3px); box-shadow: var(--shadow); }
-    .card:hover::before { opacity: 1; }
-
-    .card-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
-
-    .tag {
-      font-size: 10px; font-weight: 700; padding: 3px 10px;
-      border-radius: 999px; text-transform: uppercase; letter-spacing: 0.5px;
-    }
+    /* SHARED */
+    .tag { font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 999px; text-transform: uppercase; letter-spacing: 0.5px; }
     .tag-arac { background: var(--blue-bg); color: var(--blue); }
     .tag-emlak { background: var(--green-bg); color: var(--green); }
     .tag-elektronik { background: var(--amber-bg); color: var(--amber); }
     .tag-diger { background: var(--purple-bg); color: var(--purple); }
-
     .verified { font-size: 11px; color: var(--green); font-weight: 600; }
+    .badge { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 999px; }
+    .badge-green { background: var(--green-bg); color: var(--green); }
+    .badge-blue { background: var(--blue-bg); color: var(--blue); }
+    .badge-amber { background: var(--amber-bg); color: var(--amber); }
+    .divider { height: 1px; background: var(--border); margin: 24px 0; }
+    .sec-lbl { font-size: 11px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+    .finput, .fselect, .ftextarea { width: 100%; padding: 13px 16px; background: var(--bg2); border: 1px solid var(--border); border-radius: 11px; font-size: 14px; color: var(--text); font-family: 'DM Sans', sans-serif; outline: none; transition: border-color 0.2s; }
+    .finput:focus, .fselect:focus, .ftextarea:focus { border-color: var(--blue); }
+    .finput::placeholder, .ftextarea::placeholder { color: var(--text3); }
+    .ftextarea { resize: none; height: 95px; line-height: 1.6; }
+    .fselect { appearance: none; cursor: pointer; }
+    .fgroup { margin-bottom: 20px; }
+    .flabel { display: block; font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
+    .flabel span { font-weight: 400; color: var(--text3); }
+    .frow { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .submit-btn { width: 100%; padding: 15px; background: var(--blue); border: none; border-radius: 12px; color: #fff; font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; cursor: pointer; transition: background 0.2s; }
+    .submit-btn:hover { background: var(--blue2); }
+    .submit-note { text-align: center; font-size: 12px; color: var(--text3); margin-top: 10px; }
 
-    .card-title {
-      font-size: 13.5px; font-weight: 500;
-      color: var(--text); line-height: 1.5; margin-bottom: 13px;
-    }
-
-    .card-budget {
-      font-family: 'Syne', sans-serif;
-      font-size: 22px; font-weight: 800;
-      color: var(--text); letter-spacing: -0.5px; margin-bottom: 14px;
-    }
-    .card-budget small {
-      font-size: 12px; font-weight: 400; color: var(--text3);
-      font-family: 'DM Sans', sans-serif;
-    }
-
-    .card-foot {
-      display: flex; align-items: center; justify-content: space-between;
-      padding-top: 13px; border-top: 1px solid var(--border);
-    }
+    /* ANA SAYFA */
+    .hero { padding: 88px 48px 64px; text-align: center; position: relative; overflow: hidden; }
+    .hero-glow { position: absolute; top: -60px; left: 50%; transform: translateX(-50%); width: 700px; height: 500px; background: radial-gradient(ellipse at center, var(--glow) 0%, transparent 65%); pointer-events: none; }
+    .hero-badge { display: inline-flex; align-items: center; gap: 7px; padding: 5px 16px; margin-bottom: 22px; border: 1px solid var(--blue-border); border-radius: 999px; font-size: 12px; font-weight: 600; color: var(--blue); background: var(--blue-bg); }
+    .hero-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--blue); animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+    .hero h1 { font-family: 'Syne', sans-serif; font-size: 56px; font-weight: 800; letter-spacing: -2px; line-height: 1.05; color: var(--text); margin-bottom: 18px; }
+    .hero h1 em { color: var(--blue); font-style: normal; }
+    .hero p { font-size: 16px; color: var(--text2); max-width: 420px; margin: 0 auto 36px; line-height: 1.7; }
+    .search-bar { display: flex; max-width: 560px; margin: 0 auto 22px; background: var(--bg2); border: 1px solid var(--border2); border-radius: 14px; overflow: hidden; box-shadow: var(--shadow); }
+    .search-bar:focus-within { border-color: var(--blue); }
+    .search-bar input { flex: 1; padding: 15px 20px; background: transparent; border: none; outline: none; font-size: 14px; color: var(--text); font-family: 'DM Sans', sans-serif; }
+    .search-bar input::placeholder { color: var(--text3); }
+    .search-bar button { margin: 6px; padding: 9px 22px; background: var(--blue); border: none; border-radius: 9px; color: #fff; font-size: 13px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+    .filter-cats { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+    .filter-cat { padding: 6px 16px; border: 1px solid var(--border); border-radius: 999px; font-size: 13px; font-weight: 500; color: var(--text2); background: var(--bg2); cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.2s; }
+    .filter-cat.active { background: var(--blue-bg); border-color: var(--blue-border); color: var(--blue); }
+    .stats-bar { display: flex; justify-content: center; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .stat-item { flex: 1; max-width: 200px; padding: 24px 0; text-align: center; border-right: 1px solid var(--border); }
+    .stat-item:last-child { border-right: none; }
+    .stat-num { font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 800; color: var(--text); }
+    .stat-lbl { font-size: 12px; color: var(--text3); margin-top: 3px; }
+    .main { padding: 44px 48px; }
+    .section-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px; }
+    .section-head h2 { font-family: 'Syne', sans-serif; font-size: 19px; font-weight: 700; }
+    .see-all { font-size: 13px; color: var(--blue); cursor: pointer; font-weight: 500; }
+    .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(248px, 1fr)); gap: 14px; }
+    .card { background: var(--bg2); border: 1px solid var(--border); border-radius: 16px; padding: 20px; cursor: pointer; transition: all 0.22s; }
+    .card:hover { border-color: var(--border2); transform: translateY(-3px); box-shadow: var(--shadow); }
+    .card-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+    .card-title { font-size: 13.5px; font-weight: 500; color: var(--text); line-height: 1.5; margin-bottom: 13px; }
+    .card-budget { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; color: var(--text); margin-bottom: 14px; }
+    .card-budget small { font-size: 12px; font-weight: 400; color: var(--text3); font-family: 'DM Sans', sans-serif; }
+    .card-foot { display: flex; align-items: center; justify-content: space-between; padding-top: 13px; border-top: 1px solid var(--border); }
     .card-loc { font-size: 12px; color: var(--text3); }
     .card-offers { font-size: 12px; color: var(--text3); }
     .card-offers strong { color: var(--text); font-weight: 600; }
-
-    .teklif-btn {
-      padding: 5px 13px; border: 1px solid var(--blue-border);
-      border-radius: 8px; background: var(--blue-bg);
-      color: var(--blue); font-size: 12px; font-weight: 600;
-      cursor: pointer; font-family: 'DM Sans', sans-serif;
-      transition: all 0.2s;
-    }
+    .teklif-btn { padding: 5px 13px; border: 1px solid var(--blue-border); border-radius: 8px; background: var(--blue-bg); color: var(--blue); font-size: 12px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.2s; }
     .teklif-btn:hover { background: var(--blue); color: #fff; }
-
-    /* CTA */
-    .cta {
-      margin: 8px 48px 44px;
-      padding: 36px 44px;
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      display: flex; align-items: center; justify-content: space-between;
-      position: relative; overflow: hidden;
-    }
-    .cta::after {
-      content: '';
-      position: absolute; right: -60px; top: -60px;
-      width: 250px; height: 250px;
-      background: radial-gradient(circle, var(--blue-bg) 0%, transparent 65%);
-    }
-    .cta h3 {
-      font-family: 'Syne', sans-serif;
-      font-size: 20px; font-weight: 800; color: var(--text); margin-bottom: 5px;
-    }
-    .cta p { font-size: 13.5px; color: var(--text2); }
-    .cta .btn-primary {
-      padding: 13px 28px; font-size: 14px;
-      flex-shrink: 0; margin-left: 24px; position: relative; z-index: 1;
-    }
-
-    /* FOOTER */
-    footer {
-      padding: 22px 48px;
-      border-top: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: space-between;
-    }
+    .cta-section { margin: 8px 48px 44px; padding: 36px 44px; background: var(--bg2); border: 1px solid var(--border); border-radius: 20px; display: flex; align-items: center; justify-content: space-between; position: relative; overflow: hidden; }
+    .cta-section::after { content: ''; position: absolute; right: -60px; top: -60px; width: 250px; height: 250px; background: radial-gradient(circle, var(--blue-bg) 0%, transparent 65%); }
+    .cta-section h3 { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 800; margin-bottom: 5px; }
+    .cta-section p { font-size: 13.5px; color: var(--text2); }
+    .cta-section .btn-primary { padding: 13px 28px; font-size: 14px; flex-shrink: 0; margin-left: 24px; position: relative; z-index: 1; }
+    footer { padding: 22px 48px; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
     footer p { font-size: 12px; color: var(--text3); }
 
-    /* PAGE: İLAN OLUŞTUR */
-    .page { display: none; }
-    .page.active { display: block; }
-
+    /* İLAN OLUŞTUR */
     .ilan-page { max-width: 660px; margin: 0 auto; padding: 44px 24px 72px; }
-
     .page-header { margin-bottom: 36px; }
-    .page-header h1 {
-      font-family: 'Syne', sans-serif;
-      font-size: 30px; font-weight: 800; letter-spacing: -0.8px; margin-bottom: 6px;
-    }
+    .page-header h1 { font-family: 'Syne', sans-serif; font-size: 30px; font-weight: 800; margin-bottom: 6px; }
     .page-header p { font-size: 14px; color: var(--text2); }
-
     .steps-bar { display: flex; align-items: center; margin-bottom: 40px; }
     .step { display: flex; align-items: center; gap: 9px; }
-    .step-num {
-      width: 32px; height: 32px; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 12px; font-weight: 700;
-      border: 2px solid var(--border2); color: var(--text3);
-    }
+    .step-num { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; border: 2px solid var(--border2); color: var(--text3); }
     .step.done .step-num { border-color: var(--green); color: var(--green); background: var(--green-bg); }
     .step.active .step-num { border-color: var(--blue); color: var(--blue); background: var(--blue-bg); }
     .step-txt { font-size: 12px; font-weight: 600; color: var(--text3); white-space: nowrap; }
     .step.active .step-txt { color: var(--blue); }
     .step.done .step-txt { color: var(--green); }
     .step-line { flex: 1; height: 1px; background: var(--border); margin: 0 10px; }
-
-    .sec-lbl {
-      font-size: 11px; font-weight: 700; color: var(--text3);
-      text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px;
-    }
-
     .cat-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin-bottom: 30px; }
-    .cat-opt {
-      padding: 18px 10px; border: 1px solid var(--border);
-      border-radius: 13px; text-align: center;
-      cursor: pointer; background: var(--bg2);
-      transition: all 0.2s;
-    }
-    .cat-opt:hover { border-color: var(--border2); }
+    .cat-opt { padding: 18px 10px; border: 1px solid var(--border); border-radius: 13px; text-align: center; cursor: pointer; background: var(--bg2); transition: all 0.2s; }
     .cat-opt.sel { border-color: var(--blue); background: var(--blue-bg); }
     .cat-opt .ico { font-size: 26px; margin-bottom: 7px; }
     .cat-opt .lbl { font-size: 12px; font-weight: 600; color: var(--text2); }
     .cat-opt.sel .lbl { color: var(--blue); }
-
-    .fgroup { margin-bottom: 20px; }
-    .flabel {
-      display: block; font-size: 13px; font-weight: 600;
-      color: var(--text); margin-bottom: 8px;
-    }
-    .flabel span { font-weight: 400; color: var(--text3); }
-
-    .finput, .fselect, .ftextarea {
-      width: 100%; padding: 13px 16px;
-      background: var(--bg2); border: 1px solid var(--border);
-      border-radius: 11px; font-size: 14px; color: var(--text);
-      font-family: 'DM Sans', sans-serif; outline: none;
-      transition: border-color 0.2s;
-    }
-    .finput:focus, .fselect:focus, .ftextarea:focus { border-color: var(--blue); }
-    .finput::placeholder, .ftextarea::placeholder { color: var(--text3); }
-    .ftextarea { resize: none; height: 95px; line-height: 1.6; }
-    .fselect { appearance: none; cursor: pointer; }
-
-    .frow { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-
     .budget-wrap { position: relative; }
-    .budget-sym {
-      position: absolute; right: 15px; top: 50%; transform: translateY(-50%);
-      font-size: 14px; font-weight: 600; color: var(--text2);
-    }
+    .budget-sym { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); font-size: 14px; font-weight: 600; color: var(--text2); }
     .budget-wrap .finput { padding-right: 36px; }
-
-    .divider { height: 1px; background: var(--border); margin: 30px 0; }
-
-    .trust-panel {
-      background: var(--bg2); border: 1px solid var(--border);
-      border-radius: 13px; overflow: hidden; margin-bottom: 28px;
-    }
-    .trust-row {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 14px 18px; border-bottom: 1px solid var(--border);
-    }
+    .trust-panel { background: var(--bg2); border: 1px solid var(--border); border-radius: 13px; overflow: hidden; margin-bottom: 28px; }
+    .trust-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; border-bottom: 1px solid var(--border); }
     .trust-row:last-child { border-bottom: none; }
     .trust-l { display: flex; align-items: center; gap: 12px; }
     .trust-ico { font-size: 20px; }
     .trust-name { font-size: 13px; font-weight: 600; color: var(--text); }
     .trust-desc { font-size: 11px; color: var(--text3); margin-top: 1px; }
-    .badge-green { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 999px; background: var(--green-bg); color: var(--green); }
-    .badge-blue { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 999px; background: var(--blue-bg); color: var(--blue); cursor: pointer; }
-
-    .preview-card {
-      background: var(--blue-bg); border: 1px solid var(--blue-border);
-      border-radius: 14px; padding: 20px; margin-bottom: 28px;
-    }
-    .prev-lbl {
-      font-size: 11px; font-weight: 700; color: var(--blue);
-      text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 14px;
-    }
+    .preview-card { background: var(--blue-bg); border: 1px solid var(--blue-border); border-radius: 14px; padding: 20px; margin-bottom: 28px; }
+    .prev-lbl { font-size: 11px; font-weight: 700; color: var(--blue); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 14px; }
     .prev-cat { font-size: 11px; font-weight: 700; color: var(--blue); text-transform: uppercase; margin-bottom: 6px; }
     .prev-title { font-size: 14px; font-weight: 500; color: var(--text); line-height: 1.45; margin-bottom: 10px; }
-    .prev-budget {
-      font-family: 'Syne', sans-serif;
-      font-size: 22px; font-weight: 800; color: var(--text); margin-bottom: 10px;
-    }
+    .prev-budget { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; color: var(--text); margin-bottom: 10px; }
     .prev-foot { display: flex; align-items: center; gap: 14px; font-size: 12px; color: var(--text3); }
     .prev-v { color: var(--green); font-weight: 600; }
 
-    .submit-btn {
-      width: 100%; padding: 15px; background: var(--blue);
-      border: none; border-radius: 12px; color: #fff;
-      font-family: 'Syne', sans-serif;
-      font-size: 16px; font-weight: 700; cursor: pointer;
-      transition: background 0.2s; letter-spacing: -0.3px;
-    }
-    .submit-btn:hover { background: var(--blue2); }
-    .submit-note { text-align: center; font-size: 12px; color: var(--text3); margin-top: 10px; }
+    /* TEKLİF VER */
+    .teklif-page { max-width: 900px; margin: 0 auto; padding: 40px 24px 72px; display: grid; grid-template-columns: 1fr 380px; gap: 24px; }
+    .ilan-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 18px; padding: 28px; height: fit-content; position: sticky; top: 80px; }
+    .ilan-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+    .ilan-title { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; color: var(--text); line-height: 1.35; margin-bottom: 16px; }
+    .ilan-budget { font-family: 'Syne', sans-serif; font-size: 32px; font-weight: 800; color: var(--text); letter-spacing: -1px; margin-bottom: 20px; }
+    .ilan-budget span { font-size: 14px; font-weight: 400; color: var(--text3); font-family: 'DM Sans', sans-serif; }
+    .ilan-meta { display: flex; flex-direction: column; gap: 10px; margin-bottom: 22px; }
+    .meta-row { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--text2); }
+    .alici-box { display: flex; align-items: center; gap: 12px; }
+    .avatar { width: 42px; height: 42px; border-radius: 50%; background: var(--blue-bg); border: 2px solid var(--blue-border); display: flex; align-items: center; justify-content: center; font-size: 18px; }
+    .alici-name { font-size: 14px; font-weight: 600; color: var(--text); }
+    .alici-badges { display: flex; gap: 5px; margin-top: 4px; }
+    .offer-count-box { margin-top: 18px; padding: 12px 16px; background: var(--bg3); border-radius: 10px; display: flex; align-items: center; justify-content: space-between; }
+    .offer-count-box span { font-size: 13px; color: var(--text2); }
+    .offer-count-box strong { font-size: 18px; font-weight: 700; color: var(--text); font-family: 'Syne', sans-serif; }
+    .teklif-form { display: flex; flex-direction: column; }
+    .form-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 18px; padding: 28px; margin-bottom: 16px; }
+    .form-title { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 6px; color: var(--text); }
+    .form-sub { font-size: 13px; color: var(--text2); margin-bottom: 24px; }
+    .price-wrap { position: relative; }
+    .price-sym { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); font-size: 14px; font-weight: 600; color: var(--text2); }
+    .price-wrap .finput { padding-right: 36px; }
+    .price-hint { margin-top: 6px; font-size: 12px; color: var(--text3); }
+    .price-hint.good { color: var(--green); }
+    .price-hint.bad { color: var(--amber); }
+    .satici-trust { background: var(--bg2); border: 1px solid var(--border); border-radius: 18px; padding: 20px; margin-bottom: 16px; }
+    .trust-title { font-size: 12px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 14px; }
 
-    /* SUCCESS */
-    .success-page { display: none; text-align: center; padding: 80px 24px; }
-    .success-page.show { display: block; }
-    .success-ico { font-size: 64px; margin-bottom: 20px; }
-    .success-page h2 {
-      font-family: 'Syne', sans-serif;
-      font-size: 28px; font-weight: 800; margin-bottom: 10px;
-    }
-    .success-page p { font-size: 15px; color: var(--text2); margin-bottom: 28px; }
+    /* GELEN TEKLİFLER */
+    .teklifler-page { max-width: 800px; margin: 0 auto; padding: 40px 24px 72px; }
+    .page-head { margin-bottom: 28px; }
+    .page-head h1 { font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 800; margin-bottom: 5px; }
+    .page-head p { font-size: 14px; color: var(--text2); }
+    .ilan-ozet { background: var(--bg2); border: 1px solid var(--border); border-radius: 16px; padding: 20px 24px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; }
+    .ozet-left { display: flex; align-items: center; gap: 14px; }
+    .ozet-icon { width: 46px; height: 46px; border-radius: 12px; background: var(--blue-bg); border: 1px solid var(--blue-border); display: flex; align-items: center; justify-content: center; font-size: 22px; }
+    .ozet-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+    .ozet-meta { font-size: 12px; color: var(--text3); }
+    .ozet-budget { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; color: var(--text); }
+    .ozet-budget small { font-size: 12px; font-weight: 400; color: var(--text3); font-family: 'DM Sans', sans-serif; }
+    .filter-row { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+    .filter-btn { padding: 6px 16px; border: 1px solid var(--border); border-radius: 999px; font-size: 13px; font-weight: 500; color: var(--text2); background: var(--bg2); cursor: pointer; font-family: 'DM Sans', sans-serif; }
+    .filter-btn.active { background: var(--blue-bg); border-color: var(--blue-border); color: var(--blue); }
+    .teklif-list { display: flex; flex-direction: column; gap: 12px; }
+    .teklif-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 16px; padding: 22px 24px; transition: all 0.2s; position: relative; overflow: hidden; }
+    .teklif-card:hover { border-color: var(--border2); }
+    .teklif-card.en-iyi { border-color: var(--green-border); }
+    .teklif-card.en-iyi::before { content: '⭐ En iyi teklif'; position: absolute; top: 0; right: 0; background: var(--green-bg); color: var(--green); font-size: 11px; font-weight: 700; padding: 5px 14px; border-bottom-left-radius: 10px; }
+    .card-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 14px; }
+    .satici-info { display: flex; align-items: center; gap: 12px; }
+    .satici-avatar { width: 42px; height: 42px; border-radius: 50%; background: var(--bg3); border: 1px solid var(--border2); display: flex; align-items: center; justify-content: center; font-size: 20px; }
+    .satici-name { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+    .satici-badges { display: flex; gap: 5px; }
+    .teklif-fiyat { text-align: right; }
+    .fiyat-num { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; color: var(--text); }
+    .fiyat-num.iyi { color: var(--green); }
+    .fiyat-diff { font-size: 12px; color: var(--text3); margin-top: 2px; }
+    .fiyat-diff.iyi { color: var(--green); }
+    .card-body { margin-bottom: 16px; }
+    .arac-bilgi { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+    .mesaj { font-size: 13px; color: var(--text2); line-height: 1.5; }
+    .card-foot { display: flex; align-items: center; justify-content: space-between; padding-top: 16px; border-top: 1px solid var(--border); }
+    .zaman { font-size: 12px; color: var(--text3); }
+    .actions { display: flex; gap: 8px; }
+    .btn-red { padding: 7px 18px; border: 1px solid var(--red-border); border-radius: 9px; background: var(--red-bg); color: var(--red); font-size: 13px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+    .btn-red:hover { background: var(--red); color: #fff; }
+    .btn-green { padding: 7px 18px; border: none; border-radius: 9px; background: var(--green); color: #fff; font-size: 13px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+
+    /* PROFİL */
+    .profil-page { max-width: 860px; margin: 0 auto; padding: 40px 24px 72px; }
+    .profile-hero { background: var(--bg2); border: 1px solid var(--border); border-radius: 20px; padding: 32px; display: flex; align-items: flex-start; gap: 24px; margin-bottom: 24px; position: relative; overflow: hidden; }
+    .profile-hero::after { content: ''; position: absolute; right: -40px; top: -40px; width: 200px; height: 200px; background: radial-gradient(circle, var(--blue-bg), transparent 70%); }
+    .avatar-wrap { position: relative; flex-shrink: 0; }
+    .profile-avatar { width: 80px; height: 80px; border-radius: 50%; background: var(--bg3); border: 2px solid var(--blue-border); display: flex; align-items: center; justify-content: center; font-size: 36px; }
+    .online-dot { position: absolute; bottom: 4px; right: 4px; width: 14px; height: 14px; border-radius: 50%; background: var(--green); border: 2px solid var(--bg2); }
+    .profile-info { flex: 1; }
+    .profile-name { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; color: var(--text); margin-bottom: 6px; }
+    .profile-meta { font-size: 13px; color: var(--text2); margin-bottom: 12px; }
+    .badges-row { display: flex; gap: 7px; flex-wrap: wrap; margin-bottom: 16px; }
+    .badge-prof { font-size: 11px; font-weight: 700; padding: 4px 12px; border-radius: 999px; }
+    .badge-prof-green { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+    .badge-prof-blue { background: var(--blue-bg); color: var(--blue); border: 1px solid var(--blue-border); }
+    .badge-prof-purple { background: var(--purple-bg); color: var(--purple); }
+    .star-row { display: flex; align-items: center; gap: 8px; }
+    .star-num { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 800; color: var(--text); }
+    .star-count { font-size: 13px; color: var(--text3); }
+    .edit-btn { padding: 9px 20px; border: 1px solid var(--border2); border-radius: 10px; background: transparent; color: var(--text2); font-size: 13px; font-weight: 500; cursor: pointer; font-family: 'DM Sans', sans-serif; flex-shrink: 0; }
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px; }
+    .stat-box { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 18px; text-align: center; }
+    .stat-box-num { font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 800; color: var(--text); }
+    .stat-box-lbl { font-size: 12px; color: var(--text3); margin-top: 3px; }
+    .tabs { display: flex; border-bottom: 1px solid var(--border); margin-bottom: 24px; }
+    .tab { padding: 12px 20px; font-size: 14px; font-weight: 500; color: var(--text2); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: all 0.2s; font-family: 'DM Sans', sans-serif; }
+    .tab.active { color: var(--blue); border-bottom-color: var(--blue); }
+    .ilan-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .ilan-card-p { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 18px; }
+    .ilan-p-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+    .status-aktif { font-size: 11px; color: var(--green); font-weight: 600; }
+    .status-kapandi { font-size: 11px; color: var(--text3); font-weight: 600; }
+    .ilan-p-title { font-size: 13px; font-weight: 500; color: var(--text); line-height: 1.45; margin-bottom: 10px; }
+    .ilan-p-budget { font-family: 'Syne', sans-serif; font-size: 19px; font-weight: 800; color: var(--text); margin-bottom: 10px; }
+    .ilan-p-foot { display: flex; align-items: center; justify-content: space-between; padding-top: 10px; border-top: 1px solid var(--border); font-size: 12px; color: var(--text3); }
+    .teklif-say { color: var(--blue); font-weight: 600; cursor: pointer; }
+    .yorum-list { display: flex; flex-direction: column; gap: 12px; }
+    .yorum-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 18px; }
+    .yorum-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+    .yorum-user { display: flex; align-items: center; gap: 10px; }
+    .y-avatar { width: 34px; height: 34px; border-radius: 50%; background: var(--bg3); display: flex; align-items: center; justify-content: center; font-size: 16px; }
+    .y-name { font-size: 13px; font-weight: 600; color: var(--text); }
+    .y-date { font-size: 11px; color: var(--text3); }
+    .y-text { font-size: 13px; color: var(--text2); line-height: 1.55; }
+
+    /* NASIL ÇALIŞIR */
+    .nc-hero { text-align: center; padding: 72px 24px 56px; position: relative; overflow: hidden; }
+    .nc-hero::before { content: ''; position: absolute; top: -80px; left: 50%; transform: translateX(-50%); width: 600px; height: 400px; background: radial-gradient(ellipse, var(--glow) 0%, transparent 65%); pointer-events: none; }
+    .hero-badge-nc { display: inline-flex; align-items: center; gap: 7px; padding: 5px 16px; margin-bottom: 20px; border: 1px solid var(--blue-border); border-radius: 999px; font-size: 12px; font-weight: 600; color: var(--blue); background: var(--blue-bg); }
+    .nc-hero h1 { font-family: 'Syne', sans-serif; font-size: 42px; font-weight: 800; letter-spacing: -1.5px; line-height: 1.1; margin-bottom: 16px; }
+    .nc-hero h1 em { color: var(--blue); font-style: normal; }
+    .nc-hero p { font-size: 16px; color: var(--text2); max-width: 440px; margin: 0 auto; line-height: 1.7; }
+    .rol-wrap { max-width: 700px; margin: 0 auto; padding: 0 24px 56px; }
+    .rol-tabs { display: flex; background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 5px; gap: 5px; margin-bottom: 40px; }
+    .rol-tab { flex: 1; padding: 12px; border-radius: 10px; text-align: center; cursor: pointer; transition: all 0.2s; font-size: 14px; font-weight: 600; color: var(--text2); font-family: 'DM Sans', sans-serif; border: none; background: transparent; }
+    .rol-tab.active { background: var(--blue); color: #fff; }
+    .step-item { display: flex; gap: 20px; margin-bottom: 32px; align-items: flex-start; }
+    .step-left { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
+    .step-circle { width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800; }
+    .step-circle.blue { background: var(--blue-bg); color: var(--blue); border: 2px solid var(--blue-border); }
+    .step-circle.green { background: var(--green-bg); color: var(--green); border: 2px solid var(--green-border); }
+    .step-circle.amber { background: var(--amber-bg); color: var(--amber); border: 2px solid rgba(245,158,11,0.3); }
+    .step-circle.purple { background: var(--purple-bg); color: var(--purple); border: 2px solid rgba(167,139,250,0.3); }
+    .step-connector { width: 2px; flex: 1; background: var(--border); margin: 8px 0; min-height: 24px; }
+    .step-body { background: var(--bg2); border: 1px solid var(--border); border-radius: 16px; padding: 22px; flex: 1; }
+    .step-body:hover { border-color: var(--border2); }
+    .step-emoji { font-size: 28px; margin-bottom: 10px; }
+    .step-title { font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+    .step-desc { font-size: 14px; color: var(--text2); line-height: 1.6; }
+    .faq-wrap { max-width: 700px; margin: 0 auto; padding: 0 24px 56px; }
+    .faq-section-title { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; text-align: center; margin-bottom: 24px; }
+    .faq-item { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; margin-bottom: 10px; overflow: hidden; }
+    .faq-q { padding: 16px 20px; font-size: 14px; font-weight: 600; color: var(--text); cursor: pointer; display: flex; align-items: center; justify-content: space-between; user-select: none; }
+    .faq-q span { font-size: 18px; color: var(--text3); transition: transform 0.2s; }
+    .faq-q.open span { transform: rotate(45deg); color: var(--blue); }
+    .faq-a { display: none; padding: 0 20px 16px; font-size: 13px; color: var(--text2); line-height: 1.65; }
+    .faq-a.show { display: block; }
+    .nc-cta-wrap { max-width: 700px; margin: 0 auto; padding: 0 24px 60px; }
+    .nc-cta-box { background: var(--bg2); border: 1px solid var(--blue-border); border-radius: 20px; padding: 44px; text-align: center; position: relative; overflow: hidden; }
+    .nc-cta-box::before { content: ''; position: absolute; top: -60px; left: 50%; transform: translateX(-50%); width: 300px; height: 200px; background: radial-gradient(ellipse, var(--blue-bg), transparent 70%); }
+    .nc-cta-box h2 { font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 800; margin-bottom: 10px; position: relative; }
+    .nc-cta-box p { font-size: 14px; color: var(--text2); margin-bottom: 24px; position: relative; }
+    .cta-btns { display: flex; gap: 10px; justify-content: center; position: relative; }
+    .btn-big { padding: 13px 28px; border-radius: 12px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+    .btn-big-blue { background: var(--blue); color: #fff; border: none; }
+    .btn-big-blue:hover { background: var(--blue2); }
+    .btn-big-outline { background: transparent; color: var(--text2); border: 1px solid var(--border2); }
+
+    /* POPUPLAR */
+    .popup-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 999; align-items: center; justify-content: center; }
+    .popup-overlay.show { display: flex; }
+    .popup-box { background: var(--bg2); border: 1px solid var(--border); border-radius: 20px; padding: 44px 36px; text-align: center; max-width: 380px; }
+    .p-ico { font-size: 56px; margin-bottom: 16px; }
+    .p-title { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; margin-bottom: 8px; }
+    .p-sub { font-size: 14px; color: var(--text2); margin-bottom: 8px; line-height: 1.6; }
+    .p-phone { font-size: 20px; font-weight: 700; color: var(--green); margin: 12px 0 20px; font-family: 'Syne', sans-serif; }
+    .p-btn { padding: 12px 28px; border: none; border-radius: 10px; color: #fff; font-size: 14px; font-weight: 700; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+    .p-btn-green { background: var(--green); }
+    .p-btn-blue { background: var(--blue); }
 
     @media (max-width: 768px) {
       nav { padding: 0 20px; }
@@ -467,47 +332,42 @@
       .hero { padding: 60px 20px 44px; }
       .hero h1 { font-size: 36px; }
       .main { padding: 32px 20px; }
-      .cta { margin: 8px 20px 32px; padding: 24px; flex-direction: column; gap: 18px; }
-      .cta .btn-primary { margin-left: 0; width: 100%; }
+      .cta-section { margin: 8px 20px 32px; padding: 24px; flex-direction: column; gap: 18px; }
+      .cta-section .btn-primary { margin-left: 0; width: 100%; }
       footer { padding: 18px 20px; }
-      .stats-bar { flex-wrap: wrap; }
-      .stat-item { min-width: 50%; }
+      .teklif-page { grid-template-columns: 1fr; }
+      .ilan-card { position: static; }
+      .stats-grid { grid-template-columns: repeat(2,1fr); }
+      .ilan-grid { grid-template-columns: 1fr; }
+      .profile-hero { flex-direction: column; }
     }
   </style>
 </head>
 <body>
 
-<!-- NAV -->
 <nav>
-  <a class="logo" onclick="showHome()" style="cursor:pointer">arı<em>yorum</em></a>
+  <div class="logo" onclick="showPage('home')">arı<em>yorum</em></div>
   <ul class="nav-links">
-    <li><a href="#ilanlar">İlanlar</a></li>
-    <li><a href="#">Nasıl çalışır?</a></li>
-    <li><a href="#">Güvenlik</a></li>
-    <li><a href="#">Hakkımızda</a></li>
+    <li><a onclick="showPage('home')">İlanlar</a></li>
+    <li><a onclick="showPage('nasil')">Nasıl çalışır?</a></li>
+    <li><a onclick="showPage('nasil')">Güvenlik</a></li>
+    <li><a onclick="showPage('profil')">Profilim</a></li>
   </ul>
   <div class="nav-right">
-    <button class="mode-toggle" onclick="toggleMode()">
-      <span id="mode-ico">🌙</span>
-      <span id="mode-lbl">Gece modu</span>
-    </button>
-    <button class="btn-outline">Giriş yap</button>
-    <button class="btn-primary" onclick="showIlan()">+ İlan ver</button>
+    <button class="mode-toggle" onclick="toggleMode()"><span id="mode-ico">🌙</span><span id="mode-lbl">Gece modu</span></button>
+    <button class="btn-outline" onclick="showPage('profil')">Giriş yap</button>
+    <button class="btn-primary" onclick="showPage('ilan')">+ İlan ver</button>
   </div>
 </nav>
 
 <!-- ANA SAYFA -->
-<div id="home-page" class="page active">
-
+<div id="page-home" class="page active">
   <section class="hero">
     <div class="hero-glow"></div>
     <div class="hero-badge"><span class="dot"></span> Türkiye'nin ilk alıcı odaklı platformu</div>
     <h1>Sen ara,<br>teklifler <em>sana gelsin</em></h1>
     <p>İlan ver, satıcılar yarışsın. Araç, ev, elektronik — ne arıyorsan bütçeni belirt, teklifleri bekle.</p>
-    <div class="search-bar">
-      <input type="text" placeholder="Ne arıyorsunuz? (örn: SUV, 3+1 daire, iPhone...)">
-      <button>Ara</button>
-    </div>
+    <div class="search-bar"><input type="text" placeholder="Ne arıyorsunuz? (örn: SUV, 3+1 daire, iPhone...)"><button>Ara</button></div>
     <div class="filter-cats">
       <button class="filter-cat active" onclick="filterCat(this,'hepsi')">Tümü</button>
       <button class="filter-cat" onclick="filterCat(this,'arac')">🚗 Araç</button>
@@ -516,312 +376,232 @@
       <button class="filter-cat" onclick="filterCat(this,'diger')">🛋 Diğer</button>
     </div>
   </section>
-
   <div class="stats-bar">
     <div class="stat-item"><div class="stat-num">2.840</div><div class="stat-lbl">Aktif ilan</div></div>
     <div class="stat-item"><div class="stat-num">18.500</div><div class="stat-lbl">Kayıtlı kullanıcı</div></div>
     <div class="stat-item"><div class="stat-num">4.200</div><div class="stat-lbl">Tamamlanan işlem</div></div>
     <div class="stat-item"><div class="stat-num">%98</div><div class="stat-lbl">Memnuniyet oranı</div></div>
   </div>
-
-  <div class="main" id="ilanlar">
-    <div class="section-head">
-      <h2>Son ilanlar</h2>
-      <a class="see-all" href="#">Tümünü gör →</a>
-    </div>
+  <div class="main">
+    <div class="section-head"><h2>Son ilanlar</h2><a class="see-all">Tümünü gör →</a></div>
     <div class="cards-grid" id="cards-grid">
-
-      <div class="card" data-cat="arac">
-        <div class="card-head">
-          <span class="tag tag-arac">Araç</span>
-          <span class="verified">✓ Kimlik onaylı</span>
-        </div>
-        <div class="card-title">SUV veya sedan arıyorum, 2020 model ve üzeri, otomatik</div>
-        <div class="card-budget">1.000.000 ₺</div>
-        <div class="card-foot">
-          <span class="card-loc">📍 Gaziantep</span>
-          <div style="display:flex;align-items:center;gap:8px">
-            <span class="card-offers"><strong>12</strong> teklif</span>
-            <button class="teklif-btn">Teklif ver</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="card" data-cat="emlak">
-        <div class="card-head">
-          <span class="tag tag-emlak">Emlak</span>
-          <span class="verified">✓ Kimlik onaylı</span>
-        </div>
-        <div class="card-title">Kiralık 3+1 daire arıyorum, merkezi konumda, eşyalı olabilir</div>
-        <div class="card-budget">15.000 ₺<small>/ay</small></div>
-        <div class="card-foot">
-          <span class="card-loc">📍 İstanbul, Kadıköy</span>
-          <div style="display:flex;align-items:center;gap:8px">
-            <span class="card-offers"><strong>7</strong> teklif</span>
-            <button class="teklif-btn">Teklif ver</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="card" data-cat="elektronik">
-        <div class="card-head">
-          <span class="tag tag-elektronik">Elektronik</span>
-          <span class="verified">✓ Kimlik onaylı</span>
-        </div>
-        <div class="card-title">iPhone 14 Pro arıyorum, temiz kullanılmış, kutusuyla</div>
-        <div class="card-budget">28.000 ₺</div>
-        <div class="card-foot">
-          <span class="card-loc">📍 Ankara</span>
-          <div style="display:flex;align-items:center;gap:8px">
-            <span class="card-offers"><strong>24</strong> teklif</span>
-            <button class="teklif-btn">Teklif ver</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="card" data-cat="arac">
-        <div class="card-head">
-          <span class="tag tag-arac">Araç</span>
-          <span class="verified">✓ Kimlik onaylı</span>
-        </div>
-        <div class="card-title">Motorsiklet arıyorum, 650cc ve üzeri, naked veya touring</div>
-        <div class="card-budget">350.000 ₺</div>
-        <div class="card-foot">
-          <span class="card-loc">📍 İzmir</span>
-          <div style="display:flex;align-items:center;gap:8px">
-            <span class="card-offers"><strong>5</strong> teklif</span>
-            <button class="teklif-btn">Teklif ver</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="card" data-cat="emlak">
-        <div class="card-head">
-          <span class="tag tag-emlak">Emlak</span>
-          <span class="verified">✓ Kimlik onaylı</span>
-        </div>
-        <div class="card-title">Satılık 2+1 daire, deniz manzaralı tercihim var</div>
-        <div class="card-budget">4.500.000 ₺</div>
-        <div class="card-foot">
-          <span class="card-loc">📍 Antalya</span>
-          <div style="display:flex;align-items:center;gap:8px">
-            <span class="card-offers"><strong>18</strong> teklif</span>
-            <button class="teklif-btn">Teklif ver</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="card" data-cat="diger">
-        <div class="card-head">
-          <span class="tag tag-diger">Diğer</span>
-          <span class="verified">✓ Kimlik onaylı</span>
-        </div>
-        <div class="card-title">Gaming bilgisayar arıyorum, RTX 4070 ve üzeri, hazır sistem</div>
-        <div class="card-budget">85.000 ₺</div>
-        <div class="card-foot">
-          <span class="card-loc">📍 Bursa</span>
-          <div style="display:flex;align-items:center;gap:8px">
-            <span class="card-offers"><strong>9</strong> teklif</span>
-            <button class="teklif-btn">Teklif ver</button>
-          </div>
-        </div>
-      </div>
-
+      <div class="card" data-cat="arac"><div class="card-head"><span class="tag tag-arac">Araç</span><span class="verified">✓ Kimlik onaylı</span></div><div class="card-title">SUV veya sedan arıyorum, 2020 model ve üzeri, otomatik</div><div class="card-budget">1.000.000 ₺</div><div class="card-foot"><span class="card-loc">📍 Gaziantep</span><div style="display:flex;align-items:center;gap:8px"><span class="card-offers"><strong>12</strong> teklif</span><button class="teklif-btn" onclick="showPage('teklifver')">Teklif ver</button></div></div></div>
+      <div class="card" data-cat="emlak"><div class="card-head"><span class="tag tag-emlak">Emlak</span><span class="verified">✓ Kimlik onaylı</span></div><div class="card-title">Kiralık 3+1 daire arıyorum, merkezi konumda, eşyalı olabilir</div><div class="card-budget">15.000 ₺<small>/ay</small></div><div class="card-foot"><span class="card-loc">📍 İstanbul, Kadıköy</span><div style="display:flex;align-items:center;gap:8px"><span class="card-offers"><strong>7</strong> teklif</span><button class="teklif-btn" onclick="showPage('teklifver')">Teklif ver</button></div></div></div>
+      <div class="card" data-cat="elektronik"><div class="card-head"><span class="tag tag-elektronik">Elektronik</span><span class="verified">✓ Kimlik onaylı</span></div><div class="card-title">iPhone 14 Pro arıyorum, temiz kullanılmış, kutusuyla</div><div class="card-budget">28.000 ₺</div><div class="card-foot"><span class="card-loc">📍 Ankara</span><div style="display:flex;align-items:center;gap:8px"><span class="card-offers"><strong>24</strong> teklif</span><button class="teklif-btn" onclick="showPage('teklifver')">Teklif ver</button></div></div></div>
+      <div class="card" data-cat="arac"><div class="card-head"><span class="tag tag-arac">Araç</span><span class="verified">✓ Kimlik onaylı</span></div><div class="card-title">Motorsiklet arıyorum, 650cc ve üzeri, naked veya touring</div><div class="card-budget">350.000 ₺</div><div class="card-foot"><span class="card-loc">📍 İzmir</span><div style="display:flex;align-items:center;gap:8px"><span class="card-offers"><strong>5</strong> teklif</span><button class="teklif-btn" onclick="showPage('teklifver')">Teklif ver</button></div></div></div>
+      <div class="card" data-cat="emlak"><div class="card-head"><span class="tag tag-emlak">Emlak</span><span class="verified">✓ Kimlik onaylı</span></div><div class="card-title">Satılık 2+1 daire, deniz manzaralı tercihim var</div><div class="card-budget">4.500.000 ₺</div><div class="card-foot"><span class="card-loc">📍 Antalya</span><div style="display:flex;align-items:center;gap:8px"><span class="card-offers"><strong>18</strong> teklif</span><button class="teklif-btn" onclick="showPage('teklifver')">Teklif ver</button></div></div></div>
+      <div class="card" data-cat="diger"><div class="card-head"><span class="tag tag-diger">Diğer</span><span class="verified">✓ Kimlik onaylı</span></div><div class="card-title">Gaming bilgisayar arıyorum, RTX 4070 ve üzeri, hazır sistem</div><div class="card-budget">85.000 ₺</div><div class="card-foot"><span class="card-loc">📍 Bursa</span><div style="display:flex;align-items:center;gap:8px"><span class="card-offers"><strong>9</strong> teklif</span><button class="teklif-btn" onclick="showPage('teklifver')">Teklif ver</button></div></div></div>
     </div>
   </div>
-
-  <div class="cta">
-    <div>
-      <h3>Sen de ilan ver, teklifleri bekle</h3>
-      <p>Ücretsiz ilan aç — satıcılar sana ulaşsın, en iyisini seç</p>
-    </div>
-    <button class="btn-primary cta" style="margin:0;padding:13px 28px;font-size:14px;border-radius:10px;background:var(--blue);border:none;color:#fff;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif" onclick="showIlan()">+ İlan oluştur</button>
-  </div>
-
-  <footer>
-    <div class="logo">arı<em>yorum</em></div>
-    <p>© 2025 arıyorum. Tüm hakları saklıdır.</p>
-  </footer>
-
+  <div class="cta-section"><div><h3>Sen de ilan ver, teklifleri bekle</h3><p>Ücretsiz ilan aç — satıcılar sana ulaşsın, en iyisini seç</p></div><button class="btn-primary" onclick="showPage('ilan')" style="padding:13px 28px;font-size:14px;position:relative;z-index:1">+ İlan oluştur</button></div>
+  <footer><div class="logo">arı<em>yorum</em></div><p>© 2025 arıyorum. Tüm hakları saklıdır.</p></footer>
 </div>
 
-<!-- İLAN OLUŞTUR SAYFASI -->
-<div id="ilan-page" class="page">
+<!-- İLAN OLUŞTUR -->
+<div id="page-ilan" class="page">
   <div class="ilan-page">
-
-    <div class="page-header">
-      <h1>İlan oluştur</h1>
-      <p>Ne aradığını anlat, satıcılar sana ulaşsın</p>
-    </div>
-
-    <div class="steps-bar">
-      <div class="step done">
-        <div class="step-num">✓</div>
-        <div class="step-txt">Kayıt</div>
-      </div>
-      <div class="step-line"></div>
-      <div class="step active">
-        <div class="step-num">2</div>
-        <div class="step-txt">İlan bilgileri</div>
-      </div>
-      <div class="step-line"></div>
-      <div class="step">
-        <div class="step-num">3</div>
-        <div class="step-txt">Yayınla</div>
-      </div>
-    </div>
-
+    <div class="page-header"><h1>İlan oluştur</h1><p>Ne aradığını anlat, satıcılar sana ulaşsın</p></div>
+    <div class="steps-bar"><div class="step done"><div class="step-num">✓</div><div class="step-txt">Kayıt</div></div><div class="step-line"></div><div class="step active"><div class="step-num">2</div><div class="step-txt">İlan bilgileri</div></div><div class="step-line"></div><div class="step"><div class="step-num">3</div><div class="step-txt">Yayınla</div></div></div>
     <div class="sec-lbl">Kategori seç</div>
     <div class="cat-grid">
-      <div class="cat-opt sel" onclick="selCat(this,'🚗 Araç')">
-        <div class="ico">🚗</div><div class="lbl">Araç</div>
-      </div>
-      <div class="cat-opt" onclick="selCat(this,'🏠 Emlak')">
-        <div class="ico">🏠</div><div class="lbl">Emlak</div>
-      </div>
-      <div class="cat-opt" onclick="selCat(this,'📱 Elektronik')">
-        <div class="ico">📱</div><div class="lbl">Elektronik</div>
-      </div>
-      <div class="cat-opt" onclick="selCat(this,'🛋 Diğer')">
-        <div class="ico">🛋</div><div class="lbl">Diğer</div>
-      </div>
+      <div class="cat-opt sel" onclick="selCat(this,'🚗 Araç')"><div class="ico">🚗</div><div class="lbl">Araç</div></div>
+      <div class="cat-opt" onclick="selCat(this,'🏠 Emlak')"><div class="ico">🏠</div><div class="lbl">Emlak</div></div>
+      <div class="cat-opt" onclick="selCat(this,'📱 Elektronik')"><div class="ico">📱</div><div class="lbl">Elektronik</div></div>
+      <div class="cat-opt" onclick="selCat(this,'🛋 Diğer')"><div class="ico">🛋</div><div class="lbl">Diğer</div></div>
     </div>
-
-    <div class="fgroup">
-      <label class="flabel">İlan başlığı</label>
-      <input class="finput" type="text" id="f-title" placeholder="Örn: 2020 model ve üzeri SUV arıyorum" oninput="updatePrev()">
-    </div>
-
+    <div class="fgroup"><label class="flabel">İlan başlığı</label><input class="finput" type="text" id="f-title" placeholder="Örn: 2020 model ve üzeri SUV arıyorum" oninput="updatePrev()"></div>
     <div class="frow">
-      <div class="fgroup">
-        <label class="flabel">Bütçe</label>
-        <div class="budget-wrap">
-          <input class="finput" type="text" id="f-budget" placeholder="1.000.000" oninput="updatePrev()">
-          <span class="budget-sym">₺</span>
-        </div>
-      </div>
-      <div class="fgroup">
-        <label class="flabel">Şehir</label>
-        <select class="fselect" id="f-city" onchange="updatePrev()">
-          <option value="">Seçiniz</option>
-          <option selected>Gaziantep</option>
-          <option>İstanbul</option>
-          <option>Ankara</option>
-          <option>İzmir</option>
-          <option>Antalya</option>
-          <option>Bursa</option>
-          <option>Adana</option>
-          <option>Konya</option>
-          <option>Diğer</option>
-        </select>
-      </div>
+      <div class="fgroup"><label class="flabel">Bütçe</label><div class="budget-wrap"><input class="finput" type="text" id="f-budget" placeholder="1.000.000" oninput="updatePrev()"><span class="budget-sym">₺</span></div></div>
+      <div class="fgroup"><label class="flabel">Şehir</label><select class="fselect" id="f-city" onchange="updatePrev()"><option value="">Seçiniz</option><option selected>Gaziantep</option><option>İstanbul</option><option>Ankara</option><option>İzmir</option><option>Antalya</option><option>Bursa</option><option>Adana</option><option>Diğer</option></select></div>
     </div>
-
-    <div class="fgroup">
-      <label class="flabel">Açıklama <span>(isteğe bağlı)</span></label>
-      <textarea class="ftextarea" placeholder="Aradığınız ürün/hizmet hakkında detay verin. Örn: Otomatik vites, benzinli tercihim var. Kaporalı araç olmamalı."></textarea>
-    </div>
-
+    <div class="fgroup"><label class="flabel">Açıklama <span>(isteğe bağlı)</span></label><textarea class="ftextarea" placeholder="Aradığınız ürün hakkında detay verin."></textarea></div>
     <div class="divider"></div>
-
     <div class="sec-lbl">Güven rozetleri</div>
     <div class="trust-panel">
-      <div class="trust-row">
-        <div class="trust-l">
-          <div class="trust-ico">🪪</div>
-          <div>
-            <div class="trust-name">Kimlik doğrulama</div>
-            <div class="trust-desc">TC kimlik numaranız ile doğrulayın</div>
-          </div>
-        </div>
-        <span class="badge-green">✓ Onaylı</span>
-      </div>
-      <div class="trust-row">
-        <div class="trust-l">
-          <div class="trust-ico">📞</div>
-          <div>
-            <div class="trust-name">Telefon doğrulama</div>
-            <div class="trust-desc">SMS ile doğrulayın</div>
-          </div>
-        </div>
-        <span class="badge-green">✓ Onaylı</span>
-      </div>
-      <div class="trust-row">
-        <div class="trust-l">
-          <div class="trust-ico">⭐</div>
-          <div>
-            <div class="trust-name">Kullanıcı puanı</div>
-            <div class="trust-desc">İlk işlem sonrası oluşur</div>
-          </div>
-        </div>
-        <span class="badge-blue">Yeni üye</span>
-      </div>
+      <div class="trust-row"><div class="trust-l"><div class="trust-ico">🪪</div><div><div class="trust-name">Kimlik doğrulama</div><div class="trust-desc">TC kimlik numaranız ile doğrulayın</div></div></div><span class="badge-green">✓ Onaylı</span></div>
+      <div class="trust-row"><div class="trust-l"><div class="trust-ico">📞</div><div><div class="trust-name">Telefon doğrulama</div><div class="trust-desc">SMS ile doğrulayın</div></div></div><span class="badge-green">✓ Onaylı</span></div>
+      <div class="trust-row"><div class="trust-l"><div class="trust-ico">⭐</div><div><div class="trust-name">Kullanıcı puanı</div><div class="trust-desc">İlk işlem sonrası oluşur</div></div></div><span class="badge-blue">Yeni üye</span></div>
     </div>
-
     <div class="sec-lbl">İlan önizlemesi</div>
-    <div class="preview-card">
-      <div class="prev-lbl">👁 Satıcılar böyle görecek</div>
-      <div class="prev-cat" id="prev-cat">🚗 Araç</div>
-      <div class="prev-title" id="prev-title">2020 model ve üzeri SUV arıyorum</div>
-      <div class="prev-budget" id="prev-budget">1.000.000 ₺</div>
-      <div class="prev-foot">
-        <span id="prev-city">📍 Gaziantep</span>
-        <span class="prev-v">✓ Kimlik onaylı</span>
-        <span class="prev-v">✓ Telefon onaylı</span>
-      </div>
-    </div>
-
-    <button class="submit-btn" onclick="submitIlan()">🚀 İlanı yayınla</button>
+    <div class="preview-card"><div class="prev-lbl">👁 Satıcılar böyle görecek</div><div class="prev-cat" id="prev-cat">🚗 Araç</div><div class="prev-title" id="prev-title">2020 model ve üzeri SUV arıyorum</div><div class="prev-budget" id="prev-budget">1.000.000 ₺</div><div class="prev-foot"><span id="prev-city">📍 Gaziantep</span><span class="prev-v">✓ Kimlik onaylı</span><span class="prev-v">✓ Telefon onaylı</span></div></div>
+    <button class="submit-btn" onclick="showPopup('ilan-success')">🚀 İlanı yayınla</button>
     <div class="submit-note">İlanınız anında yayınlanır ve satıcılar size ulaşmaya başlar</div>
-
   </div>
 </div>
 
-<!-- BAŞARI SAYFASI -->
-<div id="success-page" class="success-page">
-  <div class="success-ico">🎉</div>
-  <h2>İlanınız yayınlandı!</h2>
-  <p>Satıcılar size ulaşmaya başlayacak.<br>Teklifleri profilinizden takip edebilirsiniz.</p>
-  <button class="btn-primary" style="padding:12px 28px;font-size:14px" onclick="showHome()">Ana sayfaya dön</button>
+<!-- TEKLİF VER -->
+<div id="page-teklifver" class="page">
+  <div class="teklif-page">
+    <div>
+      <div class="ilan-card">
+        <div class="ilan-top"><span class="tag tag-arac">🚗 Araç</span><span class="verified">✓ Kimlik onaylı</span></div>
+        <div class="ilan-title">SUV veya sedan arıyorum, 2020 model ve üzeri, otomatik vites</div>
+        <div class="ilan-budget">1.000.000 ₺<span> bütçe</span></div>
+        <div class="ilan-meta"><div class="meta-row">📍 Gaziantep</div><div class="meta-row">📅 2 saat önce yayınlandı</div><div class="meta-row">📝 Otomatik vites, benzinli tercihim. Kaporalı olmamalı.</div></div>
+        <div class="divider"></div>
+        <div class="alici-box"><div class="avatar">👤</div><div><div class="alici-name">A. Yılmaz</div><div class="alici-badges"><span class="badge badge-green">✓ Kimlik</span><span class="badge badge-green">✓ Telefon</span><span class="badge badge-blue">Yeni üye</span></div></div></div>
+        <div class="offer-count-box"><span>Gelen teklif</span><strong>12</strong></div>
+      </div>
+    </div>
+    <div class="teklif-form">
+      <div class="form-card">
+        <div class="form-title">Teklif ver</div>
+        <div class="form-sub">Alıcıya en iyi teklifini gönder</div>
+        <div class="fgroup"><label class="flabel">Teklif fiyatı</label><div class="price-wrap"><input class="finput" type="text" id="price-input" placeholder="950.000" oninput="checkPrice()"><span class="price-sym">₺</span></div><div class="price-hint" id="price-hint">💡 Alıcının bütçesi: 1.000.000 ₺</div></div>
+        <div class="fgroup"><label class="flabel">Araç bilgisi</label><input class="finput" type="text" placeholder="Örn: 2021 Toyota RAV4 1.8 Hybrid, 45.000 km"></div>
+        <div class="fgroup"><label class="flabel">Mesajınız <span>(isteğe bağlı)</span></label><textarea class="ftextarea" placeholder="Araç hakkında ek bilgi verin."></textarea></div>
+        <div class="fgroup"><label class="flabel">İletişim numarası</label><input class="finput" type="text" placeholder="05XX XXX XX XX"></div>
+      </div>
+      <div class="satici-trust">
+        <div class="trust-title">Satıcı profiliniz</div>
+        <div class="trust-row"><div class="trust-l"><span class="trust-ico">🪪</span> Kimlik doğrulama</div><span class="badge-green">✓ Onaylı</span></div>
+        <div class="trust-row"><div class="trust-l"><span class="trust-ico">📞</span> Telefon doğrulama</div><span class="badge-green">✓ Onaylı</span></div>
+        <div class="trust-row"><div class="trust-l"><span class="trust-ico">⭐</span> Kullanıcı puanı</div><span class="badge-blue">Yeni üye</span></div>
+      </div>
+      <button class="submit-btn" onclick="showPopup('teklif-success')">📨 Teklifi gönder</button>
+      <div class="submit-note">Teklifiniz alıcıya anında iletilir</div>
+    </div>
+  </div>
 </div>
+
+<!-- GELEN TEKLİFLER -->
+<div id="page-teklifler" class="page">
+  <div class="teklifler-page">
+    <div class="page-head"><h1>Gelen teklifler</h1><p>İlanınıza gelen teklifleri inceleyin, en iyisini kabul edin</p></div>
+    <div class="ilan-ozet"><div class="ozet-left"><div class="ozet-icon">🚗</div><div><div class="ozet-title">SUV veya sedan arıyorum, 2020 model ve üzeri</div><div class="ozet-meta">📍 Gaziantep · 2 saat önce</div></div></div><div class="ozet-budget">1.000.000 ₺<small> bütçe</small></div></div>
+    <div class="filter-row"><button class="filter-btn active">Tümü (4)</button><button class="filter-btn">Bütçe dahili (3)</button><button class="filter-btn">En düşük fiyat</button></div>
+    <div class="teklif-list">
+      <div class="teklif-card en-iyi"><div class="card-top"><div class="satici-info"><div class="satici-avatar">🧑</div><div><div class="satici-name">Mehmet K.</div><div class="satici-badges"><span class="badge badge-green">✓ Kimlik</span><span class="badge badge-green">✓ Telefon</span><span class="badge badge-amber">⭐ 4.9 · 47 işlem</span></div></div></div><div class="teklif-fiyat"><div class="fiyat-num iyi">920.000 ₺</div><div class="fiyat-diff iyi">Bütçenden 80.000 ₺ ucuz</div></div></div><div class="card-body"><div class="arac-bilgi">2022 Toyota RAV4 1.8 Hybrid · 38.000 km</div><div class="mesaj">Hasar kaydı yok, muayene 2026'ya kadar geçerli. İkinci el sıfır ayarında.</div></div><div class="card-foot"><span class="zaman">35 dakika önce</span><div class="actions"><button class="btn-red" onclick="reddet(this)">Reddet</button><button class="btn-green" onclick="showPopup('kabul-success')">✓ Kabul et</button></div></div></div>
+      <div class="teklif-card"><div class="card-top"><div class="satici-info"><div class="satici-avatar">👨</div><div><div class="satici-name">Ali R.</div><div class="satici-badges"><span class="badge badge-green">✓ Kimlik</span><span class="badge badge-amber">⭐ 4.7 · 23 işlem</span></div></div></div><div class="teklif-fiyat"><div class="fiyat-num">975.000 ₺</div><div class="fiyat-diff">Bütçenden 25.000 ₺ ucuz</div></div></div><div class="card-body"><div class="arac-bilgi">2021 Honda CR-V 1.5 VTEC · 52.000 km</div><div class="mesaj">Tek sahipli, bakımları serviste yapılmış. Faturalı satış yapılır.</div></div><div class="card-foot"><span class="zaman">1 saat önce</span><div class="actions"><button class="btn-red" onclick="reddet(this)">Reddet</button><button class="btn-green" onclick="showPopup('kabul-success')">✓ Kabul et</button></div></div></div>
+      <div class="teklif-card"><div class="card-top"><div class="satici-info"><div class="satici-avatar">👩</div><div><div class="satici-name">Fatma S.</div><div class="satici-badges"><span class="badge badge-green">✓ Kimlik</span><span class="badge badge-blue">Yeni üye</span></div></div></div><div class="teklif-fiyat"><div class="fiyat-num">990.000 ₺</div><div class="fiyat-diff">Bütçenden 10.000 ₺ ucuz</div></div></div><div class="card-body"><div class="arac-bilgi">2020 Hyundai Tucson 1.6 T-GDI · 61.000 km</div><div class="mesaj">Eşimin kullandığı araç, garajda bekliyor. Takas düşünmüyorum.</div></div><div class="card-foot"><span class="zaman">1 saat 45 dk önce</span><div class="actions"><button class="btn-red" onclick="reddet(this)">Reddet</button><button class="btn-green" onclick="showPopup('kabul-success')">✓ Kabul et</button></div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- PROFİL -->
+<div id="page-profil" class="page">
+  <div class="profil-page">
+    <div class="profile-hero">
+      <div class="avatar-wrap"><div class="profile-avatar">👤</div><div class="online-dot"></div></div>
+      <div class="profile-info">
+        <div class="profile-name">Ahmet Yılmaz</div>
+        <div class="profile-meta">📍 Gaziantep · Üye: Ocak 2025</div>
+        <div class="badges-row"><span class="badge-prof badge-prof-green">✓ Kimlik onaylı</span><span class="badge-prof badge-prof-green">✓ Telefon onaylı</span><span class="badge-prof badge-prof-blue">Alıcı</span><span class="badge-prof badge-prof-purple">🏆 Güvenilir üye</span></div>
+        <div class="star-row"><span style="font-size:16px">⭐⭐⭐⭐⭐</span><span class="star-num">4.9</span><span class="star-count">· 14 değerlendirme</span></div>
+      </div>
+      <button class="edit-btn">✏️ Profili düzenle</button>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-box"><div class="stat-box-num">3</div><div class="stat-box-lbl">Aktif ilan</div></div>
+      <div class="stat-box"><div class="stat-box-num">8</div><div class="stat-box-lbl">Tamamlanan işlem</div></div>
+      <div class="stat-box"><div class="stat-box-num">47</div><div class="stat-box-lbl">Gelen teklif</div></div>
+      <div class="stat-box"><div class="stat-box-num">4.9</div><div class="stat-box-lbl">Ortalama puan</div></div>
+    </div>
+    <div class="tabs">
+      <div class="tab active" onclick="switchTab('ilanlar',this)">İlanlarım</div>
+      <div class="tab" onclick="switchTab('yorumlar',this)">Değerlendirmeler</div>
+      <div class="tab" onclick="switchTab('ayarlar',this)">Ayarlar</div>
+    </div>
+    <div class="tab-content active" id="tab-ilanlar">
+      <div class="ilan-grid">
+        <div class="ilan-card-p"><div class="ilan-p-top"><span class="tag tag-arac">Araç</span><span class="status-aktif">● Aktif</span></div><div class="ilan-p-title">SUV veya sedan arıyorum, 2020 model ve üzeri</div><div class="ilan-p-budget">1.000.000 ₺</div><div class="ilan-p-foot"><span>📍 Gaziantep</span><span class="teklif-say" onclick="showPage('teklifler')">12 teklif →</span></div></div>
+        <div class="ilan-card-p"><div class="ilan-p-top"><span class="tag tag-emlak">Emlak</span><span class="status-aktif">● Aktif</span></div><div class="ilan-p-title">Kiralık 3+1 daire, merkezi konum</div><div class="ilan-p-budget">15.000 ₺/ay</div><div class="ilan-p-foot"><span>📍 Gaziantep</span><span class="teklif-say">5 teklif</span></div></div>
+        <div class="ilan-card-p" style="opacity:0.5"><div class="ilan-p-top"><span class="tag tag-arac">Araç</span><span class="status-kapandi">● Kapandı</span></div><div class="ilan-p-title">Motorsiklet arıyorum, 400cc ve üzeri</div><div class="ilan-p-budget">180.000 ₺</div><div class="ilan-p-foot"><span>📍 Gaziantep</span><span>Tamamlandı</span></div></div>
+      </div>
+    </div>
+    <div class="tab-content" id="tab-yorumlar">
+      <div class="yorum-list">
+        <div class="yorum-card"><div class="yorum-top"><div class="yorum-user"><div class="y-avatar">🧑</div><div><div class="y-name">Mehmet K.</div><div class="y-date">Mart 2025</div></div></div><span>⭐⭐⭐⭐⭐</span></div><div class="y-text">Çok hızlı iletişim kurdu, söylediği gibi işlemi tamamladı. Kesinlikle tavsiye ederim.</div></div>
+        <div class="yorum-card"><div class="yorum-top"><div class="yorum-user"><div class="y-avatar">👩</div><div><div class="y-name">Fatma S.</div><div class="y-date">Şubat 2025</div></div></div><span>⭐⭐⭐⭐⭐</span></div><div class="y-text">Güvenilir alıcı, pazarlık sürecinde çok saygılıydı. Tekrar çalışmak isterim.</div></div>
+      </div>
+    </div>
+    <div class="tab-content" id="tab-ayarlar">
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:16px;overflow:hidden">
+        <div style="padding:18px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between"><div><div style="font-size:14px;font-weight:600;color:var(--text)">Ad Soyad</div><div style="font-size:13px;color:var(--text3);margin-top:2px">Ahmet Yılmaz</div></div><button class="edit-btn" style="padding:6px 14px;font-size:12px">Düzenle</button></div>
+        <div style="padding:18px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between"><div><div style="font-size:14px;font-weight:600;color:var(--text)">Telefon</div><div style="font-size:13px;color:var(--text3);margin-top:2px">0532 *** ** **</div></div><span class="badge-green">✓ Onaylı</span></div>
+        <div style="padding:18px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between"><div><div style="font-size:14px;font-weight:600;color:var(--text)">Kimlik doğrulama</div><div style="font-size:13px;color:var(--text3);margin-top:2px">TC Kimlik ile doğrulandı</div></div><span class="badge-green">✓ Onaylı</span></div>
+        <div style="padding:18px 22px;display:flex;align-items:center;justify-content:space-between"><div><div style="font-size:14px;font-weight:600;color:var(--text)">Bildirimler</div><div style="font-size:13px;color:var(--text3);margin-top:2px">Yeni teklif geldiğinde SMS</div></div><div style="width:42px;height:24px;border-radius:999px;background:var(--blue);position:relative;cursor:pointer"><div style="width:18px;height:18px;border-radius:50%;background:#fff;position:absolute;right:3px;top:3px"></div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- NASIL ÇALIŞIR -->
+<div id="page-nasil" class="page">
+  <div class="nc-hero">
+    <div class="hero-badge-nc">Nasıl çalışır?</div>
+    <h1>Basit, güvenli,<br><em>etkili</em></h1>
+    <p>arıyorum'da alıcılar ilan açar, satıcılar yarışır. Her iki taraf için de anlatalım.</p>
+  </div>
+  <div class="rol-wrap">
+    <div class="rol-tabs">
+      <button class="rol-tab active" onclick="switchRol('alici',this)">🛒 Ben alıcıyım</button>
+      <button class="rol-tab" onclick="switchRol('satici',this)">🏪 Ben satıcıyım</button>
+    </div>
+    <div class="tab-content active" id="rol-alici">
+      <div class="step-item"><div class="step-left"><div class="step-circle blue">1</div><div class="step-connector"></div></div><div class="step-body"><div class="step-emoji">📝</div><div class="step-title">İlanını oluştur</div><div class="step-desc">Ne aradığını, bütçeni ve şehrini yaz. 2 dakikada ilan hazır. Kimlik ve telefon doğrulaması ile güvenilir profil oluştur.</div></div></div>
+      <div class="step-item"><div class="step-left"><div class="step-circle green">2</div><div class="step-connector"></div></div><div class="step-body"><div class="step-emoji">📬</div><div class="step-title">Teklifleri bekle</div><div class="step-desc">Satıcılar senin ilanını görür ve teklif gönderir. SMS ile anında bilgilendirilirsin.</div></div></div>
+      <div class="step-item"><div class="step-left"><div class="step-circle amber">3</div><div class="step-connector"></div></div><div class="step-body"><div class="step-emoji">🔍</div><div class="step-title">Teklifleri karşılaştır</div><div class="step-desc">Gelen teklifleri fiyat, satıcı puanı ve güven rozeti ile karşılaştır. En iyi teklifi kolayca belirle.</div></div></div>
+      <div class="step-item"><div class="step-left"><div class="step-circle purple">4</div></div><div class="step-body"><div class="step-emoji">🤝</div><div class="step-title">Kabul et, iletişime geç</div><div class="step-desc">Beğendiğin teklifi kabul et. Satıcının iletişim bilgileri anında paylaşılır.</div></div></div>
+    </div>
+    <div class="tab-content" id="rol-satici">
+      <div class="step-item"><div class="step-left"><div class="step-circle blue">1</div><div class="step-connector"></div></div><div class="step-body"><div class="step-emoji">🔑</div><div class="step-title">Kayıt ol, profilini oluştur</div><div class="step-desc">Kimlik ve telefon doğrulaması yap. Güvenilir satıcı rozeti kazan. Alıcılar seni daha çok tercih eder.</div></div></div>
+      <div class="step-item"><div class="step-left"><div class="step-circle green">2</div><div class="step-connector"></div></div><div class="step-body"><div class="step-emoji">👀</div><div class="step-title">İlanları incele</div><div class="step-desc">Sana uygun alıcı ilanlarını bul. Kategori, bütçe ve şehre göre filtrele.</div></div></div>
+      <div class="step-item"><div class="step-left"><div class="step-circle amber">3</div><div class="step-connector"></div></div><div class="step-body"><div class="step-emoji">💬</div><div class="step-title">Teklifini gönder</div><div class="step-desc">Fiyatını ve ürün bilgini gir. Alıcının bütçesiyle karşılaştır, rekabetçi teklifini ilet.</div></div></div>
+      <div class="step-item"><div class="step-left"><div class="step-circle purple">4</div></div><div class="step-body"><div class="step-emoji">🎉</div><div class="step-title">Alıcı kabul etti, sat!</div><div class="step-desc">Alıcı teklifini kabul ettiğinde bildirim alırsın. İletişim bilgilerin paylaşılır.</div></div></div>
+    </div>
+  </div>
+  <div class="faq-wrap">
+    <div class="faq-section-title">Sıkça sorulan sorular</div>
+    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Ücretsiz mi? <span>+</span></div><div class="faq-a">Evet! İlan açmak ve teklif vermek tamamen ücretsiz.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Kimlik bilgilerim güvende mi? <span>+</span></div><div class="faq-a">Kimlik bilgileriniz yalnızca doğrulama için kullanılır, asla üçüncü kişilerle paylaşılmaz ve şifreli olarak saklanır.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Sahte ilan varsa ne yapabilirim? <span>+</span></div><div class="faq-a">Her ilan için şikayet butonu mevcuttur. Şikayet edilen hesaplar incelenerek askıya alınır.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Kaç teklif alabilirim? <span>+</span></div><div class="faq-a">Sınırsız teklif alabilirsiniz. İlanınız aktif olduğu sürece satıcılar teklif gönderebilir.</div></div>
+  </div>
+  <div class="nc-cta-wrap">
+    <div class="nc-cta-box">
+      <h2>Hemen başla, ücretsiz</h2>
+      <p>İlanını ver, teklifleri bekle. Satıcılar sana gelsin.</p>
+      <div class="cta-btns">
+        <button class="btn-big btn-big-blue" onclick="showPage('ilan')">+ İlan oluştur</button>
+        <button class="btn-big btn-big-outline" onclick="showPage('home')">İlanları gör</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- POPUPLAR -->
+<div class="popup-overlay" id="popup-ilan-success"><div class="popup-box"><div class="p-ico">🎉</div><div class="p-title">İlanınız yayınlandı!</div><div class="p-sub">Satıcılar size ulaşmaya başlayacak.<br>Teklifleri profilinizden takip edebilirsiniz.</div><button class="p-btn p-btn-blue" onclick="closePopup('ilan-success');showPage('teklifler')">Teklifleri gör</button></div></div>
+<div class="popup-overlay" id="popup-teklif-success"><div class="popup-box"><div class="p-ico">📨</div><div class="p-title">Teklif gönderildi!</div><div class="p-sub">Teklifiniz alıcıya iletildi.<br>Alıcı onaylarsa iletişim bilgileriniz paylaşılır.</div><button class="p-btn p-btn-blue" onclick="closePopup('teklif-success');showPage('home')">Ana sayfaya dön</button></div></div>
+<div class="popup-overlay" id="popup-kabul-success"><div class="popup-box"><div class="p-ico">🤝</div><div class="p-title">Teklif kabul edildi!</div><div class="p-sub">Satıcının iletişim bilgileri paylaşıldı.</div><div class="p-phone">0532 XXX XX XX</div><button class="p-btn p-btn-green" onclick="closePopup('kabul-success')">Tamam</button></div></div>
 
 <script>
   let isLight = false;
-  let selectedCat = '🚗 Araç';
-
   function toggleMode() {
     isLight = !isLight;
     document.body.classList.toggle('light', isLight);
     document.getElementById('mode-ico').textContent = isLight ? '☀️' : '🌙';
     document.getElementById('mode-lbl').textContent = isLight ? 'Gündüz modu' : 'Gece modu';
   }
-
-  function showHome() {
-    document.getElementById('home-page').classList.add('active');
-    document.getElementById('ilan-page').classList.remove('active');
-    document.getElementById('success-page').classList.remove('show');
+  function showPage(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + id).classList.add('active');
+    window.scrollTo(0, 0);
   }
-
-  function showIlan() {
-    document.getElementById('home-page').classList.remove('active');
-    document.getElementById('ilan-page').classList.add('active');
-    document.getElementById('success-page').classList.remove('show');
-    window.scrollTo(0,0);
+  function showPopup(id) { document.getElementById('popup-' + id).classList.add('show'); }
+  function closePopup(id) { document.getElementById('popup-' + id).classList.remove('show'); }
+  function filterCat(el, cat) {
+    document.querySelectorAll('.filter-cat').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    document.querySelectorAll('.card').forEach(card => {
+      card.style.display = (cat === 'hepsi' || card.dataset.cat === cat) ? 'block' : 'none';
+    });
   }
-
-  function submitIlan() {
-    document.getElementById('ilan-page').classList.remove('active');
-    document.getElementById('success-page').classList.add('show');
-    window.scrollTo(0,0);
-  }
-
   function selCat(el, cat) {
     document.querySelectorAll('.cat-opt').forEach(c => c.classList.remove('sel'));
     el.classList.add('sel');
-    selectedCat = cat;
     document.getElementById('prev-cat').textContent = cat;
   }
-
   function updatePrev() {
     const t = document.getElementById('f-title').value;
     const b = document.getElementById('f-budget').value;
@@ -830,15 +610,34 @@
     document.getElementById('prev-budget').textContent = (b || '1.000.000') + ' ₺';
     document.getElementById('prev-city').textContent = '📍 ' + (c || 'Gaziantep');
   }
-
-  function filterCat(el, cat) {
-    document.querySelectorAll('.filter-cat').forEach(c => c.classList.remove('active'));
+  function checkPrice() {
+    const val = parseInt(document.getElementById('price-input').value.replace(/\D/g,''));
+    const hint = document.getElementById('price-hint');
+    if (!val) { hint.className = 'price-hint'; hint.textContent = '💡 Alıcının bütçesi: 1.000.000 ₺'; return; }
+    if (val <= 1000000) { hint.className = 'price-hint good'; hint.textContent = '✓ Bütçe dahilinde, güçlü teklif!'; }
+    else { hint.className = 'price-hint bad'; hint.textContent = '⚠️ Alıcının bütçesini aşıyor'; }
+  }
+  function switchTab(tab, el) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
     el.classList.add('active');
-    document.querySelectorAll('.card').forEach(card => {
-      card.style.display = (cat === 'hepsi' || card.dataset.cat === cat) ? 'block' : 'none';
-    });
+    document.getElementById('tab-' + tab).classList.add('active');
+  }
+  function switchRol(rol, el) {
+    document.querySelectorAll('.rol-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('#page-nasil .tab-content').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('rol-' + rol).classList.add('active');
+  }
+  function toggleFaq(el) {
+    el.classList.toggle('open');
+    el.nextElementSibling.classList.toggle('show');
+  }
+  function reddet(btn) {
+    const card = btn.closest('.teklif-card');
+    card.style.opacity = '0.35';
+    card.style.pointerEvents = 'none';
   }
 </script>
-
 </body>
 </html>
