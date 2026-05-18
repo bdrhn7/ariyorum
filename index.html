@@ -969,7 +969,14 @@
     const catIsim = { 'arac':'🚗 Araç', 'emlak':'🏠 Emlak', 'elektronik':'📱 Elektronik', 'diger':'🛋 Diğer' };
     const catRenk = { 'arac':'tag-arac', 'emlak':'tag-emlak', 'elektronik':'tag-elektronik', 'diger':'tag-diger' };
 
-    db.collection('ilanlar').orderBy('createdAt', 'desc').get().then(snap => {
+    // Admin butonunu göster
+    const user = auth.currentUser;
+    if (user && user.email === ADMIN_EMAIL) {
+      const adminWrap = document.getElementById('admin-btn-wrap');
+      if (adminWrap) adminWrap.style.display = 'block';
+    }
+
+    db.collection('ilanlar').get().then(snap => {
       const ilanlar = snap.docs.filter(d => d.data().userId === uid);
       document.getElementById('profil-ilan-say').textContent = ilanlar.length;
 
@@ -993,6 +1000,8 @@
           </div>
         </div>`;
       }).join('');
+    }).catch(e => {
+      grid.innerHTML = '<div style="padding:20px;color:var(--red)">İlanlar yüklenemedi.</div>';
     });
   }
 
