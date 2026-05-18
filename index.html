@@ -1723,12 +1723,7 @@
     if (!confirm('Bu teklifi reddetmek istediğinize emin misiniz?')) return;
     db.collection('teklifler').doc(teklifId).update({ reddedildi: true }).then(() => {
       const kart = document.getElementById('teklif-' + teklifId);
-      if (kart) {
-        kart.style.opacity = '0.4';
-        kart.style.pointerEvents = 'none';
-        const butonlar = kart.querySelector('.teklif-butonlar');
-        if (butonlar) butonlar.innerHTML = '<div style="text-align:center;padding:8px;color:var(--text3);font-size:12px;">✕ Reddedildi</div>';
-      }
+      if (kart) kart.remove();
     }).catch(e => alert('Hata: ' + e.message));
   }
   window.teklifReddet = teklifReddet;
