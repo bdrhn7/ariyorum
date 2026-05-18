@@ -535,7 +535,7 @@
         <div class="badges-row"><span class="badge-prof badge-prof-green">✓ E-posta onaylı</span><span class="badge-prof badge-prof-blue">Alıcı</span></div>
         <div class="star-row"><span style="font-size:16px">⭐⭐⭐⭐⭐</span><span class="star-num">—</span><span class="star-count">· Henüz değerlendirme yok</span></div>
       </div>
-      <button class="edit-btn" onclick="cikisYap()">🚪 Çıkış yap</button>
+      <button style="padding:9px 20px;border:1px solid var(--red-border);border-radius:10px;background:var(--red-bg);color:var(--red);font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;position:relative;z-index:10;" onclick="window._auth.signOut().then(()=>showPage('home'))">🚪 Çıkış yap</button>
     </div>
     <div class="stats-grid">
       <div class="stat-box"><div class="stat-box-num" id="profil-ilan-say">0</div><div class="stat-box-lbl">Aktif ilan</div></div>
@@ -764,6 +764,7 @@
   firebase.initializeApp(firebaseConfig);
   const auth = firebase.auth();
   const db = firebase.firestore();
+  window._auth = auth;
 
   // Kullanıcı durumu takip et
   auth.onAuthStateChanged((user) => {
