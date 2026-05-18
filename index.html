@@ -748,10 +748,11 @@
     <div style="padding:16px 24px;border-bottom:1px solid var(--border);background:var(--bg2);display:flex;align-items:center;gap:12px;position:sticky;top:62px;">
       <button onclick="showPage('mesajlar')" style="padding:6px 14px;border:1px solid var(--border2);border-radius:9px;background:transparent;color:var(--text2);font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif;">←</button>
       <div style="width:36px;height:36px;border-radius:50%;background:var(--blue-bg);display:flex;align-items:center;justify-content:center;font-size:16px;">👤</div>
-      <div>
+      <div style="flex:1;">
         <div id="mesaj-karsi-isim" style="font-size:14px;font-weight:600;color:var(--text);">—</div>
         <div id="mesaj-ilan-baslik" style="font-size:11px;color:var(--text3);">—</div>
       </div>
+      <button onclick="kullaniciEngelle()" style="padding:6px 14px;border:1px solid var(--red-border);border-radius:9px;background:var(--red-bg);color:var(--red);font-size:12px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;">🚫 Engelle</button>
     </div>
 
     <!-- Mesajlar -->
@@ -1321,16 +1322,11 @@
         </div>
 
         ${!benimIlan ? `
-        <div style="display:flex;flex-direction:column;gap:10px;">
-          <div style="display:flex;gap:10px;">
-            <button onclick="if(!window._currentUser){showPage('giris');return;}teklifVerSayfasiAc('${id}')" style="flex:1;padding:15px;background:var(--blue);border:none;border-radius:12px;color:#fff;font-family:'Syne',sans-serif;font-size:16px;font-weight:700;cursor:pointer;">
-              💬 Teklif ver
-            </button>
-            <button onclick="ilanPaylas('${id}')" style="padding:15px 18px;background:var(--bg3);border:1px solid var(--border2);border-radius:12px;color:var(--text);font-size:20px;cursor:pointer;" title="İlanı paylaş">🔗</button>
-          </div>
-          <button onclick="if(!window._currentUser){showPage('giris');return;}soruSor('${d.userId}','${d.userEmail}','${id}','${d.title}')" style="width:100%;padding:13px;background:transparent;border:1px solid var(--border2);border-radius:12px;color:var(--text2);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;">
-            ❓ Alıcıya soru sor
+        <div style="display:flex;gap:10px;">
+          <button onclick="if(!window._currentUser){showPage('giris');return;}teklifVerSayfasiAc('${id}')" style="flex:1;padding:15px;background:var(--blue);border:none;border-radius:12px;color:#fff;font-family:'Syne',sans-serif;font-size:16px;font-weight:700;cursor:pointer;">
+            💬 Teklif ver
           </button>
+          <button onclick="ilanPaylas('${id}')" style="padding:15px 18px;background:var(--bg3);border:1px solid var(--border2);border-radius:12px;color:var(--text);font-size:20px;cursor:pointer;" title="İlanı paylaş">🔗</button>
         </div>` : `
         <div style="display:flex;gap:10px;">
           <div style="flex:1;padding:14px;background:var(--blue-bg);border:1px solid var(--blue-border);border-radius:12px;text-align:center;font-size:13px;color:var(--blue);font-weight:600;">Bu ilan size ait</div>
@@ -1614,6 +1610,24 @@
     });
   }
   window.kullaniciProfil = kullaniciProfil;
+
+  function kullaniciEngelle() {
+    if (!_aktifSohbet) return;
+    if (!confirm('Bu kullanıcıyı engellemek istediğinize emin misiniz? Artık size mesaj gönderemeyecek.')) return;
+    const user = auth.currentUser;
+    db.collection('engelliKullanicilar').add({
+      engelleyenId: user.uid,
+      engelleyenEmail: user.email,
+      engellenenId: _aktifSohbet,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    }).then(() => {
+      // Sohbeti kapat
+      db.collection('sohbetler').doc(_aktifSohbet).update({ engellendi: true });
+      alert('Kullanıcı engellendi.');
+      showPage('mesajlar');
+    });
+  }
+  window.kullaniciEngelle = kullaniciEngelle;
 
   // MESAJLAŞMA SİSTEMİ
   let _aktifSohbet = null;
