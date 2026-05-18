@@ -766,6 +766,12 @@
   const db = firebase.firestore();
   window._auth = auth;
 
+  function formatBudget(val) {
+    if (!val) return '—';
+    const num = Number(String(val).replace(/[^0-9]/g, ''));
+    return isNaN(num) ? val : num.toLocaleString('tr-TR');
+  }
+
   // Kullanıcı durumu takip et
   auth.onAuthStateChanged((user) => {
     window._currentUser = user;
@@ -852,7 +858,7 @@
         return `<div class="card" data-cat="${cat}">
           <div class="card-head"><span class="tag ${catRenk[cat]}">${catIsim[cat]}</span><span class="verified">✓ Onaylı</span></div>
           <div class="card-title">${d.title}</div>
-          <div class="card-budget">${Number(d.budget).toLocaleString('tr-TR')} ₺</div>
+          <div class="card-budget">${formatBudget(d.budget)} ₺</div>
           <div class="card-foot">
             <span class="card-loc">📍 ${d.city}</span>
             <div style="display:flex;align-items:center;gap:8px">
@@ -882,7 +888,7 @@
       grid.innerHTML = ilanlar.map(doc => {
         const d = doc.data();
         const cat = d.kategori || 'diger';
-        return `<div class="ilan-card-p"><div class="ilan-p-top"><span class="tag ${catRenk[cat]}">${catIsim[cat]}</span><span class="status-aktif">● Aktif</span></div><div class="ilan-p-title">${d.title}</div><div class="ilan-p-budget">${Number(d.budget).toLocaleString('tr-TR')} ₺</div><div class="ilan-p-foot"><span>📍 ${d.city}</span><span class="teklif-say">${d.teklifSayisi||0} teklif</span></div></div>`;
+        return `<div class="ilan-card-p"><div class="ilan-p-top"><span class="tag ${catRenk[cat]}">${catIsim[cat]}</span><span class="status-aktif">● Aktif</span></div><div class="ilan-p-title">${d.title}</div><div class="ilan-p-budget">${formatBudget(d.budget)} ₺</div><div class="ilan-p-foot"><span>📍 ${d.city}</span><span class="teklif-say">${d.teklifSayisi||0} teklif</span></div></div>`;
       }).join('');
     });
   }
