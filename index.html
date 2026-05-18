@@ -662,6 +662,7 @@
       <p style="font-size:14px;color:var(--text2);">Ücretsiz kayıt ol, ilan ver</p>
     </div>
     <div style="background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:28px;">
+      <div class="fgroup"><label class="flabel">Ad Soyad</label><input class="finput" type="text" id="kayit-isim" placeholder="Adınız Soyadınız"></div>
       <div class="fgroup"><label class="flabel">E-posta</label><input class="finput" type="email" id="kayit-email" placeholder="ornek@mail.com"></div>
       <div class="fgroup"><label class="flabel">Şifre</label><input class="finput" type="password" id="kayit-pass" placeholder="En az 6 karakter"></div>
       <div id="kayit-hata" style="font-size:13px;color:var(--red);margin-bottom:12px;"></div>
@@ -812,7 +813,7 @@
   auth.onAuthStateChanged((user) => {
     window._currentUser = user;
     if (user) {
-      const isim = user.email.split('@')[0];
+      const isim = user.displayName || user.email.split('@')[0];
       const tarih = new Date(user.metadata.creationTime).toLocaleDateString('tr-TR', {year:'numeric', month:'long'});
 
       document.querySelectorAll('.btn-outline').forEach(btn => {
@@ -942,13 +943,20 @@
 
   // Kayıt ol
   function kayitOl() {
+    const isim = document.getElementById('kayit-isim').value.trim();
     const email = document.getElementById('kayit-email').value;
     const pass = document.getElementById('kayit-pass').value;
     const btn = document.getElementById('kayit-btn');
     const hata = document.getElementById('kayit-hata');
+
+    if (!isim) { hata.textContent = 'Lütfen adınızı girin.'; return; }
+
     btn.textContent = 'Kaydediliyor...';
     hata.textContent = '';
     auth.createUserWithEmailAndPassword(email, pass)
+      .then(result => {
+        return result.user.updateProfile({ displayName: isim });
+      })
       .then(() => showPage('home'))
       .catch(e => {
         hata.textContent = e.code === 'auth/email-already-in-use' ? 'Bu e-posta zaten kayıtlı.' :
