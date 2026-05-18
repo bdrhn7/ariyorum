@@ -1337,7 +1337,13 @@
     auth.createUserWithEmailAndPassword(email, pass)
       .then(result => {
         return result.user.updateProfile({ displayName: isim }).then(() => {
-          // Doğrulama maili gönder
+          // Kullanıcıyı Firestore'a kaydet
+          db.collection('kullanicilar').doc(result.user.uid).set({
+            isim,
+            email,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            sonNotifGorulme: 0
+          });
           return result.user.sendEmailVerification();
         });
       })
@@ -1557,9 +1563,12 @@
   function notifAc() {
     const popup = document.getElementById('notif-popup');
     popup.style.display = popup.style.display === 'none' ? 'block' : 'none';
-    // Bildirimleri okundu olarak işaretle
     document.getElementById('notif-badge').style.display = 'none';
-    localStorage.setItem('notif-son-gorulme', Date.now());
+    // Son görülme zamanını Firestore'a kaydet
+    const user = auth.currentUser;
+    if (user) {
+      db.collection('kullanicilar').doc(user.uid).set({ sonNotifGorulme: Date.now() }, { merge: true });
+    }
   }
   function notifKapat() {
     document.getElementById('notif-popup').style.display = 'none';
@@ -1573,35 +1582,36 @@
     const liste = document.getElementById('notif-liste');
     if (wrap) wrap.style.display = 'flex';
 
-    // Kullanıcının ilanlarına gelen teklifleri bul
-    db.collection('ilanlar').where('userId','==',uid).get().then(ilanSnap => {
-      if (ilanSnap.empty) return;
-      const ilanIds = ilanSnap.docs.map(d => d.id);
-      const ilanlar = {};
-      ilanSnap.docs.forEach(d => ilanlar[d.id] = d.data().title);
+    db.collection('kullanicilar').doc(uid).get().then(userDoc => {
+      const sonGorulme = userDoc.exists ? (userDoc.data()?.sonNotifGorulme || 0) : 0;
 
-      db.collection('teklifler').get().then(teklifSnap => {
-        const teklifler = teklifSnap.docs.filter(d => ilanIds.includes(d.data().ilanId));
-        const sonGorulme = parseInt(localStorage.getItem('notif-son-gorulme') || '0');
-        let yeniSay = 0;
+      db.collection('ilanlar').where('userId','==',uid).get().then(ilanSnap => {
+        if (ilanSnap.empty) return;
+        const ilanIds = ilanSnap.docs.map(d => d.id);
+        const ilanlar = {};
+        ilanSnap.docs.forEach(d => ilanlar[d.id] = d.data().title);
 
-        if (teklifler.length === 0) return;
+        db.collection('teklifler').get().then(teklifSnap => {
+          const teklifler = teklifSnap.docs.filter(d => ilanIds.includes(d.data().ilanId));
+          let yeniSay = 0;
+          if (teklifler.length === 0) return;
 
-        liste.innerHTML = teklifler.map(doc => {
-          const d = doc.data();
-          const zaman = d.createdAt?.toDate().toLocaleDateString('tr-TR') || '—';
-          const yeni = d.createdAt?.toDate().getTime() > sonGorulme;
-          if (yeni) yeniSay++;
-          return `<div style="padding:14px 18px;border-bottom:1px solid var(--border);cursor:pointer;${yeni?'background:var(--blue-bg)':''}" onclick="teklifleriGor('${d.ilanId}','${ilanlar[d.ilanId]||'İlan'}');notifKapat()">
-            <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:3px;">💬 Yeni teklif: ${formatBudget(d.fiyat)} ₺</div>
-            <div style="font-size:11px;color:var(--text3);">${ilanlar[d.ilanId]||'İlan'} · ${zaman}</div>
-          </div>`;
-        }).reverse().join('');
+          liste.innerHTML = teklifler.map(doc => {
+            const d = doc.data();
+            const zaman = d.createdAt?.toDate().toLocaleDateString('tr-TR') || '—';
+            const yeni = d.createdAt?.toDate().getTime() > sonGorulme;
+            if (yeni) yeniSay++;
+            return `<div style="padding:14px 18px;border-bottom:1px solid var(--border);cursor:pointer;${yeni?'background:var(--blue-bg)':''}" onclick="teklifleriGor('${d.ilanId}','${ilanlar[d.ilanId]||'İlan'}');notifKapat()">
+              <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:3px;">💬 Yeni teklif: ${formatBudget(d.fiyat)} ₺</div>
+              <div style="font-size:11px;color:var(--text3);">${ilanlar[d.ilanId]||'İlan'} · ${zaman}</div>
+            </div>`;
+          }).reverse().join('');
 
-        if (yeniSay > 0) {
-          badge.style.display = 'block';
-          badge.textContent = yeniSay;
-        }
+          if (yeniSay > 0) {
+            badge.style.display = 'block';
+            badge.textContent = yeniSay;
+          }
+        });
       });
     });
   }
