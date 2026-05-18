@@ -878,16 +878,9 @@
       if (document.getElementById('profil-isim')) {
         document.getElementById('profil-isim').textContent = isim;
         document.getElementById('profil-meta').textContent = '📧 ' + user.email + ' · Üye: ' + tarih;
-        document.getElementById('ayar-email').textContent = user.email;
-        document.getElementById('ayar-isim').textContent = isim;
-        document.getElementById('ayar-tarih').textContent = tarih;
+        if (document.getElementById('ayar-email')) document.getElementById('ayar-email').textContent = user.email;
+        if (document.getElementById('ayar-isim')) document.getElementById('ayar-isim').textContent = isim;
         loadProfilIlanlar(user.uid);
-
-        // Admin butonu
-        if (user.email === ADMIN_EMAIL) {
-          const adminWrap = document.getElementById('admin-btn-wrap');
-          if (adminWrap) adminWrap.style.display = 'block';
-        }
       }
     } else {
       document.querySelectorAll('.btn-outline').forEach(btn => {
