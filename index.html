@@ -633,6 +633,7 @@
     </div>
     <div class="tabs">
       <div class="tab active" onclick="switchTab('ilanlar',this)">İlanlarım</div>
+      <div class="tab" onclick="switchTab('tekliflerim',this)">Tekliflerim</div>
       <div class="tab" onclick="switchTab('yorumlar',this)">Değerlendirmeler</div>
       <div class="tab" onclick="switchTab('mesajlar',this)">💬 Mesajlar</div>
       <div class="tab" onclick="switchTab('istekler',this)">📩 İstekler</div>
@@ -643,7 +644,11 @@
         <div style="text-align:center;padding:40px;color:var(--text3);font-size:14px;grid-column:1/-1;">İlanlarınız yükleniyor...</div>
       </div>
     </div>
-    <div class="tab-content" id="tab-istekler">
+    <div class="tab-content" id="tab-tekliflerim">
+      <div id="profil-tekliflerim-liste">
+        <div style="text-align:center;padding:40px;color:var(--text3);font-size:14px;">Yükleniyor...</div>
+      </div>
+    </div>
       <div id="profil-istekler-liste">
         <div style="text-align:center;padding:40px;color:var(--text3);font-size:14px;">Yükleniyor...</div>
       </div>
@@ -1090,6 +1095,7 @@
     document.getElementById('tab-' + tab).classList.add('active');
     if (tab === 'mesajlar' && auth.currentUser) sohbetleriYukle(auth.currentUser.uid);
     if (tab === 'istekler' && auth.currentUser) mesajIstekleriniYukle(auth.currentUser.uid);
+    if (tab === 'tekliflerim' && auth.currentUser) tekliflerimYukle(auth.currentUser.uid);
   }
   function switchRol(rol, el) {
     document.querySelectorAll('.rol-tab').forEach(t => t.classList.remove('active'));
@@ -1426,16 +1432,70 @@
 
     const ilanId = window._aktifIlanId || 'genel';
 
-    db.collection('teklifler').add({
-      ilanId, fiyat, aracBilgi, mesaj, telefon,
-      userId: user.uid,
-      userEmail: user.email,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    }).then(() => {
-      showPopup('teklif-success');
-    }).catch(e => alert('Hata: ' + e.message));
+    // Daha önce teklif vermiş mi kontrol et
+    db.collection('teklifler')
+      .where('ilanId','==',ilanId)
+      .where('userId','==',user.uid)
+      .get().then(snap => {
+        const aktifTeklif = snap.docs.find(d => !d.data().reddedildi);
+        if (aktifTeklif) {
+          alert('Bu ilana zaten teklif verdiniz! Teklifiniz kabul veya reddedilmeden yeni teklif veremezsiniz.');
+          return;
+        }
+
+        db.collection('teklifler').add({
+          ilanId, fiyat, aracBilgi, mesaj, telefon,
+          userId: user.uid,
+          userEmail: user.email,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        }).then(() => {
+          showPopup('teklif-success');
+        }).catch(e => alert('Hata: ' + e.message));
+      });
   }
   window.teklifGonder = teklifGonder;
+
+  // TEKLİFLERİM
+  function tekliflerimYukle(uid) {
+    const liste = document.getElementById('profil-tekliflerim-liste');
+    if (!liste) return;
+    liste.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text3);">Yükleniyor...</div>';
+
+    db.collection('teklifler').where('userId','==',uid).get().then(snap => {
+      if (snap.empty) {
+        liste.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text3);font-size:14px;">Henüz teklif vermediniz.</div>';
+        return;
+      }
+      const ilanIds = [...new Set(snap.docs.map(d => d.data().ilanId))];
+      Promise.all(ilanIds.map(id => db.collection('ilanlar').doc(id).get())).then(ilanDocs => {
+        const ilanlar = {};
+        ilanDocs.forEach(d => { if (d.exists) ilanlar[d.id] = d.data(); });
+
+        liste.innerHTML = snap.docs.map(doc => {
+          const d = doc.data();
+          const ilan = ilanlar[d.ilanId];
+          const zaman = d.createdAt?.toDate().toLocaleDateString('tr-TR') || '—';
+          const durum = d.reddedildi ? '❌ Reddedildi' : '⏳ Bekliyor';
+          const durumRenk = d.reddedildi ? 'var(--red)' : 'var(--amber)';
+          return `<div style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:10px;cursor:pointer;" onclick="ilanDetay('${d.ilanId}')">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">
+              <div style="font-size:14px;font-weight:700;color:var(--text);">${ilan?.title || 'İlan silinmiş'}</div>
+              <span style="font-size:11px;font-weight:700;color:${durumRenk};">${durum}</span>
+            </div>
+            <div style="font-size:12px;color:var(--text3);margin-bottom:8px;">📍 ${ilan?.city || '—'} · ${zaman}</div>
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <div style="font-size:13px;color:var(--text2);">Teklifim: <strong style="color:var(--green)">${formatBudget(d.fiyat)} ₺</strong></div>
+              <div style="font-size:12px;color:var(--text3);">Bütçe: ${formatBudget(ilan?.budget)} ₺</div>
+            </div>
+            ${d.aracBilgi ? `<div style="font-size:12px;color:var(--text3);margin-top:6px;">📦 ${d.aracBilgi}</div>` : ''}
+          </div>`;
+        }).join('');
+      });
+    }).catch(() => {
+      liste.innerHTML = '<div style="padding:20px;color:var(--red)">Teklifler yüklenemedi.</div>';
+    });
+  }
+  window.tekliflerimYukle = tekliflerimYukle;
 
   // İlan detay sayfası
   function ilanDetay(id) {
