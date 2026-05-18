@@ -572,7 +572,7 @@
         <div class="profile-name" id="profil-isim">Giriş yapılmadı</div>
         <div class="profile-meta" id="profil-meta">📍 — · Üye: —</div>
         <div class="badges-row">
-          <span class="badge-prof" style="${user.emailVerified ? 'background:var(--green-bg);color:var(--green);border:1px solid var(--green-border);' : 'background:var(--amber-bg);color:var(--amber);'}">${user.emailVerified ? '✓ E-posta onaylı' : '⚠️ E-posta onaylanmadı'}</span>
+          <span class="badge-prof" id="email-onay-rozet" style="background:var(--green-bg);color:var(--green);border:1px solid var(--green-border);">✓ E-posta onaylı</span>
           <span class="badge-prof badge-prof-blue">Alıcı</span>
           <span id="profil-rozet" style="display:none;font-size:11px;font-weight:700;padding:4px 12px;border-radius:999px;"></span>
         </div>
@@ -1097,6 +1097,20 @@
         loadProfilIlanlar(user.uid);
         notifYukle(user.uid);
         sohbetleriYukle(user.uid);
+
+        // E-posta onay durumu
+        const emailRozetEl = document.getElementById('email-onay-rozet');
+        if (emailRozetEl) {
+          if (user.emailVerified || user.email === ADMIN_EMAIL) {
+            emailRozetEl.textContent = '✓ E-posta onaylı';
+            emailRozetEl.style.background = 'var(--green-bg)';
+            emailRozetEl.style.color = 'var(--green)';
+          } else {
+            emailRozetEl.textContent = '⚠️ E-posta onaylanmadı';
+            emailRozetEl.style.background = 'var(--amber-bg)';
+            emailRozetEl.style.color = 'var(--amber)';
+          }
+        }
 
         // Kendi rozetini hesapla ve göster
         db.collection('puanlar').where('verenUserId','==',user.uid).get().then(snap => {
