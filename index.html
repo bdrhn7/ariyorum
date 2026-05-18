@@ -1199,6 +1199,24 @@
       if (adminWrap) adminWrap.style.display = 'block';
     }
 
+    // Rozeti hesapla ve göster
+    if (user) {
+      db.collection('puanlar').where('verenUserId','==',user.uid).get().then(snap => {
+        const rozet = rozetHesapla(snap.size, user.email);
+        const rozetEl = document.getElementById('profil-rozet');
+        if (rozetEl) {
+          rozetEl.textContent = rozet.rozet;
+          rozetEl.style.background = rozet.bg;
+          rozetEl.style.color = rozet.renk;
+          rozetEl.style.display = 'inline-block';
+          rozetEl.style.padding = '4px 12px';
+          rozetEl.style.borderRadius = '999px';
+          rozetEl.style.fontSize = '11px';
+          rozetEl.style.fontWeight = '700';
+        }
+      });
+    }
+
     db.collection('ilanlar').get().then(snap => {
       const ilanlar = snap.docs.filter(d => d.data().userId === uid);
       document.getElementById('profil-ilan-say').textContent = ilanlar.length;
