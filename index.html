@@ -535,7 +535,7 @@
         <div class="badges-row"><span class="badge-prof badge-prof-green">✓ E-posta onaylı</span><span class="badge-prof badge-prof-blue">Alıcı</span></div>
         <div class="star-row"><span style="font-size:16px">⭐⭐⭐⭐⭐</span><span class="star-num">—</span><span class="star-count">· Henüz değerlendirme yok</span></div>
       </div>
-      <button class="edit-btn" id="cikis-btn">🚪 Çıkış yap</button>
+      <button class="edit-btn" onclick="cikisYap()">🚪 Çıkış yap</button>
     </div>
     <div class="stats-grid">
       <div class="stat-box"><div class="stat-box-num" id="profil-ilan-say">0</div><div class="stat-box-lbl">Aktif ilan</div></div>
@@ -704,6 +704,11 @@
     window.seciliKategori = cat === '🚗 Araç' ? 'arac' : cat === '🏠 Emlak' ? 'emlak' : cat === '📱 Elektronik' ? 'elektronik' : 'diger';
     document.getElementById('prev-cat').textContent = cat;
   }
+  function cikisYap() {
+    if (window._firebaseSignOut) {
+      window._firebaseSignOut().then(() => showPage('home'));
+    }
+  }
   function updatePrev() {
     const t = document.getElementById('f-title').value;
     const b = document.getElementById('f-budget').value;
@@ -829,6 +834,9 @@
       alert('Hata oluştu: ' + e.message);
     }
   };
+
+  // Firebase signOut'u global yap
+  window._firebaseSignOut = () => signOut(auth);
 
   // Çıkış butonu
   document.getElementById('cikis-btn').addEventListener('click', async () => {
