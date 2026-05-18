@@ -747,34 +747,34 @@
   }
 </script>
 
-<!-- FIREBASE -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
-  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
-  import { getFirestore, collection, addDoc, getDocs, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
-
+<!-- FIREBASE COMPAT -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script>
   const firebaseConfig = {
     apiKey: "AIzaSyD7Orq1GqfUTVIISW_Q6vYDOWH7H-j3r5M",
     authDomain: "ariyorum-a3fb0.firebaseapp.com",
     projectId: "ariyorum-a3fb0",
     storageBucket: "ariyorum-a3fb0.firebasestorage.app",
     messagingSenderId: "918438082684",
-    appId: "1:918438082684:web:598f0795345939c40a71f9",
-    measurementId: "G-NWPFNV6DP6"
+    appId: "1:918438082684:web:598f0795345939c40a71f9"
   };
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  const db = firebase.firestore();
 
   // Kullanıcı durumu takip et
-  onAuthStateChanged(auth, (user) => {
+  auth.onAuthStateChanged((user) => {
     window._currentUser = user;
     if (user) {
-      // Navbar güncelle
+      const isim = user.email.split('@')[0];
+      const tarih = new Date(user.metadata.creationTime).toLocaleDateString('tr-TR', {year:'numeric', month:'long'});
+
       document.querySelectorAll('.btn-outline').forEach(btn => {
         if (btn.textContent === 'Giriş yap') {
-          btn.textContent = '👤 ' + (user.email.split('@')[0]);
+          btn.textContent = '👤 ' + isim;
           btn.onclick = () => showPage('profil');
         }
       });
@@ -783,17 +783,13 @@
         btn.onclick = () => { showPage('profil'); closeMobileMenu(); };
       });
 
-      // Profil sayfasını güncelle
-      const isim = user.email.split('@')[0];
-      const tarih = new Date(user.metadata.creationTime).toLocaleDateString('tr-TR', {year:'numeric', month:'long'});
-      document.getElementById('profil-isim').textContent = isim;
-      document.getElementById('profil-meta').textContent = '📧 ' + user.email + ' · Üye: ' + tarih;
-      document.getElementById('ayar-email').textContent = user.email;
-      document.getElementById('ayar-tarih').textContent = tarih;
-
-      // Kullanıcının ilanlarını yükle
-      loadProfilIlanlar(user.uid);
-
+      if (document.getElementById('profil-isim')) {
+        document.getElementById('profil-isim').textContent = isim;
+        document.getElementById('profil-meta').textContent = '📧 ' + user.email + ' · Üye: ' + tarih;
+        document.getElementById('ayar-email').textContent = user.email;
+        document.getElementById('ayar-tarih').textContent = tarih;
+        loadProfilIlanlar(user.uid);
+      }
     } else {
       document.querySelectorAll('.btn-outline').forEach(btn => {
         btn.textContent = 'Giriş yap';
@@ -806,7 +802,13 @@
     }
   });
 
-  window.ilanYayinla = async function() {
+  // Çıkış yap
+  function cikisYap() {
+    auth.signOut().then(() => showPage('home'));
+  }
+
+  // İlan yayınla
+  function ilanYayinla() {
     const user = auth.currentUser;
     if (!user) { showPage('giris'); return; }
 
@@ -815,157 +817,122 @@
     const city = document.getElementById('f-city').value;
     const kategori = window.seciliKategori || 'diger';
 
-    if (!title || !budget || !city) {
-      alert('Lütfen tüm alanları doldurun!');
-      return;
-    }
+    if (!title || !budget || !city) { alert('Lütfen tüm alanları doldurun!'); return; }
 
-    try {
-      await addDoc(collection(db, 'ilanlar'), {
-        title, budget, city, kategori,
-        userId: user.uid,
-        userEmail: user.email,
-        createdAt: serverTimestamp(),
-        teklifSayisi: 0
-      });
+    db.collection('ilanlar').add({
+      title, budget, city, kategori,
+      userId: user.uid,
+      userEmail: user.email,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      teklifSayisi: 0
+    }).then(() => {
       showPopup('ilan-success');
       loadIlanlar();
-    } catch (e) {
-      alert('Hata oluştu: ' + e.message);
-    }
-  };
-
-  // Firebase signOut'u global yap
-  window._firebaseSignOut = () => signOut(auth);
-
-  // Çıkış butonu
-  document.getElementById('cikis-btn').addEventListener('click', async () => {
-    await signOut(auth);
-    showPage('home');
-  });
-
-  // Çıkış yap
-  window.cikisYap = async function() {
-    try {
-      await signOut(auth);
-      showPage('home');
-    } catch(e) {
-      console.log('Çıkış hatası:', e);
-    }
-  };
-
-  // Kullanıcının kendi ilanlarını yükle
-  window.loadProfilIlanlar = async function(uid) {
-    const grid = document.getElementById('profil-ilanlar');
-    try {
-      const q = query(collection(db, 'ilanlar'), orderBy('createdAt', 'desc'));
-      const snap = await getDocs(q);
-      const kullanicıIlanlar = snap.docs.filter(d => d.data().userId === uid);
-      document.getElementById('profil-ilan-say').textContent = kullanicıIlanlar.length;
-      if (kullanicıIlanlar.length === 0) {
-        grid.innerHTML = `<div style="text-align:center;padding:40px;color:var(--text3);font-size:14px;grid-column:1/-1;">Henüz ilan açmadınız.<br><br><button class="btn-primary" onclick="ilanAc()" style="padding:10px 20px;font-size:13px">+ İlan oluştur</button></div>`;
-        return;
-      }
-      const catIsim = { 'arac':'🚗 Araç', 'emlak':'🏠 Emlak', 'elektronik':'📱 Elektronik', 'diger':'🛋 Diğer' };
-      const catRenk = { 'arac':'tag-arac', 'emlak':'tag-emlak', 'elektronik':'tag-elektronik', 'diger':'tag-diger' };
-      grid.innerHTML = kullanicıIlanlar.map(doc => {
-        const d = doc.data();
-        const cat = d.kategori || 'diger';
-        return `<div class="ilan-card-p"><div class="ilan-p-top"><span class="tag ${catRenk[cat]}">${catIsim[cat]}</span><span class="status-aktif">● Aktif</span></div><div class="ilan-p-title">${d.title}</div><div class="ilan-p-budget">${Number(d.budget).toLocaleString('tr-TR')} ₺</div><div class="ilan-p-foot"><span>📍 ${d.city}</span><span class="teklif-say">${d.teklifSayisi || 0} teklif</span></div></div>`;
-      }).join('');
-    } catch(e) {
-      grid.innerHTML = '<div style="padding:20px;color:var(--text3)">İlanlar yüklenemedi.</div>';
-    }
-  };
+    }).catch(e => alert('Hata: ' + e.message));
+  }
 
   // İlanları yükle
-  window.loadIlanlar = async function() {
+  function loadIlanlar() {
     const loading = document.getElementById('ilanlar-loading');
     const grid = document.getElementById('cards-grid');
     const bos = document.getElementById('ilanlar-bos');
 
-    try {
-      const q = query(collection(db, 'ilanlar'), orderBy('createdAt', 'desc'));
-      const snap = await getDocs(q);
-
+    db.collection('ilanlar').orderBy('createdAt', 'desc').get().then(snap => {
       loading.style.display = 'none';
+      if (snap.empty) { bos.style.display = 'block'; return; }
 
-      if (snap.empty) {
-        bos.style.display = 'block';
-        return;
-      }
-
-      const catRenk = {
-        'arac': 'tag-arac', 'emlak': 'tag-emlak',
-        'elektronik': 'tag-elektronik', 'diger': 'tag-diger'
-      };
-      const catIsim = {
-        'arac': '🚗 Araç', 'emlak': '🏠 Emlak',
-        'elektronik': '📱 Elektronik', 'diger': '🛋 Diğer'
-      };
+      const catRenk = { 'arac':'tag-arac', 'emlak':'tag-emlak', 'elektronik':'tag-elektronik', 'diger':'tag-diger' };
+      const catIsim = { 'arac':'🚗 Araç', 'emlak':'🏠 Emlak', 'elektronik':'📱 Elektronik', 'diger':'🛋 Diğer' };
 
       grid.style.display = 'grid';
       grid.innerHTML = snap.docs.map(doc => {
         const d = doc.data();
         const cat = d.kategori || 'diger';
-        return `
-          <div class="card" data-cat="${cat}" data-id="${doc.id}">
-            <div class="card-head">
-              <span class="tag ${catRenk[cat] || 'tag-diger'}">${catIsim[cat] || '🛋 Diğer'}</span>
-              <span class="verified">✓ Onaylı</span>
+        return `<div class="card" data-cat="${cat}">
+          <div class="card-head"><span class="tag ${catRenk[cat]}">${catIsim[cat]}</span><span class="verified">✓ Onaylı</span></div>
+          <div class="card-title">${d.title}</div>
+          <div class="card-budget">${Number(d.budget).toLocaleString('tr-TR')} ₺</div>
+          <div class="card-foot">
+            <span class="card-loc">📍 ${d.city}</span>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span class="card-offers"><strong>${d.teklifSayisi||0}</strong> teklif</span>
+              <button class="teklif-btn" onclick="showPage('teklifver')">Teklif ver</button>
             </div>
-            <div class="card-title">${d.title}</div>
-            <div class="card-budget">${Number(d.budget).toLocaleString('tr-TR')} ₺</div>
-            <div class="card-foot">
-              <span class="card-loc">📍 ${d.city}</span>
-              <div style="display:flex;align-items:center;gap:8px">
-                <span class="card-offers"><strong>${d.teklifSayisi || 0}</strong> teklif</span>
-                <button class="teklif-btn" onclick="showPage('teklifver')">Teklif ver</button>
-              </div>
-            </div>
-          </div>`;
+          </div>
+        </div>`;
       }).join('');
+    }).catch(e => { loading.textContent = 'Yüklenemedi, sayfayı yenileyin.'; });
+  }
 
-    } catch(e) {
-      loading.textContent = 'İlanlar yüklenemedi. Lütfen sayfayı yenileyin.';
-      console.log('Hata:', e);
-    }
-  };
+  // Profil ilanları yükle
+  function loadProfilIlanlar(uid) {
+    const grid = document.getElementById('profil-ilanlar');
+    const catIsim = { 'arac':'🚗 Araç', 'emlak':'🏠 Emlak', 'elektronik':'📱 Elektronik', 'diger':'🛋 Diğer' };
+    const catRenk = { 'arac':'tag-arac', 'emlak':'tag-emlak', 'elektronik':'tag-elektronik', 'diger':'tag-diger' };
+
+    db.collection('ilanlar').orderBy('createdAt', 'desc').get().then(snap => {
+      const ilanlar = snap.docs.filter(d => d.data().userId === uid);
+      document.getElementById('profil-ilan-say').textContent = ilanlar.length;
+
+      if (ilanlar.length === 0) {
+        grid.innerHTML = `<div style="text-align:center;padding:40px;color:var(--text3);font-size:14px;grid-column:1/-1;">Henüz ilan açmadınız.<br><br><button class="btn-primary" onclick="ilanAc()" style="padding:10px 20px;font-size:13px">+ İlan oluştur</button></div>`;
+        return;
+      }
+      grid.innerHTML = ilanlar.map(doc => {
+        const d = doc.data();
+        const cat = d.kategori || 'diger';
+        return `<div class="ilan-card-p"><div class="ilan-p-top"><span class="tag ${catRenk[cat]}">${catIsim[cat]}</span><span class="status-aktif">● Aktif</span></div><div class="ilan-p-title">${d.title}</div><div class="ilan-p-budget">${Number(d.budget).toLocaleString('tr-TR')} ₺</div><div class="ilan-p-foot"><span>📍 ${d.city}</span><span class="teklif-say">${d.teklifSayisi||0} teklif</span></div></div>`;
+      }).join('');
+    });
+  }
 
   // Kayıt ol
-  window.kayitOl = async function() {
+  function kayitOl() {
     const email = document.getElementById('kayit-email').value;
     const pass = document.getElementById('kayit-pass').value;
     const btn = document.getElementById('kayit-btn');
+    const hata = document.getElementById('kayit-hata');
     btn.textContent = 'Kaydediliyor...';
-    try {
-      await createUserWithEmailAndPassword(auth, email, pass);
-      showPage('home');
-    } catch(e) {
-      document.getElementById('kayit-hata').textContent = 
-        e.code === 'auth/email-already-in-use' ? 'Bu e-posta zaten kayıtlı.' :
-        e.code === 'auth/weak-password' ? 'Şifre en az 6 karakter olmalı.' :
-        'Hata: ' + e.message;
-      btn.textContent = 'Kayıt ol';
-    }
-  };
+    hata.textContent = '';
+    auth.createUserWithEmailAndPassword(email, pass)
+      .then(() => showPage('home'))
+      .catch(e => {
+        hata.textContent = e.code === 'auth/email-already-in-use' ? 'Bu e-posta zaten kayıtlı.' :
+          e.code === 'auth/weak-password' ? 'Şifre en az 6 karakter olmalı.' : 'Hata: ' + e.message;
+        btn.textContent = 'Kayıt ol';
+      });
+  }
 
   // Giriş yap
-  window.girisYap = async function() {
+  function girisYap() {
     const email = document.getElementById('giris-email').value;
     const pass = document.getElementById('giris-pass').value;
     const btn = document.getElementById('giris-btn');
+    const hata = document.getElementById('giris-hata');
     btn.textContent = 'Giriş yapılıyor...';
-    try {
-      await signInWithEmailAndPassword(auth, email, pass);
-      showPage('home');
-    } catch(e) {
-      document.getElementById('giris-hata').textContent = 
-        e.code === 'auth/invalid-credential' ? 'E-posta veya şifre hatalı.' :
-        'Hata: ' + e.message;
-      btn.textContent = 'Giriş yap';
-    }
-  };
+    hata.textContent = '';
+    auth.signInWithEmailAndPassword(email, pass)
+      .then(() => showPage('home'))
+      .catch(e => {
+        hata.textContent = e.code === 'auth/invalid-credential' ? 'E-posta veya şifre hatalı.' : 'Hata: ' + e.message;
+        btn.textContent = 'Giriş yap';
+      });
+  }
+
+  // İlan aç (giriş kontrolü)
+  function ilanAc() {
+    if (!auth.currentUser) { showPage('giris'); return; }
+    showPage('ilan');
+  }
+
+  // Global fonksiyonlar
+  window.cikisYap = cikisYap;
+  window.ilanYayinla = ilanYayinla;
+  window.loadIlanlar = loadIlanlar;
+  window.kayitOl = kayitOl;
+  window.girisYap = girisYap;
+  window.ilanAc = ilanAc;
+  window.loadProfilIlanlar = loadProfilIlanlar;
 
   // Sayfa yüklenince ilanları getir
   loadIlanlar();
