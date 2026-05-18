@@ -1062,7 +1062,7 @@
             <span class="card-loc">📍 ${d.city}</span>
             <div style="display:flex;align-items:center;gap:8px">
               <span class="card-offers"><strong>${d.teklifSayisi||0}</strong> teklif</span>
-              <button class="teklif-btn" onclick="event.stopPropagation();window._aktifIlanId='${doc.id}';showPage('teklifver')">Teklif ver</button>
+              <button class="teklif-btn" onclick="event.stopPropagation();if(!window._currentUser){showPage('giris');return;}window._aktifIlanId='${doc.id}';showPage('teklifver')">Teklif ver</button>
             </div>
           </div>
         </div>`;
@@ -1231,7 +1231,7 @@
         </div>
 
         ${!benimIlan ? `
-        <button onclick="window._aktifIlanId='${id}';showPage('teklifver')" style="width:100%;padding:15px;background:var(--blue);border:none;border-radius:12px;color:#fff;font-family:'Syne',sans-serif;font-size:16px;font-weight:700;cursor:pointer;margin-bottom:12px;">
+        <button onclick="if(!window._currentUser){showPage('giris');return;}window._aktifIlanId='${id}';showPage('teklifver')" style="width:100%;padding:15px;background:var(--blue);border:none;border-radius:12px;color:#fff;font-family:'Syne',sans-serif;font-size:16px;font-weight:700;cursor:pointer;margin-bottom:12px;">
           💬 Teklif ver
         </button>` : `
         <div style="padding:14px;background:var(--blue-bg);border:1px solid var(--blue-border);border-radius:12px;text-align:center;font-size:13px;color:var(--blue);font-weight:600;">Bu ilan size ait</div>
