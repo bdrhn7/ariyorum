@@ -1563,10 +1563,9 @@
   function notifAc() {
     const popup = document.getElementById('notif-popup');
     popup.style.display = popup.style.display === 'none' ? 'block' : 'none';
-    document.getElementById('notif-badge').style.display = 'none';
-    // Son görülme zamanını Firestore'a kaydet
     const user = auth.currentUser;
     if (user) {
+      document.getElementById('notif-badge').style.display = 'none';
       db.collection('kullanicilar').doc(user.uid).set({ sonNotifGorulme: Date.now() }, { merge: true });
     }
   }
@@ -1710,13 +1709,26 @@
           ${d.aracBilgi ? `<div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px;">📦 ${d.aracBilgi}</div>` : ''}
           ${d.mesaj ? `<div style="font-size:13px;color:var(--text2);margin-bottom:10px;">${d.mesaj}</div>` : ''}
           ${d.telefon ? `<div style="padding:10px 14px;background:var(--green-bg);border:1px solid var(--green-border);border-radius:8px;font-size:14px;font-weight:700;color:var(--green);margin-bottom:12px;">📞 ${d.telefon}</div>` : ''}
-          <button onclick="teklifKabul('${doc.id}','${d.userId}','${d.userEmail}')" style="width:100%;padding:10px;background:var(--green);border:none;border-radius:10px;color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;">✓ Kabul et ve puanla</button>
+          <div style="display:flex;gap:8px;">
+            <button onclick="teklifKabul('${doc.id}','${d.userId}','${d.userEmail}')" style="flex:1;padding:10px;background:var(--green);border:none;border-radius:10px;color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;">✓ Kabul et ve puanla</button>
+            <button onclick="teklifReddet('${doc.id}',this)" style="padding:10px 16px;background:var(--red-bg);border:1px solid var(--red-border);border-radius:10px;color:var(--red);font-size:13px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;">✕ Reddet</button>
+          </div>
         </div>`;
       }).join('');
     }).catch(e => {
       document.getElementById('teklifler-liste').innerHTML = '<div style="padding:20px;color:var(--red)">Teklifler yüklenemedi.</div>';
     });
   }
+  function teklifReddet(teklifId, btn) {
+    if (!confirm('Bu teklifi reddetmek istediğinize emin misiniz?')) return;
+    db.collection('teklifler').doc(teklifId).update({ reddedildi: true }).then(() => {
+      btn.closest('div[style*="background:var(--bg2)"]').style.opacity = '0.4';
+      btn.closest('div[style*="background:var(--bg2)"]').style.pointerEvents = 'none';
+      btn.parentElement.innerHTML = '<div style="text-align:center;padding:8px;color:var(--text3);font-size:12px;">✕ Reddedildi</div>';
+    }).catch(e => alert('Hata: ' + e.message));
+  }
+  window.teklifReddet = teklifReddet;
+
   window.teklifleriGor = teklifleriGor;
 
   // Soru sor — direkt sohbet aç
