@@ -890,7 +890,6 @@
         const cat = d.kategori || 'diger';
         return `<div class="ilan-card-p"><div class="ilan-p-top"><span class="tag ${catRenk[cat]}">${catIsim[cat]}</span><span class="status-aktif">● Aktif</span></div><div class="ilan-p-title">${d.title}</div><div class="ilan-p-budget">${formatBudget(d.budget)} ₺</div><div class="ilan-p-foot"><span>📍 ${d.city}</span><div style="display:flex;align-items:center;gap:8px"><span class="teklif-say">${d.teklifSayisi||0} teklif</span><button onclick="ilanSil('${doc.id}')" style="padding:4px 10px;border:1px solid var(--red-border);border-radius:7px;background:var(--red-bg);color:var(--red);font-size:11px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;">Sil</button></div></div></div>`;
       }).join('');
-      }).join('');
     });
   }
 
