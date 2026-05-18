@@ -596,7 +596,7 @@
     </div>
     <div class="tab-content" id="tab-mesajlar">
       <div id="profil-mesajlar-liste">
-        <div style="text-align:center;padding:40px;color:var(--text3);font-size:14px;">Yükleniyor...</div>
+        <div style="text-align:center;padding:40px;color:var(--text3);font-size:14px;">💬 Mesajlarınız burada görünecek.<br><br>Teklif kabul edilince sohbet başlar.</div>
       </div>
     </div>
     <div class="tab-content" id="tab-yorumlar">
@@ -1003,6 +1003,9 @@
     document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
     el.classList.add('active');
     document.getElementById('tab-' + tab).classList.add('active');
+    if (tab === 'mesajlar' && auth.currentUser) {
+      sohbetleriYukle(auth.currentUser.uid);
+    }
   }
   function switchRol(rol, el) {
     document.querySelectorAll('.rol-tab').forEach(t => t.classList.remove('active'));
@@ -1343,17 +1346,36 @@
   function teklifVerSayfasiAc(ilanId) {
     window._aktifIlanId = ilanId;
     showPage('teklifver');
-    // İlan bilgilerini güncelle
     db.collection('ilanlar').doc(ilanId).get().then(doc => {
       if (!doc.exists) return;
       const d = doc.data();
       const catIsim = { 'arac':'🚗 Araç', 'emlak':'🏠 Emlak', 'elektronik':'📱 Elektronik', 'diger':'🛋 Diğer' };
+      const urunLabel = { 'arac':'Araç bilgisi', 'emlak':'Emlak bilgisi', 'elektronik':'Ürün bilgisi', 'diger':'Ürün/Hizmet bilgisi' };
+      const urunPlaceholder = { 'arac':'Örn: 2021 Toyota RAV4 1.8 Hybrid, 45.000 km', 'emlak':'Örn: 3+1, 120m², 2. kat, eşyalı', 'elektronik':'Örn: iPhone 14 Pro, 128GB, siyah', 'diger':'Ürün veya hizmet hakkında bilgi verin' };
+      const mesajPlaceholder = { 'arac':'Araç hakkında ek bilgi verin.', 'emlak':'Daire hakkında ek bilgi verin.', 'elektronik':'Ürün hakkında ek bilgi verin.', 'diger':'Ek bilgi verin.' };
+      const cat = d.kategori || 'diger';
+
+      // Başlık ve bütçe güncelle
       document.querySelector('.ilan-title') && (document.querySelector('.ilan-title').textContent = d.title);
       document.querySelector('.ilan-budget') && (document.querySelector('.ilan-budget').innerHTML = formatBudget(d.budget) + ' ₺<span> bütçe</span>');
       document.querySelector('.offer-count-box strong') && (document.querySelector('.offer-count-box strong').textContent = d.teklifSayisi || 0);
       document.querySelectorAll('.meta-row')[0] && (document.querySelectorAll('.meta-row')[0].textContent = '📍 ' + d.city);
       document.getElementById('price-hint') && (document.getElementById('price-hint').textContent = '💡 Alıcının bütçesi: ' + formatBudget(d.budget) + ' ₺');
       document.querySelector('.alici-name') && (document.querySelector('.alici-name').textContent = d.userEmail?.split('@')[0] || 'Alıcı');
+
+      // Kategori etiketini güncelle
+      const tagEl = document.querySelector('#page-teklifver .tag');
+      if (tagEl) { tagEl.className = 'tag tag-' + cat; tagEl.textContent = catIsim[cat]; }
+
+      // Form labellarını güncelle
+      const urunLabelEl = document.querySelector('.finput[placeholder*="RAV4"]');
+      if (urunLabelEl) {
+        urunLabelEl.placeholder = urunPlaceholder[cat];
+        const label = urunLabelEl.previousElementSibling;
+        if (label) label.textContent = urunLabel[cat];
+      }
+      const mesajEl = document.querySelector('.ftextarea[placeholder*="ek bilgi"]');
+      if (mesajEl) mesajEl.placeholder = mesajPlaceholder[cat];
     });
   }
   window.teklifVerSayfasiAc = teklifVerSayfasiAc;
@@ -1679,29 +1701,30 @@
 
   function sohbetleriYukle(uid) {
     const liste = document.getElementById('profil-mesajlar-liste');
-    db.collection('sohbetler').where('katilimcilar', 'array-contains', uid)
-      .orderBy('sonMesajZaman', 'desc').get().then(snap => {
-        if (snap.empty) {
-          liste.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text3);font-size:14px;">Henüz mesaj yok.<br><br>Teklif kabul ettikten sonra mesajlaşabilirsiniz.</div>';
-          return;
-        }
-        liste.innerHTML = snap.docs.map(doc => {
-          const d = doc.data();
-          const karsi = d.katilimcilar.find(k => k !== uid);
-          const karsiIsim = d.isimler?.[karsi] || karsi?.split('@')[0] || 'Kullanıcı';
-          return `<div onclick="sohbetAc('${doc.id}','${karsiIsim}','${d.ilanBaslik||'İlan'}')" style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:16px 20px;margin-bottom:10px;cursor:pointer;display:flex;align-items:center;gap:14px;">
-            <div style="width:44px;height:44px;border-radius:50%;background:var(--blue-bg);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">👤</div>
-            <div style="flex:1;">
-              <div style="font-size:14px;font-weight:600;color:var(--text);">${karsiIsim}</div>
-              <div style="font-size:12px;color:var(--text3);margin-top:2px;">${d.ilanBaslik||'İlan'}</div>
-              <div style="font-size:12px;color:var(--text2);margin-top:4px;">${d.sonMesaj||'Henüz mesaj yok'}</div>
-            </div>
-            <div style="font-size:11px;color:var(--text3);">${d.sonMesajZaman?.toDate().toLocaleDateString('tr-TR')||''}</div>
-          </div>`;
-        }).join('');
-      }).catch(() => {
-        liste.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text3);">Mesajlar yüklenemedi.</div>';
-      });
+    if (!liste) return;
+    liste.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text3);">Yükleniyor...</div>';
+
+    db.collection('sohbetler').where('katilimcilar', 'array-contains', uid).get().then(snap => {
+      if (snap.empty) {
+        liste.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text3);font-size:14px;">💬 Henüz mesajınız yok.<br><br>Teklif kabul edilince sohbet başlar.</div>';
+        return;
+      }
+      liste.innerHTML = snap.docs.map(doc => {
+        const d = doc.data();
+        const karsi = d.katilimcilar?.find(k => k !== uid) || '';
+        const karsiIsim = d.isimler?.[karsi] || 'Kullanıcı';
+        return `<div onclick="sohbetAc('${doc.id}','${karsiIsim}','${d.ilanBaslik||'İlan'}')" style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:16px 20px;margin-bottom:10px;cursor:pointer;display:flex;align-items:center;gap:14px;">
+          <div style="width:44px;height:44px;border-radius:50%;background:var(--blue-bg);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">👤</div>
+          <div style="flex:1;">
+            <div style="font-size:14px;font-weight:600;color:var(--text);">${karsiIsim}</div>
+            <div style="font-size:12px;color:var(--text3);margin-top:2px;">${d.ilanBaslik||'İlan'}</div>
+            <div style="font-size:12px;color:var(--text2);margin-top:4px;">${d.sonMesaj||'Henüz mesaj yok'}</div>
+          </div>
+        </div>`;
+      }).join('');
+    }).catch(() => {
+      liste.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text3);">Mesajlar yüklenemedi.</div>';
+    });
   }
 
   // Teklif kabul edilince sohbet oluştur
