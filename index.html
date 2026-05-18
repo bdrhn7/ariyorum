@@ -1065,7 +1065,7 @@
             <span class="card-loc">📍 ${d.city}</span>
             <div style="display:flex;align-items:center;gap:8px">
               <span class="card-offers"><strong>${d.teklifSayisi||0}</strong> teklif</span>
-              <button class="teklif-btn" onclick="event.stopPropagation();if(!window._currentUser){showPage('giris');return;}window._aktifIlanId='${doc.id}';showPage('teklifver')">Teklif ver</button>
+              <button class="teklif-btn" onclick="event.stopPropagation();if(!window._currentUser){showPage('giris');return;}teklifVerSayfasiAc('${doc.id}')">Teklif ver</button>
             </div>
           </div>
         </div>`;
@@ -1235,7 +1235,7 @@
         </div>
 
         ${!benimIlan ? `
-        <button onclick="if(!window._currentUser){showPage('giris');return;}window._aktifIlanId='${id}';showPage('teklifver');console.log('ilan id:','${id}')" style="width:100%;padding:15px;background:var(--blue);border:none;border-radius:12px;color:#fff;font-family:'Syne',sans-serif;font-size:16px;font-weight:700;cursor:pointer;margin-bottom:12px;">
+        <button onclick="if(!window._currentUser){showPage('giris');return;}teklifVerSayfasiAc('${id}');console.log('ilan id:','${id}')" style="width:100%;padding:15px;background:var(--blue);border:none;border-radius:12px;color:#fff;font-family:'Syne',sans-serif;font-size:16px;font-weight:700;cursor:pointer;margin-bottom:12px;">
           💬 Teklif ver
         </button>` : `
         <div style="padding:14px;background:var(--blue-bg);border:1px solid var(--blue-border);border-radius:12px;text-align:center;font-size:13px;color:var(--blue);font-weight:600;">Bu ilan size ait</div>
@@ -1247,7 +1247,23 @@
   }
   window.ilanDetay = ilanDetay;
 
-  // BİLDİRİM SİSTEMİ
+  function teklifVerSayfasiAc(ilanId) {
+    window._aktifIlanId = ilanId;
+    showPage('teklifver');
+    // İlan bilgilerini güncelle
+    db.collection('ilanlar').doc(ilanId).get().then(doc => {
+      if (!doc.exists) return;
+      const d = doc.data();
+      const catIsim = { 'arac':'🚗 Araç', 'emlak':'🏠 Emlak', 'elektronik':'📱 Elektronik', 'diger':'🛋 Diğer' };
+      document.querySelector('.ilan-title') && (document.querySelector('.ilan-title').textContent = d.title);
+      document.querySelector('.ilan-budget') && (document.querySelector('.ilan-budget').innerHTML = formatBudget(d.budget) + ' ₺<span> bütçe</span>');
+      document.querySelector('.offer-count-box strong') && (document.querySelector('.offer-count-box strong').textContent = d.teklifSayisi || 0);
+      document.querySelectorAll('.meta-row')[0] && (document.querySelectorAll('.meta-row')[0].textContent = '📍 ' + d.city);
+      document.getElementById('price-hint') && (document.getElementById('price-hint').textContent = '💡 Alıcının bütçesi: ' + formatBudget(d.budget) + ' ₺');
+      document.querySelector('.alici-name') && (document.querySelector('.alici-name').textContent = d.userEmail?.split('@')[0] || 'Alıcı');
+    });
+  }
+  window.teklifVerSayfasiAc = teklifVerSayfasiAc;
   function notifAc() {
     const popup = document.getElementById('notif-popup');
     popup.style.display = popup.style.display === 'none' ? 'block' : 'none';
