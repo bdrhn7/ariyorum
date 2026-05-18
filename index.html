@@ -425,6 +425,37 @@
       <button class="filter-cat" onclick="filterCat(this,'emlak')">🏠 Emlak</button>
       <button class="filter-cat" onclick="filterCat(this,'elektronik')">📱 Elektronik</button>
       <button class="filter-cat" onclick="filterCat(this,'diger')">🛋 Diğer</button>
+      <button class="filter-cat" onclick="toggleGelFilter()" id="filtre-btn">⚙️ Filtrele</button>
+    </div>
+
+    <!-- GELİŞMİŞ FİLTRELER -->
+    <div id="gelismis-filtre" style="display:none;margin-top:16px;background:var(--bg2);border:1px solid var(--border2);border-radius:14px;padding:18px;max-width:560px;margin-left:auto;margin-right:auto;">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
+        <div>
+          <div style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:7px;">Min Bütçe</div>
+          <input id="f-min" type="number" class="finput" placeholder="0" style="padding:9px 12px;font-size:13px;" oninput="ilanFiltrele()">
+        </div>
+        <div>
+          <div style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:7px;">Max Bütçe</div>
+          <input id="f-max" type="number" class="finput" placeholder="Sınırsız" style="padding:9px 12px;font-size:13px;" oninput="ilanFiltrele()">
+        </div>
+        <div>
+          <div style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:7px;">Şehir</div>
+          <select id="f-sehir" class="fselect" style="padding:9px 12px;font-size:13px;" onchange="ilanFiltrele()">
+            <option value="">Tümü</option>
+            <option>Adana</option><option>Adıyaman</option><option>Afyonkarahisar</option><option>Ağrı</option><option>Ankara</option><option>Antalya</option><option>Artvin</option><option>Aydın</option><option>Balıkesir</option><option>Bursa</option><option>Çanakkale</option><option>Denizli</option><option>Diyarbakır</option><option>Edirne</option><option>Elazığ</option><option>Erzurum</option><option>Eskişehir</option><option>Gaziantep</option><option>Giresun</option><option>Hatay</option><option>Isparta</option><option>Mersin</option><option>İstanbul</option><option>İzmir</option><option>Kayseri</option><option>Kocaeli</option><option>Konya</option><option>Malatya</option><option>Manisa</option><option>Kahramanmaraş</option><option>Mardin</option><option>Muğla</option><option>Samsun</option><option>Şanlıurfa</option><option>Trabzon</option><option>Van</option><option>Diğer</option>
+          </select>
+        </div>
+      </div>
+      <div style="margin-top:12px;">
+        <div style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:7px;">Sıralama</div>
+        <div style="display:flex;gap:8px;">
+          <button class="filter-cat active" id="sort-yeni" onclick="sortBy('yeni',this)">En yeni</button>
+          <button class="filter-cat" id="sort-dusuk" onclick="sortBy('dusuk',this)">En düşük fiyat</button>
+          <button class="filter-cat" id="sort-yuksek" onclick="sortBy('yuksek',this)">En yüksek fiyat</button>
+        </div>
+      </div>
+      <button onclick="filtreTemizle()" style="margin-top:12px;padding:7px 16px;border:1px solid var(--border2);border-radius:8px;background:transparent;color:var(--text3);font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;">✕ Filtreleri temizle</button>
     </div>
   </section>
   <div class="stats-bar">
@@ -772,31 +803,86 @@
   function showPopup(id) { document.getElementById('popup-' + id).classList.add('show'); }
   function closePopup(id) { document.getElementById('popup-' + id).classList.remove('show'); }
   window.seciliKat = 'hepsi';
+  window.seciliSort = 'yeni';
+
+  function toggleGelFilter() {
+    const el = document.getElementById('gelismis-filtre');
+    el.style.display = el.style.display === 'none' ? 'block' : 'none';
+  }
+
+  function sortBy(tip, el) {
+    window.seciliSort = tip;
+    document.querySelectorAll('#sort-yeni,#sort-dusuk,#sort-yuksek').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+    ilanFiltrele();
+  }
+
+  function filtreTemizle() {
+    document.getElementById('f-min').value = '';
+    document.getElementById('f-max').value = '';
+    document.getElementById('f-sehir').value = '';
+    document.getElementById('search-input').value = '';
+    window.seciliSort = 'yeni';
+    document.getElementById('sort-yeni').classList.add('active');
+    document.getElementById('sort-dusuk').classList.remove('active');
+    document.getElementById('sort-yuksek').classList.remove('active');
+    ilanFiltrele();
+  }
+
   function filterCat(el, cat) {
     document.querySelectorAll('.filter-cat').forEach(c => c.classList.remove('active'));
     el.classList.add('active');
     window.seciliKat = cat;
     ilanFiltrele();
   }
-  function aramaYap() {
-    ilanFiltrele();
-  }
+
+  function aramaYap() { ilanFiltrele(); }
+
   function ilanFiltrele() {
     const aramaMetni = (document.getElementById('search-input')?.value || '').toLowerCase();
     const kat = window.seciliKat || 'hepsi';
-    const kartlar = document.querySelectorAll('.card');
+    const min = parseInt(document.getElementById('f-min')?.value || '0') || 0;
+    const max = parseInt(document.getElementById('f-max')?.value || '0') || 0;
+    const sehir = (document.getElementById('f-sehir')?.value || '').toLowerCase();
+    const sort = window.seciliSort || 'yeni';
+
+    let kartlar = Array.from(document.querySelectorAll('.card'));
     let gorunen = 0;
+
     kartlar.forEach(card => {
       const catUygun = kat === 'hepsi' || card.dataset.cat === kat;
       const baslik = card.querySelector('.card-title')?.textContent.toLowerCase() || '';
       const aramaUygun = !aramaMetni || baslik.includes(aramaMetni);
-      const goster = catUygun && aramaUygun;
+      const budgetText = card.querySelector('.card-budget')?.textContent.replace(/[^0-9]/g,'') || '0';
+      const budget = parseInt(budgetText) || 0;
+      const minUygun = min === 0 || budget >= min;
+      const maxUygun = max === 0 || budget <= max;
+      const cardSehir = card.querySelector('.card-loc')?.textContent.toLowerCase() || '';
+      const sehirUygun = !sehir || cardSehir.includes(sehir);
+      const goster = catUygun && aramaUygun && minUygun && maxUygun && sehirUygun;
       card.style.display = goster ? 'block' : 'none';
       if (goster) gorunen++;
     });
+
+    // Sıralama
+    const grid = document.getElementById('cards-grid');
+    if (grid && sort !== 'yeni') {
+      const gorunenKartlar = kartlar.filter(c => c.style.display !== 'none');
+      gorunenKartlar.sort((a, b) => {
+        const aVal = parseInt(a.querySelector('.card-budget')?.textContent.replace(/[^0-9]/g,'') || '0');
+        const bVal = parseInt(b.querySelector('.card-budget')?.textContent.replace(/[^0-9]/g,'') || '0');
+        return sort === 'dusuk' ? aVal - bVal : bVal - aVal;
+      });
+      gorunenKartlar.forEach(card => grid.appendChild(card));
+    }
+
     const bos = document.getElementById('ilanlar-bos');
     if (bos) bos.style.display = gorunen === 0 && kartlar.length > 0 ? 'block' : 'none';
   }
+
+  window.toggleGelFilter = toggleGelFilter;
+  window.sortBy = sortBy;
+  window.filtreTemizle = filtreTemizle;
   function selCat(el, cat) {
     document.querySelectorAll('.cat-opt').forEach(c => c.classList.remove('sel'));
     el.classList.add('sel');
