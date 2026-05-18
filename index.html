@@ -387,6 +387,10 @@
   </ul>
   <div class="nav-right">
     <button class="mode-toggle" onclick="toggleMode()"><span id="mode-ico">🌙</span><span id="mode-lbl">Gece modu</span></button>
+    <div id="notif-wrap" style="display:none;position:relative;cursor:pointer;" onclick="notifAc()">
+      <span style="font-size:20px;">🔔</span>
+      <span id="notif-badge" style="display:none;position:absolute;top:-4px;right:-4px;background:#f87171;color:#fff;font-size:10px;font-weight:700;padding:1px 5px;border-radius:999px;min-width:16px;text-align:center;"></span>
+    </div>
     <button class="btn-outline" onclick="window._currentUser ? showPage('profil') : showPage('giris')">Giriş yap</button>
     <button class="btn-primary" onclick="ilanAc()">+ İlan ver</button>
   </div>
@@ -618,6 +622,17 @@
         <button class="btn-big btn-big-outline" onclick="showPage('home')">İlanları gör</button>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- BİLDİRİM POPUP -->
+<div id="notif-popup" style="display:none;position:fixed;top:70px;right:20px;width:320px;background:var(--bg2);border:1px solid var(--border2);border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,0.3);z-index:500;overflow:hidden;">
+  <div style="padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+    <span style="font-size:14px;font-weight:700;color:var(--text);">🔔 Bildirimler</span>
+    <button onclick="notifKapat()" style="background:none;border:none;color:var(--text3);font-size:18px;cursor:pointer;">×</button>
+  </div>
+  <div id="notif-liste" style="max-height:320px;overflow-y:auto;">
+    <div style="padding:32px;text-align:center;color:var(--text3);font-size:13px;">Henüz bildirim yok</div>
   </div>
 </div>
 
@@ -880,6 +895,7 @@
         if (document.getElementById('ayar-email')) document.getElementById('ayar-email').textContent = user.email;
         if (document.getElementById('ayar-isim')) document.getElementById('ayar-isim').textContent = isim;
         loadProfilIlanlar(user.uid);
+        notifYukle(user.uid);
       }
     } else {
       document.querySelectorAll('.btn-outline').forEach(btn => {
@@ -1067,6 +1083,59 @@
     }).catch(e => alert('Hata: ' + e.message));
   }
   window.teklifGonder = teklifGonder;
+
+  // BİLDİRİM SİSTEMİ
+  function notifAc() {
+    const popup = document.getElementById('notif-popup');
+    popup.style.display = popup.style.display === 'none' ? 'block' : 'none';
+    // Bildirimleri okundu olarak işaretle
+    document.getElementById('notif-badge').style.display = 'none';
+    localStorage.setItem('notif-son-gorulme', Date.now());
+  }
+  function notifKapat() {
+    document.getElementById('notif-popup').style.display = 'none';
+  }
+  window.notifAc = notifAc;
+  window.notifKapat = notifKapat;
+
+  function notifYukle(uid) {
+    const wrap = document.getElementById('notif-wrap');
+    const badge = document.getElementById('notif-badge');
+    const liste = document.getElementById('notif-liste');
+    if (wrap) wrap.style.display = 'flex';
+
+    // Kullanıcının ilanlarına gelen teklifleri bul
+    db.collection('ilanlar').where('userId','==',uid).get().then(ilanSnap => {
+      if (ilanSnap.empty) return;
+      const ilanIds = ilanSnap.docs.map(d => d.id);
+      const ilanlar = {};
+      ilanSnap.docs.forEach(d => ilanlar[d.id] = d.data().title);
+
+      db.collection('teklifler').get().then(teklifSnap => {
+        const teklifler = teklifSnap.docs.filter(d => ilanIds.includes(d.data().ilanId));
+        const sonGorulme = parseInt(localStorage.getItem('notif-son-gorulme') || '0');
+        let yeniSay = 0;
+
+        if (teklifler.length === 0) return;
+
+        liste.innerHTML = teklifler.map(doc => {
+          const d = doc.data();
+          const zaman = d.createdAt?.toDate().toLocaleDateString('tr-TR') || '—';
+          const yeni = d.createdAt?.toDate().getTime() > sonGorulme;
+          if (yeni) yeniSay++;
+          return `<div style="padding:14px 18px;border-bottom:1px solid var(--border);cursor:pointer;${yeni?'background:var(--blue-bg)':''}" onclick="teklifleriGor('${d.ilanId}','${ilanlar[d.ilanId]||'İlan'}');notifKapat()">
+            <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:3px;">💬 Yeni teklif: ${formatBudget(d.fiyat)} ₺</div>
+            <div style="font-size:11px;color:var(--text3);">${ilanlar[d.ilanId]||'İlan'} · ${zaman}</div>
+          </div>`;
+        }).reverse().join('');
+
+        if (yeniSay > 0) {
+          badge.style.display = 'block';
+          badge.textContent = yeniSay;
+        }
+      });
+    });
+  }
 
   // ADMİN
   const ADMIN_EMAIL = 'noxer79@gmail.com';
