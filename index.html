@@ -899,7 +899,7 @@
             <span class="card-loc">📍 ${d.city}</span>
             <div style="display:flex;align-items:center;gap:8px">
               <span class="card-offers"><strong>${d.teklifSayisi||0}</strong> teklif</span>
-              <button class="teklif-btn" onclick="showPage('teklifver')">Teklif ver</button>
+              <button class="teklif-btn" onclick="window._aktifIlanId='${doc.id}';showPage('teklifver')">Teklif ver</button>
             </div>
           </div>
         </div>`;
