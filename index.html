@@ -538,6 +538,7 @@
         <div class="star-row"><span style="font-size:16px">⭐⭐⭐⭐⭐</span><span class="star-num">—</span><span class="star-count">· Henüz değerlendirme yok</span></div>
       </div>
       <button style="padding:9px 20px;border:1px solid var(--red-border);border-radius:10px;background:var(--red-bg);color:var(--red);font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;position:relative;z-index:10;" onclick="window._auth.signOut().then(()=>showPage('home'))">🚪 Çıkış yap</button>
+      <button id="admin-btn" style="display:none;padding:9px 20px;border:1px solid var(--amber-bg);border-radius:10px;background:var(--amber-bg);color:var(--amber);font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;margin-top:8px;">🛡️ Admin paneli</button>
     </div>
     <div class="stats-grid">
       <div class="stat-box"><div class="stat-box-num" id="profil-ilan-say">0</div><div class="stat-box-lbl">Aktif ilan</div></div>
@@ -613,6 +614,44 @@
       <div class="cta-btns">
         <button class="btn-big btn-big-blue" onclick="ilanAc()">+ İlan oluştur</button>
         <button class="btn-big btn-big-outline" onclick="showPage('home')">İlanları gör</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ADMİN PANELİ -->
+<div id="page-admin" class="page">
+  <div style="max-width:900px;margin:0 auto;padding:40px 24px 72px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;">
+      <div>
+        <h1 style="font-family:'Syne',sans-serif;font-size:26px;font-weight:800;margin-bottom:4px;">🛡️ Admin Paneli</h1>
+        <p style="font-size:13px;color:var(--text3);">Tüm ilanları ve kullanıcıları yönet</p>
+      </div>
+      <button onclick="showPage('home')" style="padding:8px 16px;border:1px solid var(--border2);border-radius:9px;background:transparent;color:var(--text2);font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif;">← Ana sayfa</button>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:28px;">
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:18px;text-align:center;">
+        <div id="admin-ilan-say" style="font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--text);">—</div>
+        <div style="font-size:12px;color:var(--text3);margin-top:4px;">Toplam ilan</div>
+      </div>
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:18px;text-align:center;">
+        <div id="admin-teklif-say" style="font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--text);">—</div>
+        <div style="font-size:12px;color:var(--text3);margin-top:4px;">Toplam teklif</div>
+      </div>
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:18px;text-align:center;">
+        <div id="admin-kullanici-say" style="font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--blue);">—</div>
+        <div style="font-size:12px;color:var(--text3);margin-top:4px;">Kayıtlı kullanıcı</div>
+      </div>
+    </div>
+
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:16px;overflow:hidden;">
+      <div style="padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+        <h2 style="font-size:15px;font-weight:700;color:var(--text);">Tüm ilanlar</h2>
+        <button onclick="adminYukle()" style="padding:6px 14px;border:1px solid var(--blue-border);border-radius:8px;background:var(--blue-bg);color:var(--blue);font-size:12px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;">🔄 Yenile</button>
+      </div>
+      <div id="admin-ilanlar">
+        <div style="text-align:center;padding:40px;color:var(--text3);font-size:14px;">Yükleniyor...</div>
       </div>
     </div>
   </div>
@@ -840,6 +879,15 @@
         document.getElementById('ayar-isim').textContent = isim;
         document.getElementById('ayar-tarih').textContent = tarih;
         loadProfilIlanlar(user.uid);
+
+        // Admin butonu
+        if (user.email === ADMIN_EMAIL) {
+          const adminBtn = document.getElementById('admin-btn');
+          if (adminBtn) {
+            adminBtn.style.display = 'block';
+            adminBtn.onclick = () => { showPage('admin'); adminYukle(); };
+          }
+        }
       }
     } else {
       document.querySelectorAll('.btn-outline').forEach(btn => {
@@ -1018,6 +1066,50 @@
     }).catch(e => alert('Hata: ' + e.message));
   }
   window.teklifGonder = teklifGonder;
+
+  // ADMİN
+  const ADMIN_EMAIL = 'noxer79@gmail.com';
+
+  function adminKontrol() {
+    const user = auth.currentUser;
+    return user && user.email === ADMIN_EMAIL;
+  }
+
+  function adminYukle() {
+    if (!adminKontrol()) { alert('Yetkisiz erişim!'); showPage('home'); return; }
+
+    db.collection('ilanlar').orderBy('createdAt', 'desc').get().then(snap => {
+      document.getElementById('admin-ilan-say').textContent = snap.size;
+      const catIsim = { 'arac':'🚗 Araç', 'emlak':'🏠 Emlak', 'elektronik':'📱 Elektronik', 'diger':'🛋 Diğer' };
+
+      document.getElementById('admin-ilanlar').innerHTML = snap.empty
+        ? '<div style="padding:40px;text-align:center;color:var(--text3)">Henüz ilan yok.</div>'
+        : snap.docs.map(doc => {
+          const d = doc.data();
+          const tarih = d.createdAt?.toDate().toLocaleDateString('tr-TR') || '—';
+          return `<div style="display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--border);">
+            <div style="flex:1">
+              <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:3px;">${d.title}</div>
+              <div style="font-size:11px;color:var(--text3);">${catIsim[d.kategori]||'Diğer'} · 📍${d.city} · ${formatBudget(d.budget)} ₺ · ${d.userEmail} · ${tarih}</div>
+            </div>
+            <button onclick="adminIlanSil('${doc.id}')" style="margin-left:16px;padding:5px 12px;border:1px solid var(--red-border);border-radius:7px;background:var(--red-bg);color:var(--red);font-size:11px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;flex-shrink:0;">Sil</button>
+          </div>`;
+        }).join('');
+    });
+
+    db.collection('teklifler').get().then(snap => {
+      document.getElementById('admin-teklif-say').textContent = snap.size;
+    });
+  }
+
+  function adminIlanSil(id) {
+    if (!confirm('Bu ilanı silmek istediğinize emin misiniz?')) return;
+    db.collection('ilanlar').doc(id).delete().then(() => adminYukle());
+  }
+
+  window.adminYukle = adminYukle;
+  window.adminIlanSil = adminIlanSil;
+  window.adminKontrol = adminKontrol;
 
   // İsim düzenle
   function isimDuzenle() {
