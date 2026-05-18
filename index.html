@@ -1188,6 +1188,7 @@
 
   // İlan detay sayfası
   function ilanDetay(id) {
+    window._aktifIlanId = id;
     showPage('detay');
     const icerik = document.getElementById('detay-icerik');
     icerik.innerHTML = '<div style="text-align:center;padding:60px;color:var(--text3);">Yükleniyor...</div>';
