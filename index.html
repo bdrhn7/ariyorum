@@ -470,7 +470,7 @@
     </div>
     <div class="sec-lbl">İlan önizlemesi</div>
     <div class="preview-card"><div class="prev-lbl">👁 Satıcılar böyle görecek</div><div class="prev-cat" id="prev-cat">🚗 Araç</div><div class="prev-title" id="prev-title">2020 model ve üzeri SUV arıyorum</div><div class="prev-budget" id="prev-budget">1.000.000 ₺</div><div class="prev-foot"><span id="prev-city">📍 Gaziantep</span><span class="prev-v">✓ Kimlik onaylı</span><span class="prev-v">✓ Telefon onaylı</span></div></div>
-    <button class="submit-btn" onclick="showPopup('ilan-success')">🚀 İlanı yayınla</button>
+    <button class="submit-btn" onclick="ilanYayinla()">🚀 İlanı yayınla</button>
     <div class="submit-note">İlanınız anında yayınlanır ve satıcılar size ulaşmaya başlar</div>
   </div>
 </div>
@@ -616,7 +616,53 @@
   </div>
 </div>
 
-<!-- POPUPLAR -->
+<!-- GİRİŞ SAYFASI -->
+<div id="page-giris" class="page">
+  <div style="max-width:440px;margin:0 auto;padding:60px 24px;">
+    <div style="text-align:center;margin-bottom:36px;">
+      <div class="logo" style="display:inline-flex;flex-direction:column;align-items:center;margin-bottom:20px;">
+        <div class="logo-main">arı<em>yorum</em></div>
+        <div class="logo-underline"><span class="u1"></span><span class="u2"></span></div>
+      </div>
+      <h1 style="font-family:'Syne',sans-serif;font-size:26px;font-weight:800;margin-bottom:6px;">Hoş geldin!</h1>
+      <p style="font-size:14px;color:var(--text2);">Hesabına giriş yap</p>
+    </div>
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:28px;">
+      <div class="fgroup"><label class="flabel">E-posta</label><input class="finput" type="email" id="giris-email" placeholder="ornek@mail.com"></div>
+      <div class="fgroup"><label class="flabel">Şifre</label><input class="finput" type="password" id="giris-pass" placeholder="••••••••"></div>
+      <div id="giris-hata" style="font-size:13px;color:var(--red);margin-bottom:12px;"></div>
+      <button class="submit-btn" id="giris-btn" onclick="girisYap()">Giriş yap</button>
+      <div style="text-align:center;margin-top:16px;font-size:13px;color:var(--text2);">
+        Hesabın yok mu? <span onclick="showPage('kayit')" style="color:var(--blue);cursor:pointer;font-weight:600;">Kayıt ol</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- KAYIT SAYFASI -->
+<div id="page-kayit" class="page">
+  <div style="max-width:440px;margin:0 auto;padding:60px 24px;">
+    <div style="text-align:center;margin-bottom:36px;">
+      <div class="logo" style="display:inline-flex;flex-direction:column;align-items:center;margin-bottom:20px;">
+        <div class="logo-main">arı<em>yorum</em></div>
+        <div class="logo-underline"><span class="u1"></span><span class="u2"></span></div>
+      </div>
+      <h1 style="font-family:'Syne',sans-serif;font-size:26px;font-weight:800;margin-bottom:6px;">Hesap oluştur</h1>
+      <p style="font-size:14px;color:var(--text2);">Ücretsiz kayıt ol, ilan ver</p>
+    </div>
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:28px;">
+      <div class="fgroup"><label class="flabel">E-posta</label><input class="finput" type="email" id="kayit-email" placeholder="ornek@mail.com"></div>
+      <div class="fgroup"><label class="flabel">Şifre</label><input class="finput" type="password" id="kayit-pass" placeholder="En az 6 karakter"></div>
+      <div id="kayit-hata" style="font-size:13px;color:var(--red);margin-bottom:12px;"></div>
+      <button class="submit-btn" id="kayit-btn" onclick="kayitOl()">Kayıt ol</button>
+      <div style="text-align:center;margin-top:16px;font-size:13px;color:var(--text2);">
+        Hesabın var mı? <span onclick="showPage('giris')" style="color:var(--blue);cursor:pointer;font-weight:600;">Giriş yap</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <div class="popup-overlay" id="popup-ilan-success"><div class="popup-box"><div class="p-ico">🎉</div><div class="p-title">İlanınız yayınlandı!</div><div class="p-sub">Satıcılar size ulaşmaya başlayacak.<br>Teklifleri profilinizden takip edebilirsiniz.</div><button class="p-btn p-btn-blue" onclick="closePopup('ilan-success');showPage('teklifler')">Teklifleri gör</button></div></div>
 <div class="popup-overlay" id="popup-teklif-success"><div class="popup-box"><div class="p-ico">📨</div><div class="p-title">Teklif gönderildi!</div><div class="p-sub">Teklifiniz alıcıya iletildi.<br>Alıcı onaylarsa iletişim bilgileriniz paylaşılır.</div><button class="p-btn p-btn-blue" onclick="closePopup('teklif-success');showPage('home')">Ana sayfaya dön</button></div></div>
 <div class="popup-overlay" id="popup-kabul-success"><div class="popup-box"><div class="p-ico">🤝</div><div class="p-title">Teklif kabul edildi!</div><div class="p-sub">Satıcının iletişim bilgileri paylaşıldı.</div><div class="p-phone">0532 XXX XX XX</div><button class="p-btn p-btn-green" onclick="closePopup('kabul-success')">Tamam</button></div></div>
@@ -694,6 +740,150 @@
     card.style.opacity = '0.35';
     card.style.pointerEvents = 'none';
   }
+</script>
+
+<!-- FIREBASE -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
+  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
+  import { getFirestore, collection, addDoc, getDocs, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyD7Orq1GqfUTVIISW_Q6vYDOWH7H-j3r5M",
+    authDomain: "ariyorum-a3fb0.firebaseapp.com",
+    projectId: "ariyorum-a3fb0",
+    storageBucket: "ariyorum-a3fb0.firebasestorage.app",
+    messagingSenderId: "918438082684",
+    appId: "1:918438082684:web:598f0795345939c40a71f9",
+    measurementId: "G-NWPFNV6DP6"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  // Kullanıcı durumu takip et
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      // Giriş yapılmış
+      document.querySelectorAll('.btn-outline').forEach(btn => {
+        if (btn.textContent === 'Giriş yap') {
+          btn.textContent = '👤 ' + (user.email.split('@')[0]);
+          btn.onclick = () => { signOut(auth); };
+        }
+      });
+      document.querySelectorAll('.mob-giris').forEach(btn => {
+        btn.textContent = 'Çıkış yap';
+        btn.onclick = () => { signOut(auth); closeMobileMenu(); };
+      });
+    } else {
+      // Çıkış yapılmış
+      document.querySelectorAll('.btn-outline').forEach(btn => {
+        btn.textContent = 'Giriş yap';
+        btn.onclick = () => showPage('giris');
+      });
+    }
+  });
+
+  // İlan yayınla
+  window.ilanYayinla = async function() {
+    const user = auth.currentUser;
+    if (!user) { showPage('giris'); return; }
+
+    const title = document.getElementById('f-title').value;
+    const budget = document.getElementById('f-budget').value;
+    const city = document.getElementById('f-city').value;
+
+    if (!title || !budget || !city) {
+      alert('Lütfen tüm alanları doldurun!');
+      return;
+    }
+
+    try {
+      await addDoc(collection(db, 'ilanlar'), {
+        title, budget, city,
+        userId: user.uid,
+        userEmail: user.email,
+        createdAt: serverTimestamp(),
+        teklifSayisi: 0
+      });
+      showPopup('ilan-success');
+      loadIlanlar();
+    } catch (e) {
+      alert('Hata oluştu: ' + e.message);
+    }
+  };
+
+  // İlanları yükle
+  window.loadIlanlar = async function() {
+    try {
+      const q = query(collection(db, 'ilanlar'), orderBy('createdAt', 'desc'));
+      const snap = await getDocs(q);
+      const grid = document.getElementById('cards-grid');
+
+      if (snap.empty) return;
+
+      // Gerçek ilanlar varsa örnek ilanları kaldır
+      const gercekIlanlar = snap.docs.map(doc => {
+        const d = doc.data();
+        return `
+          <div class="card" data-cat="diger">
+            <div class="card-head"><span class="tag tag-diger">İlan</span><span class="verified">✓ Onaylı</span></div>
+            <div class="card-title">${d.title}</div>
+            <div class="card-budget">${d.budget} ₺</div>
+            <div class="card-foot">
+              <span class="card-loc">📍 ${d.city}</span>
+              <div style="display:flex;align-items:center;gap:8px">
+                <span class="card-offers"><strong>${d.teklifSayisi || 0}</strong> teklif</span>
+                <button class="teklif-btn" onclick="showPage('teklifver')">Teklif ver</button>
+              </div>
+            </div>
+          </div>`;
+      }).join('');
+
+      grid.innerHTML = gercekIlanlar + grid.innerHTML;
+    } catch(e) {
+      console.log('İlanlar yüklenemedi:', e);
+    }
+  };
+
+  // Kayıt ol
+  window.kayitOl = async function() {
+    const email = document.getElementById('kayit-email').value;
+    const pass = document.getElementById('kayit-pass').value;
+    const btn = document.getElementById('kayit-btn');
+    btn.textContent = 'Kaydediliyor...';
+    try {
+      await createUserWithEmailAndPassword(auth, email, pass);
+      showPage('home');
+    } catch(e) {
+      document.getElementById('kayit-hata').textContent = 
+        e.code === 'auth/email-already-in-use' ? 'Bu e-posta zaten kayıtlı.' :
+        e.code === 'auth/weak-password' ? 'Şifre en az 6 karakter olmalı.' :
+        'Hata: ' + e.message;
+      btn.textContent = 'Kayıt ol';
+    }
+  };
+
+  // Giriş yap
+  window.girisYap = async function() {
+    const email = document.getElementById('giris-email').value;
+    const pass = document.getElementById('giris-pass').value;
+    const btn = document.getElementById('giris-btn');
+    btn.textContent = 'Giriş yapılıyor...';
+    try {
+      await signInWithEmailAndPassword(auth, email, pass);
+      showPage('home');
+    } catch(e) {
+      document.getElementById('giris-hata').textContent = 
+        e.code === 'auth/invalid-credential' ? 'E-posta veya şifre hatalı.' :
+        'Hata: ' + e.message;
+      btn.textContent = 'Giriş yap';
+    }
+  };
+
+  // Sayfa yüklenince ilanları getir
+  loadIlanlar();
 </script>
 </body>
 </html>
