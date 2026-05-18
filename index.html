@@ -528,20 +528,20 @@
 <div id="page-profil" class="page">
   <div class="profil-page">
     <div class="profile-hero">
-      <div class="avatar-wrap"><div class="profile-avatar">👤</div><div class="online-dot"></div></div>
+      <div class="avatar-wrap"><div class="profile-avatar" id="profil-avatar">👤</div><div class="online-dot"></div></div>
       <div class="profile-info">
-        <div class="profile-name">Ahmet Yılmaz</div>
-        <div class="profile-meta">📍 Gaziantep · Üye: Ocak 2025</div>
-        <div class="badges-row"><span class="badge-prof badge-prof-green">✓ Kimlik onaylı</span><span class="badge-prof badge-prof-green">✓ Telefon onaylı</span><span class="badge-prof badge-prof-blue">Alıcı</span><span class="badge-prof badge-prof-purple">🏆 Güvenilir üye</span></div>
-        <div class="star-row"><span style="font-size:16px">⭐⭐⭐⭐⭐</span><span class="star-num">4.9</span><span class="star-count">· 14 değerlendirme</span></div>
+        <div class="profile-name" id="profil-isim">Giriş yapılmadı</div>
+        <div class="profile-meta" id="profil-meta">📍 — · Üye: —</div>
+        <div class="badges-row"><span class="badge-prof badge-prof-green">✓ E-posta onaylı</span><span class="badge-prof badge-prof-blue">Alıcı</span></div>
+        <div class="star-row"><span style="font-size:16px">⭐⭐⭐⭐⭐</span><span class="star-num">—</span><span class="star-count">· Henüz değerlendirme yok</span></div>
       </div>
-      <button class="edit-btn">✏️ Profili düzenle</button>
+      <button class="edit-btn" onclick="cikisYap()">🚪 Çıkış yap</button>
     </div>
     <div class="stats-grid">
-      <div class="stat-box"><div class="stat-box-num">3</div><div class="stat-box-lbl">Aktif ilan</div></div>
-      <div class="stat-box"><div class="stat-box-num">8</div><div class="stat-box-lbl">Tamamlanan işlem</div></div>
-      <div class="stat-box"><div class="stat-box-num">47</div><div class="stat-box-lbl">Gelen teklif</div></div>
-      <div class="stat-box"><div class="stat-box-num">4.9</div><div class="stat-box-lbl">Ortalama puan</div></div>
+      <div class="stat-box"><div class="stat-box-num" id="profil-ilan-say">0</div><div class="stat-box-lbl">Aktif ilan</div></div>
+      <div class="stat-box"><div class="stat-box-num">0</div><div class="stat-box-lbl">Tamamlanan işlem</div></div>
+      <div class="stat-box"><div class="stat-box-num">0</div><div class="stat-box-lbl">Gelen teklif</div></div>
+      <div class="stat-box"><div class="stat-box-num">—</div><div class="stat-box-lbl">Ortalama puan</div></div>
     </div>
     <div class="tabs">
       <div class="tab active" onclick="switchTab('ilanlar',this)">İlanlarım</div>
@@ -549,24 +549,18 @@
       <div class="tab" onclick="switchTab('ayarlar',this)">Ayarlar</div>
     </div>
     <div class="tab-content active" id="tab-ilanlar">
-      <div class="ilan-grid">
-        <div class="ilan-card-p"><div class="ilan-p-top"><span class="tag tag-arac">Araç</span><span class="status-aktif">● Aktif</span></div><div class="ilan-p-title">SUV veya sedan arıyorum, 2020 model ve üzeri</div><div class="ilan-p-budget">1.000.000 ₺</div><div class="ilan-p-foot"><span>📍 Gaziantep</span><span class="teklif-say" onclick="showPage('teklifler')">12 teklif →</span></div></div>
-        <div class="ilan-card-p"><div class="ilan-p-top"><span class="tag tag-emlak">Emlak</span><span class="status-aktif">● Aktif</span></div><div class="ilan-p-title">Kiralık 3+1 daire, merkezi konum</div><div class="ilan-p-budget">15.000 ₺/ay</div><div class="ilan-p-foot"><span>📍 Gaziantep</span><span class="teklif-say">5 teklif</span></div></div>
-        <div class="ilan-card-p" style="opacity:0.5"><div class="ilan-p-top"><span class="tag tag-arac">Araç</span><span class="status-kapandi">● Kapandı</span></div><div class="ilan-p-title">Motorsiklet arıyorum, 400cc ve üzeri</div><div class="ilan-p-budget">180.000 ₺</div><div class="ilan-p-foot"><span>📍 Gaziantep</span><span>Tamamlandı</span></div></div>
+      <div class="ilan-grid" id="profil-ilanlar">
+        <div style="text-align:center;padding:40px;color:var(--text3);font-size:14px;grid-column:1/-1;">İlanlarınız yükleniyor...</div>
       </div>
     </div>
     <div class="tab-content" id="tab-yorumlar">
-      <div class="yorum-list">
-        <div class="yorum-card"><div class="yorum-top"><div class="yorum-user"><div class="y-avatar">🧑</div><div><div class="y-name">Mehmet K.</div><div class="y-date">Mart 2025</div></div></div><span>⭐⭐⭐⭐⭐</span></div><div class="y-text">Çok hızlı iletişim kurdu, söylediği gibi işlemi tamamladı. Kesinlikle tavsiye ederim.</div></div>
-        <div class="yorum-card"><div class="yorum-top"><div class="yorum-user"><div class="y-avatar">👩</div><div><div class="y-name">Fatma S.</div><div class="y-date">Şubat 2025</div></div></div><span>⭐⭐⭐⭐⭐</span></div><div class="y-text">Güvenilir alıcı, pazarlık sürecinde çok saygılıydı. Tekrar çalışmak isterim.</div></div>
-      </div>
+      <div style="text-align:center;padding:40px;color:var(--text3);font-size:14px;">Henüz değerlendirme yok.</div>
     </div>
     <div class="tab-content" id="tab-ayarlar">
       <div style="background:var(--bg2);border:1px solid var(--border);border-radius:16px;overflow:hidden">
-        <div style="padding:18px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between"><div><div style="font-size:14px;font-weight:600;color:var(--text)">Ad Soyad</div><div style="font-size:13px;color:var(--text3);margin-top:2px">Ahmet Yılmaz</div></div><button class="edit-btn" style="padding:6px 14px;font-size:12px">Düzenle</button></div>
-        <div style="padding:18px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between"><div><div style="font-size:14px;font-weight:600;color:var(--text)">Telefon</div><div style="font-size:13px;color:var(--text3);margin-top:2px">0532 *** ** **</div></div><span class="badge-green">✓ Onaylı</span></div>
-        <div style="padding:18px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between"><div><div style="font-size:14px;font-weight:600;color:var(--text)">Kimlik doğrulama</div><div style="font-size:13px;color:var(--text3);margin-top:2px">TC Kimlik ile doğrulandı</div></div><span class="badge-green">✓ Onaylı</span></div>
-        <div style="padding:18px 22px;display:flex;align-items:center;justify-content:space-between"><div><div style="font-size:14px;font-weight:600;color:var(--text)">Bildirimler</div><div style="font-size:13px;color:var(--text3);margin-top:2px">Yeni teklif geldiğinde SMS</div></div><div style="width:42px;height:24px;border-radius:999px;background:var(--blue);position:relative;cursor:pointer"><div style="width:18px;height:18px;border-radius:50%;background:#fff;position:absolute;right:3px;top:3px"></div></div></div>
+        <div style="padding:18px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between"><div><div style="font-size:14px;font-weight:600;color:var(--text)">E-posta</div><div id="ayar-email" style="font-size:13px;color:var(--text3);margin-top:2px">—</div></div><span class="badge-green">✓ Onaylı</span></div>
+        <div style="padding:18px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between"><div><div style="font-size:14px;font-weight:600;color:var(--text)">Üyelik tarihi</div><div id="ayar-tarih" style="font-size:13px;color:var(--text3);margin-top:2px">—</div></div></div>
+        <div style="padding:18px 22px;display:flex;align-items:center;justify-content:space-between"><div><div style="font-size:14px;font-weight:600;color:var(--text)">Bildirimler</div><div style="font-size:13px;color:var(--text3);margin-top:2px">Yeni teklif geldiğinde bildir</div></div><div style="width:42px;height:24px;border-radius:999px;background:var(--blue);position:relative;cursor:pointer"><div style="width:18px;height:18px;border-radius:50%;background:#fff;position:absolute;right:3px;top:3px"></div></div></div>
       </div>
     </div>
   </div>
@@ -772,22 +766,37 @@
   onAuthStateChanged(auth, (user) => {
     window._currentUser = user;
     if (user) {
-      // Giriş yapılmış
+      // Navbar güncelle
       document.querySelectorAll('.btn-outline').forEach(btn => {
         if (btn.textContent === 'Giriş yap') {
           btn.textContent = '👤 ' + (user.email.split('@')[0]);
-          btn.onclick = () => { signOut(auth); };
+          btn.onclick = () => showPage('profil');
         }
       });
       document.querySelectorAll('.mob-giris').forEach(btn => {
-        btn.textContent = 'Çıkış yap';
-        btn.onclick = () => { signOut(auth); closeMobileMenu(); };
+        btn.textContent = '👤 Profilim';
+        btn.onclick = () => { showPage('profil'); closeMobileMenu(); };
       });
+
+      // Profil sayfasını güncelle
+      const isim = user.email.split('@')[0];
+      const tarih = new Date(user.metadata.creationTime).toLocaleDateString('tr-TR', {year:'numeric', month:'long'});
+      document.getElementById('profil-isim').textContent = isim;
+      document.getElementById('profil-meta').textContent = '📧 ' + user.email + ' · Üye: ' + tarih;
+      document.getElementById('ayar-email').textContent = user.email;
+      document.getElementById('ayar-tarih').textContent = tarih;
+
+      // Kullanıcının ilanlarını yükle
+      loadProfilIlanlar(user.uid);
+
     } else {
-      // Çıkış yapılmış
       document.querySelectorAll('.btn-outline').forEach(btn => {
         btn.textContent = 'Giriş yap';
         btn.onclick = () => showPage('giris');
+      });
+      document.querySelectorAll('.mob-giris').forEach(btn => {
+        btn.textContent = 'Giriş yap';
+        btn.onclick = () => { showPage('giris'); closeMobileMenu(); };
       });
     }
   });
@@ -818,6 +827,36 @@
       loadIlanlar();
     } catch (e) {
       alert('Hata oluştu: ' + e.message);
+    }
+  };
+
+  // Çıkış yap
+  window.cikisYap = async function() {
+    await signOut(auth);
+    showPage('home');
+  };
+
+  // Kullanıcının kendi ilanlarını yükle
+  window.loadProfilIlanlar = async function(uid) {
+    const grid = document.getElementById('profil-ilanlar');
+    try {
+      const q = query(collection(db, 'ilanlar'), orderBy('createdAt', 'desc'));
+      const snap = await getDocs(q);
+      const kullanicıIlanlar = snap.docs.filter(d => d.data().userId === uid);
+      document.getElementById('profil-ilan-say').textContent = kullanicıIlanlar.length;
+      if (kullanicıIlanlar.length === 0) {
+        grid.innerHTML = `<div style="text-align:center;padding:40px;color:var(--text3);font-size:14px;grid-column:1/-1;">Henüz ilan açmadınız.<br><br><button class="btn-primary" onclick="ilanAc()" style="padding:10px 20px;font-size:13px">+ İlan oluştur</button></div>`;
+        return;
+      }
+      const catIsim = { 'arac':'🚗 Araç', 'emlak':'🏠 Emlak', 'elektronik':'📱 Elektronik', 'diger':'🛋 Diğer' };
+      const catRenk = { 'arac':'tag-arac', 'emlak':'tag-emlak', 'elektronik':'tag-elektronik', 'diger':'tag-diger' };
+      grid.innerHTML = kullanicıIlanlar.map(doc => {
+        const d = doc.data();
+        const cat = d.kategori || 'diger';
+        return `<div class="ilan-card-p"><div class="ilan-p-top"><span class="tag ${catRenk[cat]}">${catIsim[cat]}</span><span class="status-aktif">● Aktif</span></div><div class="ilan-p-title">${d.title}</div><div class="ilan-p-budget">${Number(d.budget).toLocaleString('tr-TR')} ₺</div><div class="ilan-p-foot"><span>📍 ${d.city}</span><span class="teklif-say">${d.teklifSayisi || 0} teklif</span></div></div>`;
+      }).join('');
+    } catch(e) {
+      grid.innerHTML = '<div style="padding:20px;color:var(--text3)">İlanlar yüklenemedi.</div>';
     }
   };
 
