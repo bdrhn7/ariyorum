@@ -734,7 +734,24 @@
   </div>
 </div>
 
-<!-- GİRİŞ SAYFASI -->
+<!-- PUANLAMA POPUP -->
+<div id="puan-popup" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:999;align-items:center;justify-content:center;">
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:40px 32px;text-align:center;max-width:380px;width:90%;">
+    <div style="font-size:48px;margin-bottom:16px;">🤝</div>
+    <h2 style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;margin-bottom:8px;">Teklif kabul edildi!</h2>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:20px;">Satıcıyı puanlayın</p>
+    <div id="puan-yildizlar" style="font-size:36px;margin-bottom:20px;cursor:pointer;">
+      <span onclick="puanSec(1)" id="y1">☆</span>
+      <span onclick="puanSec(2)" id="y2">☆</span>
+      <span onclick="puanSec(3)" id="y3">☆</span>
+      <span onclick="puanSec(4)" id="y4">☆</span>
+      <span onclick="puanSec(5)" id="y5">☆</span>
+    </div>
+    <textarea id="puan-yorum" class="ftextarea" placeholder="Yorum ekleyin (isteğe bağlı)" style="margin-bottom:16px;height:80px;"></textarea>
+    <button onclick="puanGonder()" style="width:100%;padding:13px;background:var(--green);border:none;border-radius:12px;color:#fff;font-family:'Syne',sans-serif;font-size:15px;font-weight:700;cursor:pointer;margin-bottom:10px;">⭐ Puanı gönder</button>
+    <button onclick="puanAtla()" style="width:100%;padding:10px;background:transparent;border:1px solid var(--border2);border-radius:12px;color:var(--text3);font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif;">Şimdi değil</button>
+  </div>
+</div>
 <div id="page-giris" class="page">
   <div style="max-width:440px;margin:0 auto;padding:60px 24px;">
     <div style="text-align:center;margin-bottom:36px;">
@@ -1390,17 +1407,19 @@
       }
       liste.innerHTML = snap.docs.map(doc => {
         const d = doc.data();
+        const zaman = d.createdAt?.toDate().toLocaleDateString('tr-TR') || '—';
         return `<div style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:12px;">
           <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">
             <div>
               <div style="font-size:14px;font-weight:600;color:var(--text);">${d.userEmail?.split('@')[0] || 'Satıcı'}</div>
-              <div style="font-size:11px;color:var(--text3);margin-top:2px;">${d.userEmail}</div>
+              <div style="font-size:11px;color:var(--text3);margin-top:2px;">${zaman}</div>
             </div>
             <div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--green);">${formatBudget(d.fiyat)} ₺</div>
           </div>
           ${d.aracBilgi ? `<div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px;">📦 ${d.aracBilgi}</div>` : ''}
           ${d.mesaj ? `<div style="font-size:13px;color:var(--text2);margin-bottom:10px;">${d.mesaj}</div>` : ''}
-          ${d.telefon ? `<div style="padding:10px 14px;background:var(--green-bg);border:1px solid var(--green-border);border-radius:8px;font-size:14px;font-weight:700;color:var(--green);">📞 ${d.telefon}</div>` : ''}
+          ${d.telefon ? `<div style="padding:10px 14px;background:var(--green-bg);border:1px solid var(--green-border);border-radius:8px;font-size:14px;font-weight:700;color:var(--green);margin-bottom:12px;">📞 ${d.telefon}</div>` : ''}
+          <button onclick="teklifKabul('${doc.id}','${d.userId}','${d.userEmail}')" style="width:100%;padding:10px;background:var(--green);border:none;border-radius:10px;color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;">✓ Kabul et ve puanla</button>
         </div>`;
       }).join('');
     }).catch(e => {
@@ -1408,6 +1427,53 @@
     });
   }
   window.teklifleriGor = teklifleriGor;
+
+  // PUANLAMA SİSTEMİ
+  let _puanHedef = null;
+  let _seciliPuan = 0;
+
+  function teklifKabul(teklifId, saticiId, saticiEmail) {
+    _puanHedef = { teklifId, saticiId, saticiEmail };
+    _seciliPuan = 0;
+    puanSec(0);
+    document.getElementById('puan-yorum').value = '';
+    document.getElementById('puan-popup').style.display = 'flex';
+  }
+
+  function puanSec(puan) {
+    _seciliPuan = puan;
+    for (let i = 1; i <= 5; i++) {
+      document.getElementById('y' + i).textContent = i <= puan ? '⭐' : '☆';
+    }
+  }
+
+  function puanGonder() {
+    if (_seciliPuan === 0) { alert('Lütfen puan seçin!'); return; }
+    const yorum = document.getElementById('puan-yorum').value;
+    const user = auth.currentUser;
+
+    db.collection('puanlar').add({
+      puan: _seciliPuan,
+      yorum,
+      hedefUserId: _puanHedef.saticiId,
+      hedefEmail: _puanHedef.saticiEmail,
+      verenUserId: user.uid,
+      verenEmail: user.email,
+      verenIsim: user.displayName || user.email.split('@')[0],
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    }).then(() => {
+      puanKapat();
+      alert('Puanınız gönderildi! Teşekkürler.');
+    }).catch(e => alert('Hata: ' + e.message));
+  }
+
+  function puanAtla() { puanKapat(); }
+  function puanKapat() { document.getElementById('puan-popup').style.display = 'none'; }
+
+  window.teklifKabul = teklifKabul;
+  window.puanSec = puanSec;
+  window.puanGonder = puanGonder;
+  window.puanAtla = puanAtla;
 
   // İlan sil
   function ilanSil(id) {
