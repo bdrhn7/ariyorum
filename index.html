@@ -164,17 +164,18 @@
     .section-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px; }
     .section-head h2 { font-family: 'Nunito', sans-serif; font-size: 19px; font-weight: 700; }
     .see-all { font-size: 13px; color: var(--blue); cursor: pointer; font-weight: 500; }
-    .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(248px, 1fr)); gap: 14px; }
-    .card { background: var(--bg2); border: 1px solid var(--border); border-radius: 16px; padding: 20px; cursor: pointer; transition: all 0.22s; }
+    .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+    .card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 16px; cursor: pointer; transition: all 0.22s; }
+    .card:hover { border-color: var(--blue-border); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(79,142,247,0.1); }
     .card:hover { border-color: var(--border2); transform: translateY(-3px); box-shadow: var(--shadow); }
-    .card-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
-    .card-title { font-size: 13.5px; font-weight: 500; color: var(--text); line-height: 1.5; margin-bottom: 13px; }
-    .card-budget { font-family: 'Nunito', sans-serif; font-size: 22px; font-weight: 800; color: var(--text); margin-bottom: 14px; }
-    .card-budget small { font-size: 12px; font-weight: 400; color: var(--text3); font-family: 'Nunito', sans-serif; }
-    .card-foot { display: flex; align-items: center; justify-content: space-between; padding-top: 13px; border-top: 1px solid var(--border); }
-    .card-loc { font-size: 12px; color: var(--text3); }
-    .card-offers { font-size: 12px; color: var(--text3); }
-    .card-offers strong { color: var(--text); font-weight: 600; }
+    .card-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+    .card-title { font-size: 13px; font-weight: 600; color: var(--text); line-height: 1.45; margin-bottom: 10px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .card-budget { font-family: 'Nunito', sans-serif; font-size: 20px; font-weight: 800; color: var(--text); margin-bottom: 10px; }
+    .card-budget small { font-size: 11px; font-weight: 400; color: var(--text3); font-family: 'Nunito', sans-serif; }
+    .card-foot { display: flex; align-items: center; justify-content: space-between; padding-top: 10px; border-top: 1px solid var(--border); }
+    .card-loc { font-size: 11px; color: var(--text3); }
+    .card-offers { font-size: 11px; color: var(--text3); }
+    .card-offers strong { color: var(--text); font-weight: 700; }
     .teklif-btn { padding: 5px 13px; border: 1px solid var(--blue-border); border-radius: 8px; background: var(--blue-bg); color: var(--blue); font-size: 12px; font-weight: 600; cursor: pointer; font-family: 'Nunito', sans-serif; transition: all 0.2s; }
     .teklif-btn:hover { background: var(--blue); color: #fff; }
     .cta-section { margin: 8px 48px 44px; padding: 36px 44px; background: var(--bg2); border: 1px solid var(--border); border-radius: 20px; display: flex; align-items: center; justify-content: space-between; position: relative; overflow: hidden; }
