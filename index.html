@@ -1698,7 +1698,7 @@
       liste.innerHTML = snap.docs.map(doc => {
         const d = doc.data();
         const zaman = d.createdAt?.toDate().toLocaleDateString('tr-TR') || '—';
-        return `<div style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:12px;">
+        return `<div class="teklif-kart" style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:12px;">
           <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">
             <div>
               <div style="font-size:14px;font-weight:600;color:var(--blue);cursor:pointer;text-decoration:underline;" onclick="kullaniciProfil('${d.userId}','${d.userEmail}')">${d.userEmail?.split('@')[0] || 'Satıcı'}</div>
@@ -1709,7 +1709,7 @@
           ${d.aracBilgi ? `<div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px;">📦 ${d.aracBilgi}</div>` : ''}
           ${d.mesaj ? `<div style="font-size:13px;color:var(--text2);margin-bottom:10px;">${d.mesaj}</div>` : ''}
           ${d.telefon ? `<div style="padding:10px 14px;background:var(--green-bg);border:1px solid var(--green-border);border-radius:8px;font-size:14px;font-weight:700;color:var(--green);margin-bottom:12px;">📞 ${d.telefon}</div>` : ''}
-          <div style="display:flex;gap:8px;">
+          <div class="teklif-butonlar" style="display:flex;gap:8px;">
             <button onclick="teklifKabul('${doc.id}','${d.userId}','${d.userEmail}')" style="flex:1;padding:10px;background:var(--green);border:none;border-radius:10px;color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;">✓ Kabul et ve puanla</button>
             <button onclick="teklifReddet('${doc.id}',this)" style="padding:10px 16px;background:var(--red-bg);border:1px solid var(--red-border);border-radius:10px;color:var(--red);font-size:13px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;">✕ Reddet</button>
           </div>
@@ -1722,9 +1722,12 @@
   function teklifReddet(teklifId, btn) {
     if (!confirm('Bu teklifi reddetmek istediğinize emin misiniz?')) return;
     db.collection('teklifler').doc(teklifId).update({ reddedildi: true }).then(() => {
-      btn.closest('div[style*="background:var(--bg2)"]').style.opacity = '0.4';
-      btn.closest('div[style*="background:var(--bg2)"]').style.pointerEvents = 'none';
-      btn.parentElement.innerHTML = '<div style="text-align:center;padding:8px;color:var(--text3);font-size:12px;">✕ Reddedildi</div>';
+      const kart = btn.closest('.teklif-kart');
+      if (kart) {
+        kart.style.opacity = '0.4';
+        kart.style.pointerEvents = 'none';
+        kart.querySelector('.teklif-butonlar').innerHTML = '<div style="text-align:center;padding:8px;color:var(--text3);font-size:12px;">✕ Reddedildi</div>';
+      }
     }).catch(e => alert('Hata: ' + e.message));
   }
   window.teklifReddet = teklifReddet;
