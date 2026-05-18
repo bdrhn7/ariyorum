@@ -1011,7 +1011,7 @@
     document.getElementById('teklifler-liste').innerHTML = '<div style="text-align:center;padding:30px;color:var(--text3)">Yükleniyor...</div>';
     showPage('tekliflerim');
 
-    db.collection('teklifler').where('ilanId','==',ilanId).orderBy('createdAt','desc').get().then(snap => {
+    db.collection('teklifler').where('ilanId','==',ilanId).get().then(snap => {
       const liste = document.getElementById('teklifler-liste');
       if (snap.empty) {
         liste.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text3);font-size:14px;">Henüz teklif gelmedi.</div>';
