@@ -572,7 +572,7 @@
         <div class="profile-name" id="profil-isim">Giriş yapılmadı</div>
         <div class="profile-meta" id="profil-meta">📍 — · Üye: —</div>
         <div class="badges-row">
-          <span class="badge-prof badge-prof-green">✓ E-posta onaylı</span>
+          <span class="badge-prof" style="${user.emailVerified ? 'background:var(--green-bg);color:var(--green);border:1px solid var(--green-border);' : 'background:var(--amber-bg);color:var(--amber);'}">${user.emailVerified ? '✓ E-posta onaylı' : '⚠️ E-posta onaylanmadı'}</span>
           <span class="badge-prof badge-prof-blue">Alıcı</span>
           <span id="profil-rozet" style="display:none;font-size:11px;font-weight:700;padding:4px 12px;border-radius:999px;"></span>
         </div>
@@ -1260,9 +1260,17 @@
     hata.textContent = '';
     auth.createUserWithEmailAndPassword(email, pass)
       .then(result => {
-        return result.user.updateProfile({ displayName: isim });
+        return result.user.updateProfile({ displayName: isim }).then(() => {
+          // Doğrulama maili gönder
+          return result.user.sendEmailVerification();
+        });
       })
-      .then(() => showPage('home'))
+      .then(() => {
+        // Çıkış yap, doğrulama bekle
+        auth.signOut();
+        showPage('home');
+        alert('Kayıt başarılı! 📧\n\n' + email + ' adresine doğrulama maili gönderdik.\n\nMailinizi onayladıktan sonra giriş yapabilirsiniz.');
+      })
       .catch(e => {
         hata.textContent = e.code === 'auth/email-already-in-use' ? 'Bu e-posta zaten kayıtlı.' :
           e.code === 'auth/weak-password' ? 'Şifre en az 6 karakter olmalı.' : 'Hata: ' + e.message;
@@ -1289,12 +1297,32 @@
     btn.textContent = 'Giriş yapılıyor...';
     hata.textContent = '';
     auth.signInWithEmailAndPassword(email, pass)
-      .then(() => showPage('home'))
+      .then(result => {
+        if (!result.user.emailVerified && result.user.email !== ADMIN_EMAIL) {
+          auth.signOut();
+          hata.textContent = '📧 E-posta adresiniz henüz doğrulanmadı. Lütfen gelen kutunuzu kontrol edin.';
+          btn.textContent = 'Giriş yap';
+          // Yeniden mail gönder butonu
+          document.getElementById('giris-hata').innerHTML += `<br><span onclick="mailTekrarGonder('${email}','${pass}')" style="color:var(--blue);cursor:pointer;font-size:12px;text-decoration:underline;">Doğrulama mailini tekrar gönder</span>`;
+          return;
+        }
+        showPage('home');
+      })
       .catch(e => {
         hata.textContent = e.code === 'auth/invalid-credential' ? 'E-posta veya şifre hatalı.' : 'Hata: ' + e.message;
         btn.textContent = 'Giriş yap';
       });
   }
+
+  function mailTekrarGonder(email, pass) {
+    auth.signInWithEmailAndPassword(email, pass).then(result => {
+      result.user.sendEmailVerification().then(() => {
+        auth.signOut();
+        alert('Doğrulama maili tekrar gönderildi! Gelen kutunuzu kontrol edin.');
+      });
+    });
+  }
+  window.mailTekrarGonder = mailTekrarGonder;
 
   // İlan aç (giriş kontrolü)
   function ilanAc() {
