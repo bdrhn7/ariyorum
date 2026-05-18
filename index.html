@@ -775,6 +775,7 @@
     <div style="background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:28px;">
       <div class="fgroup"><label class="flabel">E-posta</label><input class="finput" type="email" id="giris-email" placeholder="ornek@mail.com"></div>
       <div class="fgroup"><label class="flabel">Şifre</label><input class="finput" type="password" id="giris-pass" placeholder="••••••••"></div>
+      <div style="text-align:right;margin-bottom:12px;"><span onclick="sifreSifirla()" style="font-size:12px;color:var(--blue);cursor:pointer;">Şifremi unuttum</span></div>
       <div id="giris-hata" style="font-size:13px;color:var(--red);margin-bottom:12px;"></div>
       <button class="submit-btn" id="giris-btn" onclick="girisYap()">Giriş yap</button>
       <div style="text-align:center;margin-top:16px;font-size:13px;color:var(--text2);">
@@ -1165,6 +1166,16 @@
         btn.textContent = 'Kayıt ol';
       });
   }
+
+  // Şifre sıfırla
+  function sifreSifirla() {
+    const email = document.getElementById('giris-email').value;
+    if (!email) { alert('Lütfen önce e-posta adresinizi girin.'); return; }
+    auth.sendPasswordResetEmail(email)
+      .then(() => alert('Şifre sıfırlama e-postası gönderildi! Gelen kutunuzu kontrol edin.'))
+      .catch(e => alert(e.code === 'auth/user-not-found' ? 'Bu e-posta ile kayıtlı hesap bulunamadı.' : 'Hata: ' + e.message));
+  }
+  window.sifreSifirla = sifreSifirla;
 
   // Giriş yap
   function girisYap() {
