@@ -1234,7 +1234,7 @@
         </div>
 
         ${!benimIlan ? `
-        <button onclick="if(!window._currentUser){showPage('giris');return;}window._aktifIlanId='${id}';showPage('teklifver')" style="width:100%;padding:15px;background:var(--blue);border:none;border-radius:12px;color:#fff;font-family:'Syne',sans-serif;font-size:16px;font-weight:700;cursor:pointer;margin-bottom:12px;">
+        <button onclick="if(!window._currentUser){showPage('giris');return;}window._aktifIlanId='${id}';showPage('teklifver');console.log('ilan id:','${id}')" style="width:100%;padding:15px;background:var(--blue);border:none;border-radius:12px;color:#fff;font-family:'Syne',sans-serif;font-size:16px;font-weight:700;cursor:pointer;margin-bottom:12px;">
           💬 Teklif ver
         </button>` : `
         <div style="padding:14px;background:var(--blue-bg);border:1px solid var(--blue-border);border-radius:12px;text-align:center;font-size:13px;color:var(--blue);font-weight:600;">Bu ilan size ait</div>
