@@ -6,6 +6,48 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
+
+  <!-- SEO -->
+  <meta name="description" content="arıyorum — Türkiye'nin ilk alıcı odaklı platformu. Ne arıyorsan ilan ver, satıcılar sana gelsin. Araç, emlak, elektronik ve daha fazlası.">
+  <meta name="keywords" content="arıyorum, alıcı ilanı, teklif al, araç ara, emlak ara, ikinci el, güvenli alışveriş, Türkiye">
+  <meta name="author" content="arıyorum">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://ariyorum.net.tr">
+
+  <!-- Google Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "arıyorum",
+    "url": "https://ariyorum.net.tr",
+    "description": "Türkiye'nin ilk alıcı odaklı platformu. Ne arıyorsan ilan ver, satıcılar sana gelsin.",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://ariyorum.net.tr/?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
+
+  <!-- Open Graph (WhatsApp, Facebook, Twitter önizleme) -->
+  <meta property="og:title" content="arıyorum — Sen ara, teklifler gelsin">
+  <meta property="og:description" content="Ne arıyorsan ilan ver, satıcılar sana gelsin. Araç, emlak, elektronik — bütçeni belirt, teklifleri bekle.">
+  <meta property="og:url" content="https://ariyorum.net.tr">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="arıyorum">
+  <meta property="og:locale" content="tr_TR">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="arıyorum — Sen ara, teklifler gelsin">
+  <meta name="twitter:description" content="Ne arıyorsan ilan ver, satıcılar sana gelsin.">
+
+  <!-- Mobil -->
+  <meta name="theme-color" content="#4f8ef7">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="arıyorum">
   <title>arıyorum — Sen ara, teklifler gelsin</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔵</text></svg>">
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -906,6 +948,24 @@
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.getElementById('page-' + id).classList.add('active');
     window.scrollTo(0, 0);
+
+    // Sayfa başlığını güncelle
+    const basliklar = {
+      'home': 'arıyorum — Sen ara, teklifler gelsin',
+      'ilan': 'İlan oluştur — arıyorum',
+      'profil': 'Profilim — arıyorum',
+      'nasil': 'Nasıl çalışır? — arıyorum',
+      'giris': 'Giriş yap — arıyorum',
+      'kayit': 'Kayıt ol — arıyorum',
+      'admin': 'Admin Paneli — arıyorum',
+      'teklifler': 'Gelen teklifler — arıyorum',
+      'teklifver': 'Teklif ver — arıyorum',
+      'mesaj': 'Mesajlar — arıyorum',
+      'mesajlar': 'Mesajlarım — arıyorum',
+      'detay': 'İlan detayı — arıyorum',
+      'kullanici': 'Kullanıcı profili — arıyorum',
+    };
+    document.title = basliklar[id] || 'arıyorum';
   }
   function ilanAc() {
     const user = window._currentUser;
