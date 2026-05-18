@@ -387,7 +387,7 @@
   <div class="nav-right">
     <button class="mode-toggle" onclick="toggleMode()"><span id="mode-ico">🌙</span><span id="mode-lbl">Gece modu</span></button>
     <button class="btn-outline" onclick="showPage('profil')">Giriş yap</button>
-    <button class="btn-primary" onclick="showPage('ilan')">+ İlan ver</button>
+    <button class="btn-primary" onclick="ilanAc()">+ İlan ver</button>
   </div>
   <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()">
     <span></span><span></span><span></span>
@@ -436,10 +436,10 @@
       <div style="font-size:48px;margin-bottom:16px;">📭</div>
       <div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:700;margin-bottom:8px;">Henüz ilan yok</div>
       <div style="font-size:14px;color:var(--text2);margin-bottom:24px;">İlk ilanı sen aç, satıcılar sana gelsin!</div>
-      <button class="btn-primary" onclick="showPage('ilan')" style="padding:12px 24px;font-size:14px">+ İlk ilanı oluştur</button>
+      <button class="btn-primary" onclick="ilanAc()" style="padding:12px 24px;font-size:14px">+ İlk ilanı oluştur</button>
     </div>
   </div>
-  <div class="cta-section"><div><h3>Sen de ilan ver, teklifleri bekle</h3><p>Ücretsiz ilan aç — satıcılar sana ulaşsın, en iyisini seç</p></div><button class="btn-primary" onclick="showPage('ilan')" style="padding:13px 28px;font-size:14px;position:relative;z-index:1">+ İlan oluştur</button></div>
+  <div class="cta-section"><div><h3>Sen de ilan ver, teklifleri bekle</h3><p>Ücretsiz ilan aç — satıcılar sana ulaşsın, en iyisini seç</p></div><button class="btn-primary" onclick="ilanAc()" style="padding:13px 28px;font-size:14px;position:relative;z-index:1">+ İlan oluştur</button></div>
   <footer><div class="logo"><div class="logo-main">arı<em>yorum</em></div><div class="logo-underline"><span class="u1"></span><span class="u2"></span></div><div class="logo-slogan">Sen ara, teklifler gelsin</div></div><p>© 2025 arıyorum. Tüm hakları saklıdır.</p></footer>
 </div>
 
@@ -609,7 +609,7 @@
       <h2>Hemen başla, ücretsiz</h2>
       <p>İlanını ver, teklifleri bekle. Satıcılar sana gelsin.</p>
       <div class="cta-btns">
-        <button class="btn-big btn-big-blue" onclick="showPage('ilan')">+ İlan oluştur</button>
+        <button class="btn-big btn-big-blue" onclick="ilanAc()">+ İlan oluştur</button>
         <button class="btn-big btn-big-outline" onclick="showPage('home')">İlanları gör</button>
       </div>
     </div>
@@ -690,6 +690,11 @@
     document.getElementById('page-' + id).classList.add('active');
     window.scrollTo(0, 0);
   }
+  function ilanAc() {
+    const user = window._currentUser;
+    if (!user) { showPage('giris'); return; }
+    showPage('ilan');
+  }
   function showPopup(id) { document.getElementById('popup-' + id).classList.add('show'); }
   function closePopup(id) { document.getElementById('popup-' + id).classList.remove('show'); }
   function filterCat(el, cat) {
@@ -765,6 +770,7 @@
 
   // Kullanıcı durumu takip et
   onAuthStateChanged(auth, (user) => {
+    window._currentUser = user;
     if (user) {
       // Giriş yapılmış
       document.querySelectorAll('.btn-outline').forEach(btn => {
