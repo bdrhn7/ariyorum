@@ -434,9 +434,9 @@
   </ul>
   <div class="nav-right">
     <button class="mode-toggle" onclick="toggleMode()"><span id="mode-ico">🌙</span><span id="mode-lbl">Gece modu</span></button>
-    <div id="notif-wrap" style="display:none;position:relative;cursor:pointer;" onclick="notifAc()">
-      <span style="font-size:20px;">🔔</span>
-      <span id="notif-badge" style="display:none;position:absolute;top:-4px;right:-4px;background:#f87171;color:#fff;font-size:10px;font-weight:700;padding:1px 5px;border-radius:999px;min-width:16px;text-align:center;"></span>
+    <div id="notif-wrap" style="display:none;position:relative;cursor:pointer;align-items:center;" onclick="notifAc()">
+      <span style="font-size:22px;">🔔</span>
+      <span id="notif-badge" style="display:none;position:absolute;top:-6px;right:-8px;background:#ef4444;color:#fff;font-size:11px;font-weight:800;padding:2px 6px;border-radius:999px;min-width:18px;text-align:center;line-height:1.4;"></span>
     </div>
     <button class="btn-outline" onclick="window._currentUser ? showPage('profil') : showPage('giris')">Giriş yap</button>
     <button class="btn-primary" onclick="ilanAc()">+ İlan ver</button>
@@ -1591,10 +1591,16 @@
         const ilanlar = {};
         ilanSnap.docs.forEach(d => ilanlar[d.id] = d.data().title);
 
-        db.collection('teklifler').get().then(teklifSnap => {
+        // Gerçek zamanlı dinleyici
+        db.collection('teklifler').onSnapshot(teklifSnap => {
           const teklifler = teklifSnap.docs.filter(d => ilanIds.includes(d.data().ilanId));
           let yeniSay = 0;
-          if (teklifler.length === 0) return;
+
+          if (teklifler.length === 0) {
+            liste.innerHTML = '<div style="padding:32px;text-align:center;color:var(--text3);font-size:13px;">Henüz bildirim yok</div>';
+            badge.style.display = 'none';
+            return;
+          }
 
           liste.innerHTML = teklifler.map(doc => {
             const d = doc.data();
@@ -1608,8 +1614,10 @@
           }).reverse().join('');
 
           if (yeniSay > 0) {
-            badge.style.display = 'block';
+            badge.style.display = 'inline-block';
             badge.textContent = yeniSay;
+          } else {
+            badge.style.display = 'none';
           }
         });
       });
