@@ -1381,6 +1381,10 @@
       document.getElementById('price-hint') && (document.getElementById('price-hint').textContent = '💡 Alıcının bütçesi: ' + formatBudget(d.budget) + ' ₺');
       document.querySelector('.alici-name') && (document.querySelector('.alici-name').textContent = d.userEmail?.split('@')[0] || 'Alıcı');
 
+      // Açıklamayı güncelle
+      const metaRows = document.querySelectorAll('.meta-row');
+      if (metaRows[2]) metaRows[2].textContent = d.aciklama ? '📝 ' + d.aciklama : '';
+
       // Kategori etiketini güncelle
       const tagEl = document.querySelector('#page-teklifver .tag');
       if (tagEl) { tagEl.className = 'tag tag-' + cat; tagEl.textContent = catIsim[cat]; }
