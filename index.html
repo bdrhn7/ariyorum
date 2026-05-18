@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>arıyorum — Sen ara, teklifler gelsin</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="shortcut icon" href="favicon.svg">
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -610,6 +612,21 @@
   </div>
 </div>
 
+<!-- TEKLİFLERİM SAYFASI -->
+<div id="page-tekliflerim" class="page">
+  <div style="max-width:700px;margin:0 auto;padding:40px 24px 72px;">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:28px;">
+      <button onclick="showPage('profil')" style="padding:8px 16px;border:1px solid var(--border2);border-radius:9px;background:transparent;color:var(--text2);font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif;">← Geri</button>
+      <h1 style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;">Gelen teklifler</h1>
+    </div>
+    <div style="background:var(--blue-bg);border:1px solid var(--blue-border);border-radius:12px;padding:14px 18px;margin-bottom:24px;">
+      <div style="font-size:12px;color:var(--blue);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;">İlan</div>
+      <div id="teklifler-baslik" style="font-size:15px;font-weight:600;color:var(--text);"></div>
+    </div>
+    <div id="teklifler-liste"></div>
+  </div>
+</div>
+
 <!-- GİRİŞ SAYFASI -->
 <div id="page-giris" class="page">
   <div style="max-width:440px;margin:0 auto;padding:60px 24px;">
@@ -907,7 +924,18 @@
       grid.innerHTML = ilanlar.map(doc => {
         const d = doc.data();
         const cat = d.kategori || 'diger';
-        return `<div class="ilan-card-p"><div class="ilan-p-top"><span class="tag ${catRenk[cat]}">${catIsim[cat]}</span><span class="status-aktif">● Aktif</span></div><div class="ilan-p-title">${d.title}</div><div class="ilan-p-budget">${formatBudget(d.budget)} ₺</div><div class="ilan-p-foot"><span>📍 ${d.city}</span><div style="display:flex;align-items:center;gap:8px"><span class="teklif-say">${d.teklifSayisi||0} teklif</span><button onclick="ilanSil('${doc.id}')" style="padding:4px 10px;border:1px solid var(--red-border);border-radius:7px;background:var(--red-bg);color:var(--red);font-size:11px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;">Sil</button></div></div></div>`;
+        return `<div class="ilan-card-p">
+          <div class="ilan-p-top"><span class="tag ${catRenk[cat]}">${catIsim[cat]}</span><span class="status-aktif">● Aktif</span></div>
+          <div class="ilan-p-title">${d.title}</div>
+          <div class="ilan-p-budget">${formatBudget(d.budget)} ₺</div>
+          <div class="ilan-p-foot">
+            <span>📍 ${d.city}</span>
+            <div style="display:flex;align-items:center;gap:6px">
+              <button onclick="teklifleriGor('${doc.id}','${d.title}')" style="padding:4px 10px;border:1px solid var(--blue-border);border-radius:7px;background:var(--blue-bg);color:var(--blue);font-size:11px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;">${d.teklifSayisi||0} teklif →</button>
+              <button onclick="ilanSil('${doc.id}')" style="padding:4px 10px;border:1px solid var(--red-border);border-radius:7px;background:var(--red-bg);color:var(--red);font-size:11px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;">Sil</button>
+            </div>
+          </div>
+        </div>`;
       }).join('');
     });
   }
@@ -975,6 +1003,40 @@
     }).catch(e => alert('Hata: ' + e.message));
   }
   window.teklifGonder = teklifGonder;
+
+  // Teklifleri görüntüle
+  function teklifleriGor(ilanId, ilanBaslik) {
+    window._aktifIlanId = ilanId;
+    document.getElementById('teklifler-baslik').textContent = ilanBaslik;
+    document.getElementById('teklifler-liste').innerHTML = '<div style="text-align:center;padding:30px;color:var(--text3)">Yükleniyor...</div>';
+    showPage('tekliflerim');
+
+    db.collection('teklifler').where('ilanId','==',ilanId).orderBy('createdAt','desc').get().then(snap => {
+      const liste = document.getElementById('teklifler-liste');
+      if (snap.empty) {
+        liste.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text3);font-size:14px;">Henüz teklif gelmedi.</div>';
+        return;
+      }
+      liste.innerHTML = snap.docs.map(doc => {
+        const d = doc.data();
+        return `<div style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:12px;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">
+            <div>
+              <div style="font-size:14px;font-weight:600;color:var(--text);">${d.userEmail?.split('@')[0] || 'Satıcı'}</div>
+              <div style="font-size:11px;color:var(--text3);margin-top:2px;">${d.userEmail}</div>
+            </div>
+            <div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--green);">${formatBudget(d.fiyat)} ₺</div>
+          </div>
+          ${d.aracBilgi ? `<div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px;">📦 ${d.aracBilgi}</div>` : ''}
+          ${d.mesaj ? `<div style="font-size:13px;color:var(--text2);margin-bottom:10px;">${d.mesaj}</div>` : ''}
+          ${d.telefon ? `<div style="padding:10px 14px;background:var(--green-bg);border:1px solid var(--green-border);border-radius:8px;font-size:14px;font-weight:700;color:var(--green);">📞 ${d.telefon}</div>` : ''}
+        </div>`;
+      }).join('');
+    }).catch(e => {
+      document.getElementById('teklifler-liste').innerHTML = '<div style="padding:20px;color:var(--red)">Teklifler yüklenemedi.</div>';
+    });
+  }
+  window.teklifleriGor = teklifleriGor;
 
   // İlan sil
   function ilanSil(id) {
