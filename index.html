@@ -1312,6 +1312,8 @@
 
       // Görüntülenme sayısını artır
       db.collection('ilanlar').doc(id).update({ goruntulenme: (d.goruntulenme||0) + 1 });
+      // Uzman oylarını yükle
+      setTimeout(() => uzmanOylariYukle(id), 100);
 
       icerik.innerHTML = `
         <div style="background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:32px;margin-bottom:20px;">
@@ -1329,6 +1331,21 @@
           </div>
 
           ${d.aciklama ? `<div style="font-size:14px;color:var(--text2);line-height:1.7;padding:16px;background:var(--bg3);border-radius:12px;margin-bottom:20px;">${d.aciklama}</div>` : ''}
+
+          <!-- UZMAN OYLAMA -->
+          <div style="padding:16px;background:var(--bg3);border-radius:12px;margin-bottom:20px;">
+            <div style="font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:10px;">👨‍💼 Bu fiyat uygun mu? (Uzman görüşü)</div>
+            <div id="uzman-oylari-${id}">
+              <div style="font-size:12px;color:var(--text3);">Henüz uzman oyu yok.</div>
+            </div>
+            ${!benimIlan ? `
+            <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;">
+              <button onclick="uzmanOyuVer('${id}','uygun')" style="padding:7px 14px;border:1px solid var(--green-border);border-radius:8px;background:var(--green-bg);color:var(--green);font-size:12px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;">✅ Uygun fiyat</button>
+              <button onclick="uzmanOyuVer('${id}','pahali')" style="padding:7px 14px;border:1px solid var(--red-border);border-radius:8px;background:var(--red-bg);color:var(--red);font-size:12px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;">❌ Pahalı</button>
+              <button onclick="uzmanOyuVer('${id}','arastir')" style="padding:7px 14px;border:1px solid rgba(245,158,11,0.3);border-radius:8px;background:var(--amber-bg);color:var(--amber);font-size:12px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;">⚠️ Araştır</button>
+            </div>
+            <div style="font-size:11px;color:var(--text3);margin-top:8px;">* Oy verebilmek için en az 10 işlem yapmanız gerekir.</div>` : ''}
+          </div>
 
           <div style="display:flex;align-items:center;gap:12px;padding-top:20px;border-top:1px solid var(--border);cursor:pointer;" onclick="kullaniciProfil('${d.userId}','${d.userEmail}')">
             <div style="width:44px;height:44px;border-radius:50%;background:var(--blue-bg);border:2px solid var(--blue-border);display:flex;align-items:center;justify-content:center;font-size:20px;">👤</div>
@@ -1594,11 +1611,14 @@
     // Puanları çek
     Promise.all([
       db.collection('puanlar').where('hedefUserId','==',uid).get(),
-      db.collection('ilanlar').where('userId','==',uid).get()
-    ]).then(([puanSnap, ilanSnap]) => {
+      db.collection('ilanlar').where('userId','==',uid).get(),
+      db.collection('puanlar').where('verenUserId','==',uid).get()
+    ]).then(([puanSnap, ilanSnap, islemSnap]) => {
       const puanlar = puanSnap.docs.map(d => d.data());
       const ortPuan = puanlar.length > 0 ? (puanlar.reduce((a,b) => a + b.puan, 0) / puanlar.length).toFixed(1) : '—';
       const yildiz = puanlar.length > 0 ? '⭐'.repeat(Math.round(ortPuan)) : '—';
+      const islemSayisi = islemSnap.size;
+      const rozet = rozetHesapla(islemSayisi);
 
       const catIsim = { 'arac':'🚗 Araç', 'emlak':'🏠 Emlak', 'elektronik':'📱 Elektronik', 'diger':'🛋 Diğer' };
       const catRenk = { 'arac':'tag-arac', 'emlak':'tag-emlak', 'elektronik':'tag-elektronik', 'diger':'tag-diger' };
@@ -1616,6 +1636,7 @@
             <span style="font-size:13px;background:var(--green-bg);color:var(--green);padding:5px 12px;border-radius:8px;font-weight:600;">✓ E-posta onaylı</span>
             <span style="font-size:13px;background:var(--bg3);color:var(--text2);padding:5px 12px;border-radius:8px;">${ilanSnap.size} ilan</span>
             <span style="font-size:13px;background:var(--amber-bg);color:var(--amber);padding:5px 12px;border-radius:8px;">${yildiz} ${ortPuan !== '—' ? ortPuan + '/5' : 'Henüz değerlendirme yok'}</span>
+            <span style="font-size:13px;padding:5px 12px;border-radius:8px;font-weight:700;background:${rozet.bg};color:${rozet.renk};">${rozet.rozet}</span>
           </div>
           <button onclick="mesajIsteGonder('${uid}','${email}')" style="width:100%;padding:12px;background:var(--blue);border:none;border-radius:11px;color:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;">💬 Mesaj gönder</button>
         </div>
@@ -1671,6 +1692,84 @@
     });
   }
   window.kullaniciEngelle = kullaniciEngelle;
+
+  // ROZET & UZMAN SİSTEMİ
+  function rozetHesapla(islemSayisi) {
+    if (islemSayisi >= 50) return { rozet: '💎 Elit Uzman', renk: '#a78bfa', bg: 'rgba(167,139,250,0.15)', uzman: true };
+    if (islemSayisi >= 20) return { rozet: '🥇 Uzman', renk: '#f59e0b', bg: 'rgba(245,158,11,0.15)', uzman: true };
+    if (islemSayisi >= 10) return { rozet: '🥈 Güvenilir', renk: '#34c782', bg: 'rgba(52,199,130,0.15)', uzman: true };
+    if (islemSayisi >= 3) return { rozet: '🥉 Deneyimli', renk: '#4f8ef7', bg: 'rgba(79,142,247,0.15)', uzman: false };
+    return { rozet: '🆕 Yeni üye', renk: '#9ca3af', bg: 'rgba(156,163,175,0.15)', uzman: false };
+  }
+
+  // Uzman oyu ver
+  function uzmanOyuVer(ilanId, oy) {
+    const user = auth.currentUser;
+    if (!user) { showPage('giris'); return; }
+
+    // Kullanıcının işlem sayısını kontrol et
+    db.collection('puanlar').where('verenUserId','==',user.uid).get().then(snap => {
+      const islemSayisi = snap.size;
+      const rozet = rozetHesapla(islemSayisi);
+      if (!rozet.uzman) {
+        alert('Uzman oyu vermek için en az 10 işlem yapmanız gerekiyor!\n\nŞu anki işlem sayınız: ' + islemSayisi);
+        return;
+      }
+
+      // Daha önce oy vermiş mi kontrol et
+      db.collection('uzmanOylari').where('ilanId','==',ilanId).where('userId','==',user.uid).get().then(oySnap => {
+        if (!oySnap.empty) {
+          alert('Bu ilana zaten oy verdiniz!');
+          return;
+        }
+
+        // Oyu kaydet
+        db.collection('uzmanOylari').add({
+          ilanId,
+          userId: user.uid,
+          userEmail: user.email,
+          userIsim: user.displayName || user.email.split('@')[0],
+          rozet: rozet.rozet,
+          oy, // 'uygun', 'pahali', 'arastir'
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        }).then(() => {
+          alert('Uzman oyunuz kaydedildi! Teşekkürler.');
+          // Detay sayfasını güncelle
+          uzmanOylariYukle(ilanId);
+        });
+      });
+    });
+  }
+
+  // Uzman oylarını yükle ve göster
+  function uzmanOylariYukle(ilanId) {
+    db.collection('uzmanOylari').where('ilanId','==',ilanId).get().then(snap => {
+      const oylar = snap.docs.map(d => d.data());
+      const toplam = oylar.length;
+      if (toplam === 0) return;
+
+      const uygun = oylar.filter(o => o.oy === 'uygun').length;
+      const pahali = oylar.filter(o => o.oy === 'pahali').length;
+      const arastir = oylar.filter(o => o.oy === 'arastir').length;
+
+      const el = document.getElementById('uzman-oylari-' + ilanId);
+      if (!el) return;
+
+      el.innerHTML = `
+        <div style="background:var(--bg3);border-radius:12px;padding:14px;margin-top:14px;">
+          <div style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:10px;">👨‍💼 Uzman Görüşü (${toplam} uzman)</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <span style="padding:5px 12px;border-radius:999px;background:var(--green-bg);color:var(--green);font-size:12px;font-weight:700;">✅ Uygun %${Math.round(uygun/toplam*100)}</span>
+            <span style="padding:5px 12px;border-radius:999px;background:var(--red-bg);color:var(--red);font-size:12px;font-weight:700;">❌ Pahalı %${Math.round(pahali/toplam*100)}</span>
+            <span style="padding:5px 12px;border-radius:999px;background:var(--amber-bg);color:var(--amber);font-size:12px;font-weight:700;">⚠️ Araştır %${Math.round(arastir/toplam*100)}</span>
+          </div>
+        </div>`;
+    });
+  }
+
+  window.uzmanOyuVer = uzmanOyuVer;
+  window.uzmanOylariYukle = uzmanOylariYukle;
+  window.rozetHesapla = rozetHesapla;
 
   // MESAJ İSTEĞİ SİSTEMİ
   let _mesajIsteHedef = null;
