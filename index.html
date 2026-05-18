@@ -1606,6 +1606,13 @@
   window.ilanAc = ilanAc;
   window.loadProfilIlanlar = loadProfilIlanlar;
 
+  // URL parametresi kontrol et
+  const urlParams = new URLSearchParams(window.location.search);
+  const ilanParam = urlParams.get('ilan');
+  if (ilanParam) {
+    setTimeout(() => ilanDetay(ilanParam), 500);
+  }
+
   // Sayfa yüklenince ilanları getir
   loadIlanlar();
 </script>
