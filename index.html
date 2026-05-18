@@ -1592,7 +1592,7 @@
 
         // Gerçek zamanlı dinleyici
         db.collection('teklifler').onSnapshot(teklifSnap => {
-          const teklifler = teklifSnap.docs.filter(d => ilanIds.includes(d.data().ilanId));
+          const teklifler = teklifSnap.docs.filter(d => ilanIds.includes(d.data().ilanId) && !d.data().reddedildi);
           let yeniSay = 0;
 
           if (teklifler.length === 0) {
@@ -1691,11 +1691,12 @@
 
     db.collection('teklifler').where('ilanId','==',ilanId).get().then(snap => {
       const liste = document.getElementById('teklifler-liste');
-      if (snap.empty) {
+      const aktifTeklifler = snap.docs.filter(d => !d.data().reddedildi);
+      if (aktifTeklifler.length === 0) {
         liste.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text3);font-size:14px;">Henüz teklif gelmedi.</div>';
         return;
       }
-      liste.innerHTML = snap.docs.map(doc => {
+      liste.innerHTML = aktifTeklifler.map(doc => {
         const d = doc.data();
         const zaman = d.createdAt?.toDate().toLocaleDateString('tr-TR') || '—';
         return `<div class="teklif-kart" id="teklif-${doc.id}" style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:12px;">
