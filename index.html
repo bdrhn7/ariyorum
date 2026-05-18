@@ -571,6 +571,9 @@
         <div style="padding:18px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between"><div><div style="font-size:14px;font-weight:600;color:var(--text)">E-posta</div><div id="ayar-email" style="font-size:13px;color:var(--text3);margin-top:2px">—</div></div><span class="badge-green">✓ Onaylı</span></div>
         <div style="padding:18px 22px;display:flex;align-items:center;justify-content:space-between"><div><div style="font-size:14px;font-weight:600;color:var(--text)">Bildirimler</div><div style="font-size:13px;color:var(--text3);margin-top:2px">Yeni teklif geldiğinde bildir</div></div><div style="width:42px;height:24px;border-radius:999px;background:var(--blue);position:relative;cursor:pointer"><div style="width:18px;height:18px;border-radius:50%;background:#fff;position:absolute;right:3px;top:3px"></div></div></div>
       </div>
+      <div id="admin-btn-wrap" style="display:none;margin-top:12px;">
+        <button onclick="showPage('admin');adminYukle()" style="width:100%;padding:13px;border:1px solid var(--amber);border-radius:12px;background:var(--amber-bg);color:var(--amber);font-size:14px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;">🛡️ Admin Paneli</button>
+      </div>
     </div>
   </div>
 </div>
@@ -882,11 +885,8 @@
 
         // Admin butonu
         if (user.email === ADMIN_EMAIL) {
-          const adminBtn = document.getElementById('admin-btn');
-          if (adminBtn) {
-            adminBtn.style.display = 'block';
-            adminBtn.onclick = () => { showPage('admin'); adminYukle(); };
-          }
+          const adminWrap = document.getElementById('admin-btn-wrap');
+          if (adminWrap) adminWrap.style.display = 'block';
         }
       }
     } else {
