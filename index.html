@@ -533,8 +533,8 @@
         <div class="form-title">Teklif ver</div>
         <div class="form-sub">Alıcıya en iyi teklifini gönder</div>
         <div class="fgroup"><label class="flabel">Teklif fiyatı</label><div class="price-wrap"><input class="finput" type="text" id="price-input" placeholder="950.000" oninput="checkPrice()"><span class="price-sym">₺</span></div><div class="price-hint" id="price-hint">💡 Alıcının bütçesi: 1.000.000 ₺</div></div>
-        <div class="fgroup"><label class="flabel">Araç bilgisi</label><input class="finput" type="text" placeholder="Örn: 2021 Toyota RAV4 1.8 Hybrid, 45.000 km"></div>
-        <div class="fgroup"><label class="flabel">Mesajınız <span>(isteğe bağlı)</span></label><textarea class="ftextarea" placeholder="Araç hakkında ek bilgi verin."></textarea></div>
+        <div class="fgroup"><label class="flabel" id="urun-label">Araç bilgisi</label><input class="finput" id="urun-input" type="text" placeholder="Örn: 2021 Toyota RAV4 1.8 Hybrid, 45.000 km"></div>
+        <div class="fgroup"><label class="flabel">Mesajınız <span>(isteğe bağlı)</span></label><textarea class="ftextarea" id="mesaj-textarea" placeholder="Araç hakkında ek bilgi verin."></textarea></div>
         <div class="fgroup"><label class="flabel">İletişim numarası</label><input class="finput" type="text" placeholder="05XX XXX XX XX"></div>
       </div>
       <div class="satici-trust">
@@ -587,11 +587,17 @@
       <div class="tab active" onclick="switchTab('ilanlar',this)">İlanlarım</div>
       <div class="tab" onclick="switchTab('yorumlar',this)">Değerlendirmeler</div>
       <div class="tab" onclick="switchTab('mesajlar',this)">💬 Mesajlar</div>
+      <div class="tab" onclick="switchTab('istekler',this)">📩 İstekler</div>
       <div class="tab" onclick="switchTab('ayarlar',this)">Ayarlar</div>
     </div>
     <div class="tab-content active" id="tab-ilanlar">
       <div class="ilan-grid" id="profil-ilanlar">
         <div style="text-align:center;padding:40px;color:var(--text3);font-size:14px;grid-column:1/-1;">İlanlarınız yükleniyor...</div>
+      </div>
+    </div>
+    <div class="tab-content" id="tab-istekler">
+      <div id="profil-istekler-liste">
+        <div style="text-align:center;padding:40px;color:var(--text3);font-size:14px;">Yükleniyor...</div>
       </div>
     </div>
     <div class="tab-content" id="tab-mesajlar">
@@ -737,6 +743,19 @@
       <div id="teklifler-baslik" style="font-size:15px;font-weight:600;color:var(--text);"></div>
     </div>
     <div id="teklifler-liste"></div>
+  </div>
+</div>
+
+<!-- MESAJ İSTEĞİ POPUP -->
+<div id="mesaj-iste-popup" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:999;align-items:center;justify-content:center;">
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:32px;max-width:400px;width:90%;">
+    <h2 style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:8px;">💬 Mesaj gönder</h2>
+    <p id="mesaj-iste-hedef" style="font-size:13px;color:var(--text2);margin-bottom:16px;"></p>
+    <textarea id="mesaj-iste-metin" class="ftextarea" placeholder="Mesajınızı yazın... (Karşı taraf kabul ederse sohbet başlar)" style="margin-bottom:16px;height:100px;"></textarea>
+    <div style="display:flex;gap:10px;">
+      <button onclick="mesajIsteGonderOnayla()" style="flex:1;padding:12px;background:var(--blue);border:none;border-radius:11px;color:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;">Gönder</button>
+      <button onclick="document.getElementById('mesaj-iste-popup').style.display='none'" style="padding:12px 20px;background:transparent;border:1px solid var(--border2);border-radius:11px;color:var(--text2);font-size:14px;cursor:pointer;font-family:'DM Sans',sans-serif;">İptal</button>
+    </div>
   </div>
 </div>
 
@@ -1003,9 +1022,8 @@
     document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
     el.classList.add('active');
     document.getElementById('tab-' + tab).classList.add('active');
-    if (tab === 'mesajlar' && auth.currentUser) {
-      sohbetleriYukle(auth.currentUser.uid);
-    }
+    if (tab === 'mesajlar' && auth.currentUser) sohbetleriYukle(auth.currentUser.uid);
+    if (tab === 'istekler' && auth.currentUser) mesajIstekleriniYukle(auth.currentUser.uid);
   }
   function switchRol(rol, el) {
     document.querySelectorAll('.rol-tab').forEach(t => t.classList.remove('active'));
@@ -1256,8 +1274,8 @@
     if (!user) { showPage('giris'); return; }
 
     const fiyat = document.getElementById('price-input')?.value;
-    const aracBilgi = document.querySelector('.finput[placeholder*="RAV4"]')?.value || '';
-    const mesaj = document.querySelector('.ftextarea[placeholder*="ek bilgi"]')?.value || '';
+    const aracBilgi = document.getElementById('urun-input')?.value || '';
+    const mesaj = document.getElementById('mesaj-textarea')?.value || '';
     const telefon = document.querySelector('.finput[placeholder*="05XX"]')?.value || '';
 
     if (!fiyat) { alert('Lütfen teklif fiyatını girin!'); return; }
@@ -1368,13 +1386,11 @@
       if (tagEl) { tagEl.className = 'tag tag-' + cat; tagEl.textContent = catIsim[cat]; }
 
       // Form labellarını güncelle
-      const urunLabelEl = document.querySelector('.finput[placeholder*="RAV4"]');
-      if (urunLabelEl) {
-        urunLabelEl.placeholder = urunPlaceholder[cat];
-        const label = urunLabelEl.previousElementSibling;
-        if (label) label.textContent = urunLabel[cat];
-      }
-      const mesajEl = document.querySelector('.ftextarea[placeholder*="ek bilgi"]');
+      const urunLabelEl = document.getElementById('urun-label');
+      const urunInputEl = document.getElementById('urun-input');
+      const mesajEl = document.getElementById('mesaj-textarea');
+      if (urunLabelEl) urunLabelEl.textContent = urunLabel[cat];
+      if (urunInputEl) urunInputEl.placeholder = urunPlaceholder[cat];
       if (mesajEl) mesajEl.placeholder = mesajPlaceholder[cat];
     });
   }
@@ -1592,11 +1608,12 @@
               <div style="font-size:12px;color:var(--text3);margin-top:4px;">📧 ${email}</div>
             </div>
           </div>
-          <div style="display:flex;gap:16px;flex-wrap:wrap;">
+          <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:16px;">
             <span style="font-size:13px;background:var(--green-bg);color:var(--green);padding:5px 12px;border-radius:8px;font-weight:600;">✓ E-posta onaylı</span>
             <span style="font-size:13px;background:var(--bg3);color:var(--text2);padding:5px 12px;border-radius:8px;">${ilanSnap.size} ilan</span>
             <span style="font-size:13px;background:var(--amber-bg);color:var(--amber);padding:5px 12px;border-radius:8px;">${yildiz} ${ortPuan !== '—' ? ortPuan + '/5' : 'Henüz değerlendirme yok'}</span>
           </div>
+          <button onclick="mesajIsteGonder('${uid}','${email}')" style="width:100%;padding:12px;background:var(--blue);border:none;border-radius:11px;color:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;">💬 Mesaj gönder</button>
         </div>
 
         ${ilanSnap.size > 0 ? `
@@ -1650,6 +1667,115 @@
     });
   }
   window.kullaniciEngelle = kullaniciEngelle;
+
+  // MESAJ İSTEĞİ SİSTEMİ
+  let _mesajIsteHedef = null;
+
+  function mesajIsteGonder(hedefId, hedefEmail) {
+    const user = auth.currentUser;
+    if (!user) { showPage('giris'); return; }
+    if (user.uid === hedefId) { alert('Kendinize mesaj gönderemezsiniz!'); return; }
+    _mesajIsteHedef = { hedefId, hedefEmail };
+    document.getElementById('mesaj-iste-hedef').textContent = hedefEmail.split('@')[0] + ' kullanıcısına mesaj isteği göndereceksiniz.';
+    document.getElementById('mesaj-iste-metin').value = '';
+    document.getElementById('mesaj-iste-popup').style.display = 'flex';
+  }
+
+  function mesajIsteGonderOnayla() {
+    const metin = document.getElementById('mesaj-iste-metin').value.trim();
+    if (!metin) { alert('Lütfen bir mesaj yazın!'); return; }
+    const user = auth.currentUser;
+
+    db.collection('mesajIstekleri').add({
+      gondereciId: user.uid,
+      gondereciEmail: user.email,
+      gondereciIsim: user.displayName || user.email.split('@')[0],
+      hedefId: _mesajIsteHedef.hedefId,
+      hedefEmail: _mesajIsteHedef.hedefEmail,
+      ilkMesaj: metin,
+      durum: 'bekliyor',
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    }).then(() => {
+      document.getElementById('mesaj-iste-popup').style.display = 'none';
+      alert('Mesaj isteği gönderildi! Karşı taraf kabul ederse sohbet başlayacak.');
+    }).catch(e => alert('Hata: ' + e.message));
+  }
+
+  function mesajIstekleriniYukle(uid) {
+    const liste = document.getElementById('profil-istekler-liste');
+    if (!liste) return;
+    liste.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text3);">Yükleniyor...</div>';
+
+    db.collection('mesajIstekleri').where('hedefId','==',uid).where('durum','==','bekliyor').get().then(snap => {
+      if (snap.empty) {
+        liste.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text3);font-size:14px;">📩 Bekleyen mesaj isteği yok.</div>';
+        return;
+      }
+      liste.innerHTML = snap.docs.map(doc => {
+        const d = doc.data();
+        return `<div style="background:var(--bg2);border:1px solid var(--blue-border);border-radius:14px;padding:18px;margin-bottom:12px;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+            <div style="width:36px;height:36px;border-radius:50%;background:var(--blue-bg);display:flex;align-items:center;justify-content:center;">👤</div>
+            <div>
+              <div style="font-size:14px;font-weight:600;color:var(--text);">${d.gondereciIsim}</div>
+              <div style="font-size:11px;color:var(--text3);">${d.gondereciEmail}</div>
+            </div>
+          </div>
+          <div style="font-size:13px;color:var(--text2);background:var(--bg3);padding:12px;border-radius:10px;margin-bottom:12px;">"${d.ilkMesaj}"</div>
+          <div style="display:flex;gap:8px;">
+            <button onclick="mesajIsteKabul('${doc.id}','${d.gondereciId}','${d.gondereciEmail}','${d.ilkMesaj}')" style="flex:1;padding:9px;background:var(--green);border:none;border-radius:9px;color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;">✓ Kabul et</button>
+            <button onclick="mesajIsteReddet('${doc.id}')" style="flex:1;padding:9px;background:var(--red-bg);border:1px solid var(--red-border);border-radius:9px;color:var(--red);font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;">✕ Reddet</button>
+          </div>
+        </div>`;
+      }).join('');
+    });
+  }
+
+  function mesajIsteKabul(isteId, gondereciId, gondereciEmail, ilkMesaj) {
+    const user = auth.currentUser;
+    const sohbetId = [user.uid, gondereciId].sort().join('_') + '_direkt';
+    const isimler = {};
+    isimler[user.uid] = user.displayName || user.email.split('@')[0];
+    isimler[gondereciId] = gondereciEmail.split('@')[0];
+
+    db.collection('sohbetler').doc(sohbetId).set({
+      katilimcilar: [user.uid, gondereciId],
+      isimler,
+      ilanBaslik: 'Direkt mesaj',
+      sonMesaj: ilkMesaj,
+      sonMesajZaman: firebase.firestore.FieldValue.serverTimestamp()
+    }, { merge: true }).then(() => {
+      // İlk mesajı ekle
+      return db.collection('sohbetler').doc(sohbetId).collection('mesajlar').add({
+        metin: ilkMesaj,
+        userId: gondereciId,
+        userEmail: gondereciEmail,
+        userIsim: gondereciEmail.split('@')[0],
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    }).then(() => {
+      // İsteği güncelle
+      return db.collection('mesajIstekleri').doc(isteId).update({ durum: 'kabul' });
+    }).then(() => {
+      alert('Mesaj isteği kabul edildi!');
+      mesajIstekleriniYukle(user.uid);
+      sohbetAc(sohbetId, gondereciEmail.split('@')[0], 'Direkt mesaj');
+    });
+  }
+
+  function mesajIsteReddet(isteId) {
+    db.collection('mesajIstekleri').doc(isteId).update({ durum: 'reddedildi' }).then(() => {
+      alert('Mesaj isteği reddedildi.');
+      const user = auth.currentUser;
+      if (user) mesajIstekleriniYukle(user.uid);
+    });
+  }
+
+  window.mesajIsteGonder = mesajIsteGonder;
+  window.mesajIsteGonderOnayla = mesajIsteGonderOnayla;
+  window.mesajIstekleriniYukle = mesajIstekleriniYukle;
+  window.mesajIsteKabul = mesajIsteKabul;
+  window.mesajIsteReddet = mesajIsteReddet;
 
   // MESAJLAŞMA SİSTEMİ
   let _aktifSohbet = null;
