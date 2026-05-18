@@ -430,13 +430,13 @@
   </div>
   <div class="main">
     <div class="section-head"><h2>Son ilanlar</h2><a class="see-all">Tümünü gör →</a></div>
-    <div class="cards-grid" id="cards-grid">
-      <div class="card" data-cat="arac"><div class="card-head"><span class="tag tag-arac">Araç</span><span class="verified">✓ Kimlik onaylı</span></div><div class="card-title">SUV veya sedan arıyorum, 2020 model ve üzeri, otomatik</div><div class="card-budget">1.000.000 ₺</div><div class="card-foot"><span class="card-loc">📍 Gaziantep</span><div style="display:flex;align-items:center;gap:8px"><span class="card-offers"><strong>12</strong> teklif</span><button class="teklif-btn" onclick="showPage('teklifver')">Teklif ver</button></div></div></div>
-      <div class="card" data-cat="emlak"><div class="card-head"><span class="tag tag-emlak">Emlak</span><span class="verified">✓ Kimlik onaylı</span></div><div class="card-title">Kiralık 3+1 daire arıyorum, merkezi konumda, eşyalı olabilir</div><div class="card-budget">15.000 ₺<small>/ay</small></div><div class="card-foot"><span class="card-loc">📍 İstanbul, Kadıköy</span><div style="display:flex;align-items:center;gap:8px"><span class="card-offers"><strong>7</strong> teklif</span><button class="teklif-btn" onclick="showPage('teklifver')">Teklif ver</button></div></div></div>
-      <div class="card" data-cat="elektronik"><div class="card-head"><span class="tag tag-elektronik">Elektronik</span><span class="verified">✓ Kimlik onaylı</span></div><div class="card-title">iPhone 14 Pro arıyorum, temiz kullanılmış, kutusuyla</div><div class="card-budget">28.000 ₺</div><div class="card-foot"><span class="card-loc">📍 Ankara</span><div style="display:flex;align-items:center;gap:8px"><span class="card-offers"><strong>24</strong> teklif</span><button class="teklif-btn" onclick="showPage('teklifver')">Teklif ver</button></div></div></div>
-      <div class="card" data-cat="arac"><div class="card-head"><span class="tag tag-arac">Araç</span><span class="verified">✓ Kimlik onaylı</span></div><div class="card-title">Motorsiklet arıyorum, 650cc ve üzeri, naked veya touring</div><div class="card-budget">350.000 ₺</div><div class="card-foot"><span class="card-loc">📍 İzmir</span><div style="display:flex;align-items:center;gap:8px"><span class="card-offers"><strong>5</strong> teklif</span><button class="teklif-btn" onclick="showPage('teklifver')">Teklif ver</button></div></div></div>
-      <div class="card" data-cat="emlak"><div class="card-head"><span class="tag tag-emlak">Emlak</span><span class="verified">✓ Kimlik onaylı</span></div><div class="card-title">Satılık 2+1 daire, deniz manzaralı tercihim var</div><div class="card-budget">4.500.000 ₺</div><div class="card-foot"><span class="card-loc">📍 Antalya</span><div style="display:flex;align-items:center;gap:8px"><span class="card-offers"><strong>18</strong> teklif</span><button class="teklif-btn" onclick="showPage('teklifver')">Teklif ver</button></div></div></div>
-      <div class="card" data-cat="diger"><div class="card-head"><span class="tag tag-diger">Diğer</span><span class="verified">✓ Kimlik onaylı</span></div><div class="card-title">Gaming bilgisayar arıyorum, RTX 4070 ve üzeri, hazır sistem</div><div class="card-budget">85.000 ₺</div><div class="card-foot"><span class="card-loc">📍 Bursa</span><div style="display:flex;align-items:center;gap:8px"><span class="card-offers"><strong>9</strong> teklif</span><button class="teklif-btn" onclick="showPage('teklifver')">Teklif ver</button></div></div></div>
+    <div id="ilanlar-loading" style="text-align:center;padding:40px;color:var(--text3);font-size:14px;">İlanlar yükleniyor...</div>
+    <div class="cards-grid" id="cards-grid" style="display:none;"></div>
+    <div id="ilanlar-bos" style="display:none;text-align:center;padding:60px 24px;">
+      <div style="font-size:48px;margin-bottom:16px;">📭</div>
+      <div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:700;margin-bottom:8px;">Henüz ilan yok</div>
+      <div style="font-size:14px;color:var(--text2);margin-bottom:24px;">İlk ilanı sen aç, satıcılar sana gelsin!</div>
+      <button class="btn-primary" onclick="showPage('ilan')" style="padding:12px 24px;font-size:14px">+ İlk ilanı oluştur</button>
     </div>
   </div>
   <div class="cta-section"><div><h3>Sen de ilan ver, teklifleri bekle</h3><p>Ücretsiz ilan aç — satıcılar sana ulaşsın, en iyisini seç</p></div><button class="btn-primary" onclick="showPage('ilan')" style="padding:13px 28px;font-size:14px;position:relative;z-index:1">+ İlan oluştur</button></div>
@@ -702,6 +702,7 @@
   function selCat(el, cat) {
     document.querySelectorAll('.cat-opt').forEach(c => c.classList.remove('sel'));
     el.classList.add('sel');
+    window.seciliKategori = cat === '🚗 Araç' ? 'arac' : cat === '🏠 Emlak' ? 'emlak' : cat === '📱 Elektronik' ? 'elektronik' : 'diger';
     document.getElementById('prev-cat').textContent = cat;
   }
   function updatePrev() {
@@ -785,7 +786,6 @@
     }
   });
 
-  // İlan yayınla
   window.ilanYayinla = async function() {
     const user = auth.currentUser;
     if (!user) { showPage('giris'); return; }
@@ -793,6 +793,7 @@
     const title = document.getElementById('f-title').value;
     const budget = document.getElementById('f-budget').value;
     const city = document.getElementById('f-city').value;
+    const kategori = window.seciliKategori || 'diger';
 
     if (!title || !budget || !city) {
       alert('Lütfen tüm alanları doldurun!');
@@ -801,7 +802,7 @@
 
     try {
       await addDoc(collection(db, 'ilanlar'), {
-        title, budget, city,
+        title, budget, city, kategori,
         userId: user.uid,
         userEmail: user.email,
         createdAt: serverTimestamp(),
@@ -816,21 +817,42 @@
 
   // İlanları yükle
   window.loadIlanlar = async function() {
+    const loading = document.getElementById('ilanlar-loading');
+    const grid = document.getElementById('cards-grid');
+    const bos = document.getElementById('ilanlar-bos');
+
     try {
       const q = query(collection(db, 'ilanlar'), orderBy('createdAt', 'desc'));
       const snap = await getDocs(q);
-      const grid = document.getElementById('cards-grid');
 
-      if (snap.empty) return;
+      loading.style.display = 'none';
 
-      // Gerçek ilanlar varsa örnek ilanları kaldır
-      const gercekIlanlar = snap.docs.map(doc => {
+      if (snap.empty) {
+        bos.style.display = 'block';
+        return;
+      }
+
+      const catRenk = {
+        'arac': 'tag-arac', 'emlak': 'tag-emlak',
+        'elektronik': 'tag-elektronik', 'diger': 'tag-diger'
+      };
+      const catIsim = {
+        'arac': '🚗 Araç', 'emlak': '🏠 Emlak',
+        'elektronik': '📱 Elektronik', 'diger': '🛋 Diğer'
+      };
+
+      grid.style.display = 'grid';
+      grid.innerHTML = snap.docs.map(doc => {
         const d = doc.data();
+        const cat = d.kategori || 'diger';
         return `
-          <div class="card" data-cat="diger">
-            <div class="card-head"><span class="tag tag-diger">İlan</span><span class="verified">✓ Onaylı</span></div>
+          <div class="card" data-cat="${cat}" data-id="${doc.id}">
+            <div class="card-head">
+              <span class="tag ${catRenk[cat] || 'tag-diger'}">${catIsim[cat] || '🛋 Diğer'}</span>
+              <span class="verified">✓ Onaylı</span>
+            </div>
             <div class="card-title">${d.title}</div>
-            <div class="card-budget">${d.budget} ₺</div>
+            <div class="card-budget">${Number(d.budget).toLocaleString('tr-TR')} ₺</div>
             <div class="card-foot">
               <span class="card-loc">📍 ${d.city}</span>
               <div style="display:flex;align-items:center;gap:8px">
@@ -841,9 +863,9 @@
           </div>`;
       }).join('');
 
-      grid.innerHTML = gercekIlanlar + grid.innerHTML;
     } catch(e) {
-      console.log('İlanlar yüklenemedi:', e);
+      loading.textContent = 'İlanlar yüklenemedi. Lütfen sayfayı yenileyin.';
+      console.log('Hata:', e);
     }
   };
 
