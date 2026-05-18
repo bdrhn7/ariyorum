@@ -571,7 +571,11 @@
       <div class="profile-info">
         <div class="profile-name" id="profil-isim">Giriş yapılmadı</div>
         <div class="profile-meta" id="profil-meta">📍 — · Üye: —</div>
-        <div class="badges-row"><span class="badge-prof badge-prof-green">✓ E-posta onaylı</span><span class="badge-prof badge-prof-blue">Alıcı</span></div>
+        <div class="badges-row">
+          <span class="badge-prof badge-prof-green">✓ E-posta onaylı</span>
+          <span class="badge-prof badge-prof-blue">Alıcı</span>
+          <span id="profil-rozet" style="display:none;font-size:11px;font-weight:700;padding:4px 12px;border-radius:999px;"></span>
+        </div>
         <div class="star-row"><span style="font-size:16px">⭐⭐⭐⭐⭐</span><span class="star-num">—</span><span class="star-count">· Henüz değerlendirme yok</span></div>
       </div>
       <button style="padding:9px 20px;border:1px solid var(--red-border);border-radius:10px;background:var(--red-bg);color:var(--red);font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;position:relative;z-index:10;" onclick="window._auth.signOut().then(()=>showPage('home'))">🚪 Çıkış yap</button>
@@ -1093,6 +1097,18 @@
         loadProfilIlanlar(user.uid);
         notifYukle(user.uid);
         sohbetleriYukle(user.uid);
+
+        // Kendi rozetini hesapla ve göster
+        db.collection('puanlar').where('verenUserId','==',user.uid).get().then(snap => {
+          const rozet = rozetHesapla(snap.size, user.email);
+          const rozetEl = document.getElementById('profil-rozet');
+          if (rozetEl) {
+            rozetEl.textContent = rozet.rozet;
+            rozetEl.style.background = rozet.bg;
+            rozetEl.style.color = rozet.renk;
+            rozetEl.style.display = 'inline-block';
+          }
+        });
       }
     } else {
       document.querySelectorAll('.btn-outline').forEach(btn => {
@@ -1618,7 +1634,7 @@
       const ortPuan = puanlar.length > 0 ? (puanlar.reduce((a,b) => a + b.puan, 0) / puanlar.length).toFixed(1) : '—';
       const yildiz = puanlar.length > 0 ? '⭐'.repeat(Math.round(ortPuan)) : '—';
       const islemSayisi = islemSnap.size;
-      const rozet = rozetHesapla(islemSayisi);
+      const rozet = rozetHesapla(islemSayisi, email);
 
       const catIsim = { 'arac':'🚗 Araç', 'emlak':'🏠 Emlak', 'elektronik':'📱 Elektronik', 'diger':'🛋 Diğer' };
       const catRenk = { 'arac':'tag-arac', 'emlak':'tag-emlak', 'elektronik':'tag-elektronik', 'diger':'tag-diger' };
@@ -1694,7 +1710,8 @@
   window.kullaniciEngelle = kullaniciEngelle;
 
   // ROZET & UZMAN SİSTEMİ
-  function rozetHesapla(islemSayisi) {
+  function rozetHesapla(islemSayisi, email) {
+    if (email === ADMIN_EMAIL) return { rozet: '👑 Admin', renk: '#f59e0b', bg: 'rgba(245,158,11,0.15)', uzman: false };
     if (islemSayisi >= 50) return { rozet: '💎 Elit Uzman', renk: '#a78bfa', bg: 'rgba(167,139,250,0.15)', uzman: true };
     if (islemSayisi >= 20) return { rozet: '🥇 Uzman', renk: '#f59e0b', bg: 'rgba(245,158,11,0.15)', uzman: true };
     if (islemSayisi >= 10) return { rozet: '🥈 Güvenilir', renk: '#34c782', bg: 'rgba(52,199,130,0.15)', uzman: true };
