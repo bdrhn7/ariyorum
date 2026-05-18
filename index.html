@@ -1779,10 +1779,14 @@
     // Puanları çek
     Promise.all([
       db.collection('puanlar').where('hedefUserId','==',uid).get(),
+      db.collection('puanlar').where('hedefEmail','==',email).get(),
       db.collection('ilanlar').where('userId','==',uid).get(),
       db.collection('puanlar').where('verenUserId','==',uid).get()
-    ]).then(([puanSnap, ilanSnap, islemSnap]) => {
-      const puanlar = puanSnap.docs.map(d => d.data());
+    ]).then(([puanSnap1, puanSnap2, ilanSnap, islemSnap]) => {
+      // İki sorguyu birleştir, tekrarları kaldır
+      const puanMap = {};
+      [...puanSnap1.docs, ...puanSnap2.docs].forEach(d => puanMap[d.id] = d.data());
+      const puanlar = Object.values(puanMap);
       const ortPuan = puanlar.length > 0 ? (puanlar.reduce((a,b) => a + b.puan, 0) / puanlar.length).toFixed(1) : '—';
       const yildiz = puanlar.length > 0 ? '⭐'.repeat(Math.round(ortPuan)) : '—';
       const islemSayisi = islemSnap.size;
@@ -2177,19 +2181,31 @@
     const yorum = document.getElementById('puan-yorum').value;
     const user = auth.currentUser;
 
-    db.collection('puanlar').add({
-      puan: _seciliPuan, yorum,
-      hedefUserId: _puanHedef.saticiId,
-      hedefEmail: _puanHedef.saticiEmail,
-      verenUserId: user.uid,
-      verenEmail: user.email,
-      verenIsim: user.displayName || user.email.split('@')[0],
-      createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    }).then(() => {
-      puanKapat();
-      // Sohbet başlat
-      sohbetOlustur(_puanHedef.teklifId, _puanHedef.saticiId, _puanHedef.saticiEmail, _puanHedef.ilanId, _puanHedef.ilanBaslik);
-    }).catch(e => alert('Hata: ' + e.message));
+    // Daha önce bu kişiyi puanlamış mı kontrol et
+    db.collection('puanlar')
+      .where('verenUserId','==',user.uid)
+      .where('hedefUserId','==',_puanHedef.saticiId)
+      .get().then(snap => {
+        if (!snap.empty) {
+          puanKapat();
+          alert('Bu kişiyi daha önce değerlendirdiniz!');
+          sohbetOlustur(_puanHedef.teklifId, _puanHedef.saticiId, _puanHedef.saticiEmail, _puanHedef.ilanId, _puanHedef.ilanBaslik);
+          return;
+        }
+
+        db.collection('puanlar').add({
+          puan: _seciliPuan, yorum,
+          hedefUserId: _puanHedef.saticiId,
+          hedefEmail: _puanHedef.saticiEmail,
+          verenUserId: user.uid,
+          verenEmail: user.email,
+          verenIsim: user.displayName || user.email.split('@')[0],
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        }).then(() => {
+          puanKapat();
+          sohbetOlustur(_puanHedef.teklifId, _puanHedef.saticiId, _puanHedef.saticiEmail, _puanHedef.ilanId, _puanHedef.ilanBaslik);
+        }).catch(e => alert('Hata: ' + e.message));
+      });
   }
 
   function puanAtla() { puanKapat(); }
