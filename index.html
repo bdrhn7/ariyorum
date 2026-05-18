@@ -560,8 +560,14 @@
     </div>
     <div class="tab-content" id="tab-ayarlar">
       <div style="background:var(--bg2);border:1px solid var(--border);border-radius:16px;overflow:hidden">
+        <div style="padding:18px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
+          <div>
+            <div style="font-size:14px;font-weight:600;color:var(--text)">Ad Soyad</div>
+            <div id="ayar-isim" style="font-size:13px;color:var(--text3);margin-top:2px">—</div>
+          </div>
+          <button class="edit-btn" style="padding:6px 14px;font-size:12px" onclick="isimDuzenle()">Düzenle</button>
+        </div>
         <div style="padding:18px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between"><div><div style="font-size:14px;font-weight:600;color:var(--text)">E-posta</div><div id="ayar-email" style="font-size:13px;color:var(--text3);margin-top:2px">—</div></div><span class="badge-green">✓ Onaylı</span></div>
-        <div style="padding:18px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between"><div><div style="font-size:14px;font-weight:600;color:var(--text)">Üyelik tarihi</div><div id="ayar-tarih" style="font-size:13px;color:var(--text3);margin-top:2px">—</div></div></div>
         <div style="padding:18px 22px;display:flex;align-items:center;justify-content:space-between"><div><div style="font-size:14px;font-weight:600;color:var(--text)">Bildirimler</div><div style="font-size:13px;color:var(--text3);margin-top:2px">Yeni teklif geldiğinde bildir</div></div><div style="width:42px;height:24px;border-radius:999px;background:var(--blue);position:relative;cursor:pointer"><div style="width:18px;height:18px;border-radius:50%;background:#fff;position:absolute;right:3px;top:3px"></div></div></div>
       </div>
     </div>
@@ -831,6 +837,7 @@
         document.getElementById('profil-isim').textContent = isim;
         document.getElementById('profil-meta').textContent = '📧 ' + user.email + ' · Üye: ' + tarih;
         document.getElementById('ayar-email').textContent = user.email;
+        document.getElementById('ayar-isim').textContent = isim;
         document.getElementById('ayar-tarih').textContent = tarih;
         loadProfilIlanlar(user.uid);
       }
@@ -1011,6 +1018,21 @@
     }).catch(e => alert('Hata: ' + e.message));
   }
   window.teklifGonder = teklifGonder;
+
+  // İsim düzenle
+  function isimDuzenle() {
+    const yeniIsim = prompt('Yeni adınızı girin:', auth.currentUser?.displayName || '');
+    if (!yeniIsim || !yeniIsim.trim()) return;
+    auth.currentUser.updateProfile({ displayName: yeniIsim.trim() }).then(() => {
+      document.getElementById('profil-isim').textContent = yeniIsim.trim();
+      document.getElementById('ayar-isim').textContent = yeniIsim.trim();
+      document.querySelectorAll('.btn-outline').forEach(btn => {
+        if (btn.textContent.startsWith('👤')) btn.textContent = '👤 ' + yeniIsim.trim();
+      });
+      alert('İsminiz güncellendi!');
+    }).catch(e => alert('Hata: ' + e.message));
+  }
+  window.isimDuzenle = isimDuzenle;
 
   // Teklifleri görüntüle
   function teklifleriGor(ilanId, ilanBaslik) {
