@@ -386,7 +386,7 @@
   </ul>
   <div class="nav-right">
     <button class="mode-toggle" onclick="toggleMode()"><span id="mode-ico">🌙</span><span id="mode-lbl">Gece modu</span></button>
-    <button class="btn-outline" onclick="showPage('profil')">Giriş yap</button>
+    <button class="btn-outline" onclick="window._currentUser ? showPage('profil') : showPage('giris')">Giriş yap</button>
     <button class="btn-primary" onclick="ilanAc()">+ İlan ver</button>
   </div>
   <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()">
@@ -401,7 +401,7 @@
   <a onclick="showPage('profil');closeMobileMenu()">Profilim</a>
   <div class="mob-btns">
     <button class="mob-btns mob-mode" onclick="toggleMode()">🌙 Gece / Gündüz modu</button>
-    <button class="mob-btns mob-giris" onclick="showPage('profil');closeMobileMenu()">Giriş yap</button>
+    <button class="mob-btns mob-giris" onclick="window._currentUser ? (showPage('profil'),closeMobileMenu()) : (showPage('giris'),closeMobileMenu())">Giriş yap</button>
     <button class="mob-btns mob-ilan" onclick="showPage('ilan');closeMobileMenu()">+ İlan ver</button>
   </div>
 </div>
