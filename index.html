@@ -466,30 +466,32 @@
     <h1>Sen ara,<br>teklifler <em>sana gelsin</em></h1>
     <p>İlan ver, satıcılar yarışsın. Araç, ev, elektronik — ne arıyorsan bütçeni belirt, teklifleri bekle.</p>
 
-    <!-- ARAMA KUTUSU -->
-    <div style="max-width:620px;margin:0 auto 24px;position:relative;">
-      <div style="display:flex;background:var(--bg2);border:1.5px solid var(--border2);border-radius:16px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.2);transition:border-color 0.2s;" onfocusin="this.style.borderColor='var(--blue)'" onfocusout="this.style.borderColor='var(--border2)'">
-        <span style="padding:0 16px;display:flex;align-items:center;color:var(--text3);font-size:18px;">🔍</span>
-        <input type="text" id="search-input" placeholder="Ne arıyorsunuz? (SUV, 3+1 daire, iPhone...)" oninput="aramaYap()" style="flex:1;background:transparent;border:none;outline:none;font-size:15px;font-family:'Nunito',sans-serif;color:var(--text);padding:16px 0;">
-        <button onclick="aramaYap()" style="margin:8px;padding:10px 24px;background:var(--blue);border:none;border-radius:10px;color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;white-space:nowrap;">Ara</button>
+    <!-- YENİ ARAMA BLOĞU -->
+    <div style="max-width:680px;margin:0 auto 20px;background:var(--bg2);border:1.5px solid var(--border2);border-radius:24px;overflow:hidden;box-shadow:0 12px 48px rgba(0,0,0,0.3);">
+      <!-- Kategori sekmeleri -->
+      <div style="display:flex;border-bottom:1px solid var(--border);padding:0 8px;">
+        <button id="scat-hepsi" onclick="filterCat(this,'hepsi');setSearchCat('hepsi',this)" style="flex:1;padding:14px 8px;background:transparent;border:none;font-size:13px;font-weight:700;color:var(--blue);cursor:pointer;font-family:'Nunito',sans-serif;border-bottom:2px solid var(--blue);margin-bottom:-1px;">Tümü</button>
+        <button id="scat-arac" onclick="filterCat(this,'arac');setSearchCat('arac',this)" style="flex:1;padding:14px 8px;background:transparent;border:none;font-size:13px;font-weight:600;color:var(--text3);cursor:pointer;font-family:'Nunito',sans-serif;border-bottom:2px solid transparent;margin-bottom:-1px;">🚗 Araç</button>
+        <button id="scat-emlak" onclick="filterCat(this,'emlak');setSearchCat('emlak',this)" style="flex:1;padding:14px 8px;background:transparent;border:none;font-size:13px;font-weight:600;color:var(--text3);cursor:pointer;font-family:'Nunito',sans-serif;border-bottom:2px solid transparent;margin-bottom:-1px;">🏠 Emlak</button>
+        <button id="scat-elektronik" onclick="filterCat(this,'elektronik');setSearchCat('elektronik',this)" style="flex:1;padding:14px 8px;background:transparent;border:none;font-size:13px;font-weight:600;color:var(--text3);cursor:pointer;font-family:'Nunito',sans-serif;border-bottom:2px solid transparent;margin-bottom:-1px;">📱 Elektronik</button>
+        <button id="scat-diger" onclick="filterCat(this,'diger');setSearchCat('diger',this)" style="flex:1;padding:14px 8px;background:transparent;border:none;font-size:13px;font-weight:600;color:var(--text3);cursor:pointer;font-family:'Nunito',sans-serif;border-bottom:2px solid transparent;margin-bottom:-1px;">🛋 Diğer</button>
+      </div>
+      <!-- Arama satırı -->
+      <div style="display:flex;align-items:center;padding:8px 8px 8px 20px;gap:8px;">
+        <span style="font-size:20px;color:var(--text3);">🔍</span>
+        <input type="text" id="search-input" placeholder="Ne arıyorsunuz?" oninput="aramaYap()" style="flex:1;background:transparent;border:none;outline:none;font-size:16px;font-family:'Nunito',sans-serif;color:var(--text);padding:10px 0;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <button onclick="toggleGelFilter()" title="Filtrele" style="padding:10px 14px;background:var(--bg3);border:1px solid var(--border);border-radius:12px;color:var(--text2);font-size:13px;font-weight:600;cursor:pointer;font-family:'Nunito',sans-serif;display:flex;align-items:center;gap:6px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
+            Filtre
+          </button>
+          <button onclick="aramaYap()" style="padding:12px 28px;background:var(--blue);border:none;border-radius:14px;color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;">Ara</button>
+        </div>
       </div>
     </div>
 
-    <!-- KATEGORİLER -->
-    <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:12px;">
-      <button class="filter-cat active" onclick="filterCat(this,'hepsi')">Tümü</button>
-      <button class="filter-cat" onclick="filterCat(this,'arac')">🚗 Araç</button>
-      <button class="filter-cat" onclick="filterCat(this,'emlak')">🏠 Emlak</button>
-      <button class="filter-cat" onclick="filterCat(this,'elektronik')">📱 Elektronik</button>
-      <button class="filter-cat" onclick="filterCat(this,'diger')">🛋 Diğer</button>
-      <button onclick="toggleGelFilter()" id="filtre-btn" style="padding:8px 18px;border:1.5px solid var(--border2);border-radius:999px;font-size:13px;font-weight:700;color:var(--text2);background:transparent;cursor:pointer;font-family:'Nunito',sans-serif;display:flex;align-items:center;gap:6px;transition:all 0.2s;" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--text2)'">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
-        Filtrele
-      </button>
-    </div>
-
     <!-- GELİŞMİŞ FİLTRELER -->
-    <div id="gelismis-filtre" style="display:none;margin-top:12px;background:var(--bg2);border:1.5px solid var(--border2);border-radius:16px;padding:20px;max-width:620px;margin-left:auto;margin-right:auto;box-shadow:0 8px 32px rgba(0,0,0,0.2);">
+    <div id="gelismis-filtre" style="display:none;margin-top:8px;background:var(--bg2);border:1.5px solid var(--border2);border-radius:16px;padding:20px;max-width:680px;margin-left:auto;margin-right:auto;box-shadow:0 8px 32px rgba(0,0,0,0.2);">
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:16px;">
         <div>
           <div style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:7px;">Min Bütçe</div>
@@ -1089,6 +1091,18 @@
   }
   function showPopup(id) { document.getElementById('popup-' + id).classList.add('show'); }
   function closePopup(id) { document.getElementById('popup-' + id).classList.remove('show'); }
+  function setSearchCat(cat, el) {
+    document.querySelectorAll('[id^="scat-"]').forEach(b => {
+      b.style.color = 'var(--text3)';
+      b.style.borderBottom = '2px solid transparent';
+      b.style.fontWeight = '600';
+    });
+    el.style.color = 'var(--blue)';
+    el.style.borderBottom = '2px solid var(--blue)';
+    el.style.fontWeight = '700';
+  }
+  window.setSearchCat = setSearchCat;
+
   window.seciliKat = 'hepsi';
   window.seciliSort = 'yeni';
 
