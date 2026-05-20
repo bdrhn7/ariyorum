@@ -684,18 +684,18 @@
         <div style="padding:18px 22px;border-bottom:1px solid var(--border);">
           <div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:10px;">Avatar</div>
           <div style="display:flex;gap:8px;flex-wrap:wrap;">
-            <button onclick="avatarSeç('👤')" style="font-size:24px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:6px 8px;cursor:pointer;">👤</button>
-            <button onclick="avatarSeç('👨')" style="font-size:24px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:6px 8px;cursor:pointer;">👨</button>
-            <button onclick="avatarSeç('👩')" style="font-size:24px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:6px 8px;cursor:pointer;">👩</button>
-            <button onclick="avatarSeç('🧑')" style="font-size:24px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:6px 8px;cursor:pointer;">🧑</button>
-            <button onclick="avatarSeç('👦')" style="font-size:24px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:6px 8px;cursor:pointer;">👦</button>
-            <button onclick="avatarSeç('👧')" style="font-size:24px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:6px 8px;cursor:pointer;">👧</button>
-            <button onclick="avatarSeç('🧔')" style="font-size:24px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:6px 8px;cursor:pointer;">🧔</button>
-            <button onclick="avatarSeç('👴')" style="font-size:24px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:6px 8px;cursor:pointer;">👴</button>
-            <button onclick="avatarSeç('👵')" style="font-size:24px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:6px 8px;cursor:pointer;">👵</button>
-            <button onclick="avatarSeç('🧑‍💼')" style="font-size:24px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:6px 8px;cursor:pointer;">🧑‍💼</button>
-            <button onclick="avatarSeç('👨‍💼')" style="font-size:24px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:6px 8px;cursor:pointer;">👨‍💼</button>
-            <button onclick="avatarSeç('👩‍💼')" style="font-size:24px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:6px 8px;cursor:pointer;">👩‍💼</button>
+            <button onclick="avatarSec('👤')" style="font-size:24px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:6px 8px;cursor:pointer;">👤</button>
+            <button onclick="avatarSec('👨')" style="font-size:24px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:6px 8px;cursor:pointer;">👨</button>
+            <button onclick="avatarSec('👩')" style="font-size:24px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:6px 8px;cursor:pointer;">👩</button>
+            <button onclick="avatarSec('🧑')" style="font-size:24px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:6px 8px;cursor:pointer;">🧑</button>
+            <button onclick="avatarSec('👦')" style="font-size:24px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:6px 8px;cursor:pointer;">👦</button>
+            <button onclick="avatarSec('👧')" style="font-size:24px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:6px 8px;cursor:pointer;">👧</button>
+            <button onclick="avatarSec('🧔')" style="font-size:24px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:6px 8px;cursor:pointer;">🧔</button>
+            <button onclick="avatarSec('👴')" style="font-size:24px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:6px 8px;cursor:pointer;">👴</button>
+            <button onclick="avatarSec('👵')" style="font-size:24px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:6px 8px;cursor:pointer;">👵</button>
+            <button onclick="avatarSec('🧑‍💼')" style="font-size:24px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:6px 8px;cursor:pointer;">🧑‍💼</button>
+            <button onclick="avatarSec('👨‍💼')" style="font-size:24px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:6px 8px;cursor:pointer;">👨‍💼</button>
+            <button onclick="avatarSec('👩‍💼')" style="font-size:24px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:6px 8px;cursor:pointer;">👩‍💼</button>
           </div>
         </div>
         <div style="padding:18px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
@@ -2471,13 +2471,13 @@
   window.puanAtla = puanAtla;
 
   // AVATAR SİSTEMİ
-  function avatarSeç(emoji) {
+  function avatarSec(emoji) {
     const user = auth.currentUser;
     if (!user) return;
     document.getElementById('profil-avatar').textContent = emoji;
     db.collection('kullanicilar').doc(user.uid).set({ avatar: emoji }, { merge: true });
   }
-  window.avatarSeç = avatarSeç;
+  window.avatarSec = avatarSec;
 
   // İLAN DÜZENLE
   function ilanDuzenle(id) {
