@@ -393,28 +393,70 @@
     .p-btn-blue { background: var(--blue); }
 
     @media (max-width: 768px) {
-      nav { padding: 0 20px; }
+      nav { padding: 0 16px; }
       .nav-links { display: none; }
       .nav-right { display: none; }
       .hamburger { display: flex; }
-      .hero { padding: 60px 20px 44px; }
-      .hero h1 { font-size: 36px; }
-      .main { padding: 32px 20px; }
-      .cta-section { margin: 8px 20px 32px; padding: 24px; flex-direction: column; gap: 18px; }
-      .cta-section .btn-primary { margin-left: 0; width: 100%; }
-      footer { padding: 18px 20px; }
-      .teklif-page { grid-template-columns: 1fr; }
-      .ilan-card { position: static; }
-      .stats-grid { grid-template-columns: repeat(2,1fr); }
-      .ilan-grid { grid-template-columns: 1fr; }
-      .profile-hero { flex-direction: column; }
+      #notif-wrap-mob { display: flex !important; }
+      
+      /* Hero */
+      .hero { padding: 48px 16px 36px; }
+      .hero h1 { font-size: 32px; letter-spacing: -0.5px; }
+      .hero p { font-size: 14px; }
+      
+      /* Arama kutusu */
+      .hero > div[style*="max-width:680px"] { margin: 0 0 16px !important; }
+      
+      /* Stats bar */
       .stats-bar { flex-wrap: wrap; }
-      .stat-item { min-width: 50%; }
-      .ilan-page { padding: 24px 16px 60px; }
-      .teklifler-page { padding: 24px 16px 60px; }
-      .profil-page { padding: 24px 16px 60px; }
+      .stat-item { min-width: 50%; border-right: none !important; }
+      
+      /* Ana sayfa */
+      .main { padding: 24px 16px 80px; }
+      .cards-grid { grid-template-columns: 1fr !important; gap: 10px; }
+      
+      /* Profil */
+      .profile-hero { flex-direction: column; align-items: flex-start; gap: 16px; }
+      .stats-grid { grid-template-columns: repeat(2,1fr); gap: 8px; }
+      .tabs { overflow-x: auto; white-space: nowrap; gap: 0; padding-bottom: 4px; }
+      .tab { flex-shrink: 0; font-size: 13px; padding: 10px 14px; }
+      .profil-page { padding: 20px 16px 80px; }
+      .ilan-grid { grid-template-columns: 1fr; }
+      
+      /* İlan formu */
+      .ilan-page { padding: 20px 16px 80px; }
       .frow { grid-template-columns: 1fr; }
       .cat-grid { grid-template-columns: repeat(2,1fr); }
+      
+      /* Teklif ver */
+      .teklif-page { grid-template-columns: 1fr; gap: 16px; }
+      .ilan-card { position: static; }
+      
+      /* Gelişmiş filtre */
+      #gelismis-filtre > div[style*="grid-template-columns:1fr 1fr 1fr"] { grid-template-columns: 1fr !important; }
+      
+      /* Detay sayfası */
+      #page-detay > div { padding: 20px 16px 80px !important; }
+      
+      /* Mesajlaşma */
+      #page-mesaj > div { height: calc(100vh - 62px); }
+      
+      /* Footer */
+      footer { padding: 18px 16px; flex-direction: column; gap: 8px; text-align: center; }
+      
+      /* CTA */
+      .cta-section { margin: 8px 16px 24px; padding: 20px; flex-direction: column; gap: 14px; }
+      .cta-section .btn-primary { margin-left: 0; width: 100%; text-align: center; }
+      
+      /* Güvenlik sayfası */
+      #page-guvenlik > div > div[style*="grid-template-columns:1fr 1fr"] { grid-template-columns: 1fr !important; }
+      
+      /* Butonlar */
+      .teklif-btn { padding: 6px 12px; font-size: 11px; }
+      
+      /* Popup'lar */
+      #puan-popup > div { width: 92% !important; padding: 24px 20px !important; }
+      #mesaj-iste-popup > div { width: 92% !important; }
     }
   </style>
 </head>
@@ -444,6 +486,10 @@
   <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()">
     <span></span><span></span><span></span>
   </button>
+  <div id="notif-wrap-mob" style="display:none;position:relative;cursor:pointer;align-items:center;margin-right:8px;" onclick="notifAc()">
+    <span style="font-size:22px;">🔔</span>
+    <span id="notif-badge-mob" style="display:none;position:absolute;top:-6px;right:-8px;background:#ef4444;color:#fff;font-size:11px;font-weight:800;padding:2px 6px;border-radius:999px;min-width:18px;text-align:center;line-height:1.4;"></span>
+  </div>
 </nav>
 
 <div class="mobile-menu" id="mobile-menu">
