@@ -429,7 +429,7 @@
   <ul class="nav-links">
     <li><a onclick="showPage('home')">İlanlar</a></li>
     <li><a onclick="showPage('nasil')">Nasıl çalışır?</a></li>
-    <li><a onclick="showPage('nasil')">Güvenlik</a></li>
+    <li><a onclick="showPage('guvenlik')">Güvenlik</a></li>
     <li><a onclick="showPage('profil')">Profilim</a></li>
   </ul>
   <div class="nav-right">
@@ -449,7 +449,7 @@
 <div class="mobile-menu" id="mobile-menu">
   <a onclick="showPage('home');closeMobileMenu()">İlanlar</a>
   <a onclick="showPage('nasil');closeMobileMenu()">Nasıl çalışır?</a>
-  <a onclick="showPage('nasil');closeMobileMenu()">Güvenlik</a>
+  <a onclick="showPage('guvenlik');closeMobileMenu()">Güvenlik</a>
   <a onclick="showPage('profil');closeMobileMenu()">Profilim</a>
   <div class="mob-btns">
     <button class="mob-btns mob-mode" onclick="toggleMode()">🌙 Gece / Gündüz modu</button>
@@ -677,6 +677,100 @@
         <button onclick="showPage('admin');adminYukle()" style="width:100%;padding:13px;border:1px solid var(--amber);border-radius:12px;background:var(--amber-bg);color:var(--amber);font-size:14px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;">🛡️ Admin Paneli</button>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- GÜVENLİK SAYFASI -->
+<div id="page-guvenlik" class="page">
+  <div style="max-width:800px;margin:0 auto;padding:60px 24px 80px;">
+    
+    <!-- Başlık -->
+    <div style="text-align:center;margin-bottom:56px;">
+      <div style="display:inline-flex;align-items:center;gap:8px;background:var(--green-bg);border:1px solid var(--green-border);border-radius:999px;padding:6px 16px;font-size:12px;font-weight:700;color:var(--green);margin-bottom:20px;">🛡️ Güvenli Platform</div>
+      <h1 style="font-family:'Nunito',sans-serif;font-size:40px;font-weight:900;letter-spacing:-1px;margin-bottom:16px;">Güvenliğin bizim için<br><span style="color:var(--blue)">öncelik</span></h1>
+      <p style="font-size:16px;color:var(--text2);max-width:500px;margin:0 auto;line-height:1.7;">arıyorum'da her işlem güvenli, her kullanıcı korumalı. İşte nasıl sağladığımız.</p>
+    </div>
+
+    <!-- Güvenlik kartları -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:40px;">
+      
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:28px;">
+        <div style="font-size:32px;margin-bottom:14px;">🔐</div>
+        <h3 style="font-family:'Nunito',sans-serif;font-size:18px;font-weight:800;margin-bottom:10px;">E-posta Doğrulama</h3>
+        <p style="font-size:14px;color:var(--text2);line-height:1.7;">Kayıt olan her kullanıcı e-posta adresiyle doğrulanır. Sahte hesaplar oluşturulamaz.</p>
+      </div>
+
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:28px;">
+        <div style="font-size:32px;margin-bottom:14px;">👨‍💼</div>
+        <h3 style="font-family:'Nunito',sans-serif;font-size:18px;font-weight:800;margin-bottom:10px;">Uzman Değerlendirmesi</h3>
+        <p style="font-size:14px;color:var(--text2);line-height:1.7;">10+ işlem yapmış güvenilir kullanıcılar, fiyatların gerçekçiliğini değerlendirir.</p>
+      </div>
+
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:28px;">
+        <div style="font-size:32px;margin-bottom:14px;">⭐</div>
+        <h3 style="font-family:'Nunito',sans-serif;font-size:18px;font-weight:800;margin-bottom:10px;">Puanlama Sistemi</h3>
+        <p style="font-size:14px;color:var(--text2);line-height:1.7;">Her işlem sonrası karşılıklı değerlendirme yapılır. Güvenilir kullanıcılar ön plana çıkar.</p>
+      </div>
+
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:28px;">
+        <div style="font-size:32px;margin-bottom:14px;">🚫</div>
+        <h3 style="font-family:'Nunito',sans-serif;font-size:18px;font-weight:800;margin-bottom:10px;">Engelleme & Şikayet</h3>
+        <p style="font-size:14px;color:var(--text2);line-height:1.7;">Rahatsız edici kullanıcıları anında engelleyebilirsiniz. Admin ekibi şikayetleri inceler.</p>
+      </div>
+
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:28px;">
+        <div style="font-size:32px;margin-bottom:14px;">🛡️</div>
+        <h3 style="font-family:'Nunito',sans-serif;font-size:18px;font-weight:800;margin-bottom:10px;">Admin Denetimi</h3>
+        <p style="font-size:14px;color:var(--text2);line-height:1.7;">Tüm ilanlar admin tarafından denetlenir. Sahte veya yanıltıcı ilanlar kaldırılır.</p>
+      </div>
+
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:28px;">
+        <div style="font-size:32px;margin-bottom:14px;">💬</div>
+        <h3 style="font-family:'Nunito',sans-serif;font-size:18px;font-weight:800;margin-bottom:10px;">Güvenli Mesajlaşma</h3>
+        <p style="font-size:14px;color:var(--text2);line-height:1.7;">Mesajlaşma isteği sistemi sayesinde istenmeyen mesajlar almazsınız.</p>
+      </div>
+
+    </div>
+
+    <!-- Rozet sistemi -->
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:32px;margin-bottom:32px;">
+      <h2 style="font-family:'Nunito',sans-serif;font-size:22px;font-weight:800;margin-bottom:20px;">🏅 Rozet Sistemi</h2>
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div style="display:flex;align-items:center;gap:14px;padding:12px;background:var(--bg3);border-radius:12px;">
+          <span style="font-size:20px;min-width:28px;">🆕</span>
+          <div><div style="font-size:14px;font-weight:700;">Yeni Üye</div><div style="font-size:12px;color:var(--text3);">0-2 işlem — Platforma yeni katılmış kullanıcı</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;padding:12px;background:var(--bg3);border-radius:12px;">
+          <span style="font-size:20px;min-width:28px;">🥉</span>
+          <div><div style="font-size:14px;font-weight:700;">Deneyimli</div><div style="font-size:12px;color:var(--text3);">3-9 işlem — Platformu aktif kullanan üye</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;padding:12px;background:var(--bg3);border-radius:12px;">
+          <span style="font-size:20px;min-width:28px;">🥈</span>
+          <div><div style="font-size:14px;font-weight:700;">Güvenilir — Uzman</div><div style="font-size:12px;color:var(--text3);">10-19 işlem — Fiyat değerlendirmesi yapabilir</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;padding:12px;background:var(--bg3);border-radius:12px;">
+          <span style="font-size:20px;min-width:28px;">🥇</span>
+          <div><div style="font-size:14px;font-weight:700;">Uzman</div><div style="font-size:12px;color:var(--text3);">20-49 işlem — Deneyimli piyasa bilgisine sahip</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;padding:12px;background:var(--bg3);border-radius:12px;">
+          <span style="font-size:20px;min-width:28px;">💎</span>
+          <div><div style="font-size:14px;font-weight:700;">Elit Uzman</div><div style="font-size:12px;color:var(--text3);">50+ işlem — Platformun en güvenilir üyeleri</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- İpuçları -->
+    <div style="background:linear-gradient(135deg,rgba(79,142,247,0.1),rgba(52,199,130,0.1));border:1px solid var(--blue-border);border-radius:20px;padding:32px;">
+      <h2 style="font-family:'Nunito',sans-serif;font-size:20px;font-weight:800;margin-bottom:16px;">💡 Güvenli alışveriş için öneriler</h2>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:10px;">
+        <li style="font-size:14px;color:var(--text2);display:flex;gap:10px;align-items:flex-start;"><span>✅</span>Karşı tarafın rozeti ve puanına dikkat edin</li>
+        <li style="font-size:14px;color:var(--text2);display:flex;gap:10px;align-items:flex-start;"><span>✅</span>Uzman değerlendirmesini mutlaka inceleyin</li>
+        <li style="font-size:14px;color:var(--text2);display:flex;gap:10px;align-items:flex-start;"><span>✅</span>Ödemeyi platform dışında yapmayın</li>
+        <li style="font-size:14px;color:var(--text2);display:flex;gap:10px;align-items:flex-start;"><span>✅</span>Şüpheli ilanları admin'e bildirin</li>
+        <li style="font-size:14px;color:var(--text2);display:flex;gap:10px;align-items:flex-start;"><span>✅</span>İlk buluşmayı güvenli bir yerde yapın</li>
+      </ul>
+    </div>
+
   </div>
 </div>
 
@@ -962,6 +1056,7 @@
       'ilan': 'İlan oluştur — arıyorum',
       'profil': 'Profilim — arıyorum',
       'nasil': 'Nasıl çalışır? — arıyorum',
+      'guvenlik': 'Güvenlik — arıyorum',
       'giris': 'Giriş yap — arıyorum',
       'kayit': 'Kayıt ol — arıyorum',
       'admin': 'Admin Paneli — arıyorum',
