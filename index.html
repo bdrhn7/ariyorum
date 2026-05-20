@@ -506,10 +506,10 @@
     </div>
   </section>
   <div class="stats-bar">
-    <div class="stat-item"><div class="stat-num">2.840</div><div class="stat-lbl">Aktif ilan</div></div>
-    <div class="stat-item"><div class="stat-num">18.500</div><div class="stat-lbl">Kayıtlı kullanıcı</div></div>
-    <div class="stat-item"><div class="stat-num">4.200</div><div class="stat-lbl">Tamamlanan işlem</div></div>
-    <div class="stat-item"><div class="stat-num">%98</div><div class="stat-lbl">Memnuniyet oranı</div></div>
+    <div class="stat-item"><div class="stat-num" id="stat-ilan">—</div><div class="stat-lbl">Aktif ilan</div></div>
+    <div class="stat-item"><div class="stat-num" id="stat-kullanici">—</div><div class="stat-lbl">Kayıtlı kullanıcı</div></div>
+    <div class="stat-item"><div class="stat-num" id="stat-teklif">—</div><div class="stat-lbl">Gelen teklif</div></div>
+    <div class="stat-item"><div class="stat-num" id="stat-sehir">—</div><div class="stat-lbl">Şehir</div></div>
   </div>
   <div class="main">
     <div class="section-head"><h2>Son ilanlar</h2><a class="see-all">Tümünü gör →</a></div>
@@ -523,7 +523,7 @@
     </div>
   </div>
   <div class="cta-section"><div><h3>Sen de ilan ver, teklifleri bekle</h3><p>Ücretsiz ilan aç — satıcılar sana ulaşsın, en iyisini seç</p></div><button class="btn-primary" onclick="ilanAc()" style="padding:13px 28px;font-size:14px;position:relative;z-index:1">+ İlan oluştur</button></div>
-  <footer><div class="logo"><div class="logo-main">arı<em>yorum</em></div><div class="logo-underline"><span class="u1"></span><span class="u2"></span></div><div class="logo-slogan">Sen ara, teklifler gelsin</div></div><p>© 2025 arıyorum. Tüm hakları saklıdır.</p></footer>
+  <footer><div class="logo"><div class="logo-main">arı<em>yorum</em></div><div class="logo-underline"><span class="u1"></span><span class="u2"></span></div><div class="logo-slogan">Sen ara, teklifler gelsin</div></div><p>© 2026 arıyorum. Tüm hakları saklıdır.</p></footer>
 </div>
 
 <!-- İLAN OLUŞTUR -->
@@ -1133,6 +1133,15 @@
   const db = firebase.firestore();
   window._auth = auth;
 
+  function zamanFarki(tarih) {
+    const fark = Math.floor((Date.now() - tarih.getTime()) / 1000);
+    if (fark < 60) return 'Az önce';
+    if (fark < 3600) return Math.floor(fark/60) + ' dk önce';
+    if (fark < 86400) return Math.floor(fark/3600) + ' sa önce';
+    if (fark < 604800) return Math.floor(fark/86400) + ' gün önce';
+    return tarih.toLocaleDateString('tr-TR', {day:'numeric', month:'short'});
+  }
+
   function formatBudget(val) {
     if (!val) return '—';
     const num = Number(String(val).replace(/[^0-9]/g, ''));
@@ -1252,8 +1261,13 @@
       grid.innerHTML = snap.docs.map(doc => {
         const d = doc.data();
         const cat = d.kategori || 'diger';
+        const tarih = d.createdAt?.toDate().toLocaleDateString('tr-TR', {day:'numeric', month:'short'}) || '';
+        const sure = d.createdAt ? zamanFarki(d.createdAt.toDate()) : '';
         return `<div class="card" data-cat="${cat}" onclick="ilanDetay('${doc.id}')" style="cursor:pointer;">
-          <div class="card-head"><span class="tag ${catRenk[cat]}">${catIsim[cat]}</span><span class="verified">✓ Onaylı</span></div>
+          <div class="card-head">
+            <span class="tag ${catRenk[cat]}">${catIsim[cat]}</span>
+            <span style="font-size:11px;color:var(--text3);">${sure}</span>
+          </div>
           <div class="card-title">${d.title}</div>
           <div class="card-budget">${formatBudget(d.budget)} ₺</div>
           <div class="card-foot">
@@ -2300,10 +2314,30 @@
   const urlParams = new URLSearchParams(window.location.search);
   const ilanParam = urlParams.get('ilan');
 
+  // Gerçek istatistikleri yükle
+  function statsYukle() {
+    Promise.all([
+      db.collection('ilanlar').get(),
+      db.collection('teklifler').get(),
+      db.collection('kullanicilar').get()
+    ]).then(([ilanSnap, teklifSnap, kullaniciSnap]) => {
+      // Aktif ilan
+      document.getElementById('stat-ilan').textContent = ilanSnap.size.toLocaleString('tr-TR');
+      // Teklifler
+      document.getElementById('stat-teklif').textContent = teklifSnap.size.toLocaleString('tr-TR');
+      // Kullanıcılar
+      document.getElementById('stat-kullanici').textContent = kullaniciSnap.size.toLocaleString('tr-TR');
+      // Şehir sayısı
+      const sehirler = new Set(ilanSnap.docs.map(d => d.data().city).filter(Boolean));
+      document.getElementById('stat-sehir').textContent = sehirler.size;
+    }).catch(() => {});
+  }
+
   // Sayfa yüklenince ilanları getir
   loadIlanlar().then(() => {
     if (ilanParam) ilanDetay(ilanParam);
   });
+  statsYukle();
 </script>
 </body>
 </html>
