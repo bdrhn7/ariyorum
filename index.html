@@ -1127,6 +1127,12 @@
     if (!user) { showPage('giris'); return; }
     showPage('ilan');
   }
+  function avatarSec(emoji) {
+    const user = window._currentUser;
+    if (!user) return;
+    document.getElementById('profil-avatar').textContent = emoji;
+    if (window._db) window._db.collection('kullanicilar').doc(user.uid).set({ avatar: emoji }, { merge: true });
+  }
   function showPopup(id) { document.getElementById('popup-' + id).classList.add('show'); }
   function closePopup(id) { document.getElementById('popup-' + id).classList.remove('show'); }
   function setSearchCat(cat, el) {
@@ -1292,6 +1298,7 @@
   const auth = firebase.auth();
   const db = firebase.firestore();
   window._auth = auth;
+  window._db = db;
 
   function zamanFarki(tarih) {
     const fark = Math.floor((Date.now() - tarih.getTime()) / 1000);
