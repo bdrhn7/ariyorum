@@ -913,8 +913,9 @@
 </div>
 
 <!-- AVATAR SEÇİM POPUP -->
-<div id="avatar-popup" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:999;align-items:center;justify-content:center;padding:20px;overflow-y:auto;">
-  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:28px;max-width:360px;width:90%;text-align:center;">
+<div id="avatar-popup" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:999;overflow-y:auto;">
+  <div style="min-height:100%;display:flex;align-items:center;justify-content:center;padding:20px;">
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:28px;max-width:360px;width:100%;text-align:center;">
     <h2 style="font-family:'Nunito',sans-serif;font-size:18px;font-weight:800;margin-bottom:16px;">Avatar Seç</h2>
     <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:20px;">
       <button onclick="avatarSeç('👤')" style="font-size:28px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:8px;cursor:pointer;">👤</button>
@@ -937,6 +938,7 @@
       <button onclick="avatarSeç('🦸‍♀️')" style="font-size:28px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:8px;cursor:pointer;">🦸‍♀️</button>
     </div>
     <button onclick="document.getElementById('avatar-popup').style.display='none'" style="padding:10px 24px;background:transparent;border:1px solid var(--border2);border-radius:10px;color:var(--text2);font-size:13px;cursor:pointer;font-family:'Nunito',sans-serif;">İptal</button>
+  </div>
   </div>
 </div>
 
