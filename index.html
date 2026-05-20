@@ -465,22 +465,35 @@
     <div class="hero-badge"><span class="dot"></span> Türkiye'nin ilk alıcı odaklı platformu</div>
     <h1>Sen ara,<br>teklifler <em>sana gelsin</em></h1>
     <p>İlan ver, satıcılar yarışsın. Araç, ev, elektronik — ne arıyorsan bütçeni belirt, teklifleri bekle.</p>
-    <div class="search-bar"><input type="text" id="search-input" placeholder="Ne arıyorsunuz? (örn: SUV, 3+1 daire, iPhone...)" oninput="aramaYap()"><button onclick="aramaYap()">Ara</button></div>
-    <div class="filter-cats">
+
+    <!-- ARAMA KUTUSU -->
+    <div style="max-width:620px;margin:0 auto 24px;position:relative;">
+      <div style="display:flex;background:var(--bg2);border:1.5px solid var(--border2);border-radius:16px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.2);transition:border-color 0.2s;" onfocusin="this.style.borderColor='var(--blue)'" onfocusout="this.style.borderColor='var(--border2)'">
+        <span style="padding:0 16px;display:flex;align-items:center;color:var(--text3);font-size:18px;">🔍</span>
+        <input type="text" id="search-input" placeholder="Ne arıyorsunuz? (SUV, 3+1 daire, iPhone...)" oninput="aramaYap()" style="flex:1;background:transparent;border:none;outline:none;font-size:15px;font-family:'Nunito',sans-serif;color:var(--text);padding:16px 0;">
+        <button onclick="aramaYap()" style="margin:8px;padding:10px 24px;background:var(--blue);border:none;border-radius:10px;color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;white-space:nowrap;">Ara</button>
+      </div>
+    </div>
+
+    <!-- KATEGORİLER -->
+    <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:12px;">
       <button class="filter-cat active" onclick="filterCat(this,'hepsi')">Tümü</button>
       <button class="filter-cat" onclick="filterCat(this,'arac')">🚗 Araç</button>
       <button class="filter-cat" onclick="filterCat(this,'emlak')">🏠 Emlak</button>
       <button class="filter-cat" onclick="filterCat(this,'elektronik')">📱 Elektronik</button>
       <button class="filter-cat" onclick="filterCat(this,'diger')">🛋 Diğer</button>
-      <button class="filter-cat" onclick="toggleGelFilter()" id="filtre-btn">⚙️ Filtrele</button>
+      <button onclick="toggleGelFilter()" id="filtre-btn" style="padding:8px 18px;border:1.5px solid var(--border2);border-radius:999px;font-size:13px;font-weight:700;color:var(--text2);background:transparent;cursor:pointer;font-family:'Nunito',sans-serif;display:flex;align-items:center;gap:6px;transition:all 0.2s;" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--text2)'">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
+        Filtrele
+      </button>
     </div>
 
     <!-- GELİŞMİŞ FİLTRELER -->
-    <div id="gelismis-filtre" style="display:none;margin-top:16px;background:var(--bg2);border:1px solid var(--border2);border-radius:14px;padding:18px;max-width:560px;margin-left:auto;margin-right:auto;">
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
+    <div id="gelismis-filtre" style="display:none;margin-top:12px;background:var(--bg2);border:1.5px solid var(--border2);border-radius:16px;padding:20px;max-width:620px;margin-left:auto;margin-right:auto;box-shadow:0 8px 32px rgba(0,0,0,0.2);">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:16px;">
         <div>
           <div style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:7px;">Min Bütçe</div>
-          <input id="f-min" type="number" class="finput" placeholder="0" style="padding:9px 12px;font-size:13px;" oninput="ilanFiltrele()">
+          <input id="f-min" type="number" class="finput" placeholder="0 ₺" style="padding:9px 12px;font-size:13px;" oninput="ilanFiltrele()">
         </div>
         <div>
           <div style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:7px;">Max Bütçe</div>
@@ -494,15 +507,15 @@
           </select>
         </div>
       </div>
-      <div style="margin-top:12px;">
-        <div style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:7px;">Sıralama</div>
+      <div style="margin-bottom:12px;">
+        <div style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px;">Sıralama</div>
         <div style="display:flex;gap:8px;">
-          <button class="filter-cat active" id="sort-yeni" onclick="sortBy('yeni',this)">En yeni</button>
-          <button class="filter-cat" id="sort-dusuk" onclick="sortBy('dusuk',this)">En düşük fiyat</button>
-          <button class="filter-cat" id="sort-yuksek" onclick="sortBy('yuksek',this)">En yüksek fiyat</button>
+          <button class="filter-cat active" id="sort-yeni" onclick="sortBy('yeni',this)">🕐 En yeni</button>
+          <button class="filter-cat" id="sort-dusuk" onclick="sortBy('dusuk',this)">⬇️ En düşük</button>
+          <button class="filter-cat" id="sort-yuksek" onclick="sortBy('yuksek',this)">⬆️ En yüksek</button>
         </div>
       </div>
-      <button onclick="filtreTemizle()" style="margin-top:12px;padding:7px 16px;border:1px solid var(--border2);border-radius:8px;background:transparent;color:var(--text3);font-size:12px;cursor:pointer;font-family:'Nunito',sans-serif;">✕ Filtreleri temizle</button>
+      <button onclick="filtreTemizle()" style="padding:7px 16px;border:1px solid var(--border2);border-radius:8px;background:transparent;color:var(--text3);font-size:12px;cursor:pointer;font-family:'Nunito',sans-serif;">✕ Filtreleri temizle</button>
     </div>
   </section>
   <div class="stats-bar">
