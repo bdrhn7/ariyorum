@@ -44,10 +44,13 @@
   <meta name="twitter:description" content="Ne arıyorsan ilan ver, satıcılar sana gelsin.">
 
   <!-- Mobil -->
+  <link rel="manifest" href="/manifest.json">
   <meta name="theme-color" content="#4f8ef7">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="arıyorum">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' rx='40' fill='%234f8ef7'/><text x='96' y='140' font-family='Arial' font-size='120' font-weight='800' fill='white' text-anchor='middle'>a</text></svg>">
   <title>arıyorum — Sen ara, teklifler gelsin</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔵</text></svg>">
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -2586,6 +2589,11 @@
   window.girisYap = girisYap;
   window.ilanAc = ilanAc;
   window.loadProfilIlanlar = loadProfilIlanlar;
+
+  // SERVICE WORKER
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js').catch(() => {});
+  }
 
   // URL parametresi kontrol et
   const urlParams = new URLSearchParams(window.location.search);
