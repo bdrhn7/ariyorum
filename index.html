@@ -608,6 +608,18 @@
       <div class="fgroup"><label class="flabel">Şehir</label><select class="fselect" id="f-city" onchange="updatePrev()"><option value="">Şehir seçiniz</option><option>Adana</option><option>Adıyaman</option><option>Afyonkarahisar</option><option>Ağrı</option><option>Amasya</option><option>Ankara</option><option>Antalya</option><option>Artvin</option><option>Aydın</option><option>Balıkesir</option><option>Bilecik</option><option>Bingöl</option><option>Bitlis</option><option>Bolu</option><option>Burdur</option><option>Bursa</option><option>Çanakkale</option><option>Çankırı</option><option>Çorum</option><option>Denizli</option><option>Diyarbakır</option><option>Edirne</option><option>Elazığ</option><option>Erzincan</option><option>Erzurum</option><option>Eskişehir</option><option selected>Gaziantep</option><option>Giresun</option><option>Gümüşhane</option><option>Hakkari</option><option>Hatay</option><option>Isparta</option><option>Mersin</option><option>İstanbul</option><option>İzmir</option><option>Kars</option><option>Kastamonu</option><option>Kayseri</option><option>Kırklareli</option><option>Kırşehir</option><option>Kocaeli</option><option>Konya</option><option>Kütahya</option><option>Malatya</option><option>Manisa</option><option>Kahramanmaraş</option><option>Mardin</option><option>Muğla</option><option>Muş</option><option>Nevşehir</option><option>Niğde</option><option>Ordu</option><option>Rize</option><option>Sakarya</option><option>Samsun</option><option>Siirt</option><option>Sinop</option><option>Sivas</option><option>Tekirdağ</option><option>Tokat</option><option>Trabzon</option><option>Tunceli</option><option>Şanlıurfa</option><option>Uşak</option><option>Van</option><option>Yozgat</option><option>Zonguldak</option><option>Aksaray</option><option>Bayburt</option><option>Karaman</option><option>Kırıkkale</option><option>Batman</option><option>Şırnak</option><option>Bartın</option><option>Ardahan</option><option>Iğdır</option><option>Yalova</option><option>Karabük</option><option>Kilis</option><option>Osmaniye</option><option>Düzce</option></select></div>
     </div>
     <div class="fgroup"><label class="flabel">Açıklama <span>(isteğe bağlı)</span></label><textarea class="ftextarea" placeholder="Aradığınız ürün hakkında detay verin."></textarea></div>
+    
+    <div class="fgroup">
+      <label class="flabel">Etiketler <span>(isteğe bağlı)</span></label>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;">
+        <button type="button" class="etiket-btn" onclick="etiketSec(this,'🔥 Acil')" style="padding:7px 14px;border:1.5px solid var(--border2);border-radius:999px;background:transparent;color:var(--text2);font-size:12px;font-weight:600;cursor:pointer;font-family:'Nunito',sans-serif;">🔥 Acil</button>
+        <button type="button" class="etiket-btn" onclick="etiketSec(this,'💰 Pazarlık var')" style="padding:7px 14px;border:1.5px solid var(--border2);border-radius:999px;background:transparent;color:var(--text2);font-size:12px;font-weight:600;cursor:pointer;font-family:'Nunito',sans-serif;">💰 Pazarlık var</button>
+        <button type="button" class="etiket-btn" onclick="etiketSec(this,'💵 Nakit')" style="padding:7px 14px;border:1.5px solid var(--border2);border-radius:999px;background:transparent;color:var(--text2);font-size:12px;font-weight:600;cursor:pointer;font-family:'Nunito',sans-serif;">💵 Nakit</button>
+        <button type="button" class="etiket-btn" onclick="etiketSec(this,'🆕 Sıfır')" style="padding:7px 14px;border:1.5px solid var(--border2);border-radius:999px;background:transparent;color:var(--text2);font-size:12px;font-weight:600;cursor:pointer;font-family:'Nunito',sans-serif;">🆕 Sıfır</button>
+        <button type="button" class="etiket-btn" onclick="etiketSec(this,'🔄 İkinci el')" style="padding:7px 14px;border:1.5px solid var(--border2);border-radius:999px;background:transparent;color:var(--text2);font-size:12px;font-weight:600;cursor:pointer;font-family:'Nunito',sans-serif;">🔄 İkinci el</button>
+        <button type="button" class="etiket-btn" onclick="etiketSec(this,'📦 Garantili')" style="padding:7px 14px;border:1.5px solid var(--border2);border-radius:999px;background:transparent;color:var(--text2);font-size:12px;font-weight:600;cursor:pointer;font-family:'Nunito',sans-serif;">📦 Garantili</button>
+      </div>
+    </div>
     <div class="divider"></div>
     <div class="sec-lbl">Güven rozetleri</div>
     <div class="trust-panel">
@@ -1390,6 +1402,7 @@
         loadProfilIlanlar(user.uid);
         notifYukle(user.uid);
         sohbetleriYukle(user.uid);
+        pushIzniIste();
 
         // Avatar yükle
         db.collection('kullanicilar').doc(user.uid).get().then(doc => {
@@ -1457,6 +1470,7 @@
 
     db.collection('ilanlar').add({
       title, budget, city, kategori, aciklama,
+      etiketler: window._seciliEtiketler || [],
       userId: user.uid,
       userEmail: user.email,
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
@@ -1504,6 +1518,7 @@
             <span style="font-size:11px;color:var(--text3);">${sure}</span>
           </div>
           <div class="card-title">${d.title}</div>
+          ${d.etiketler && d.etiketler.length > 0 ? `<div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px;">${d.etiketler.map(e => `<span style="font-size:10px;font-weight:700;padding:3px 8px;border-radius:999px;background:var(--blue-bg);color:var(--blue);">${e}</span>`).join('')}</div>` : ''}
           <div class="card-budget">${formatBudget(d.budget)} ₺</div>
           <div class="card-foot">
             <span class="card-loc">📍 ${d.city}</span>
@@ -1925,6 +1940,7 @@
           if (yeniSay > 0) {
             badge.style.display = 'inline-block';
             badge.textContent = yeniSay;
+            pushGonder('arıyorum 🔔', yeniSay + ' yeni teklif geldi!');
           } else {
             badge.style.display = 'none';
           }
@@ -2193,7 +2209,7 @@
     // Kullanıcının işlem sayısını kontrol et
     db.collection('puanlar').where('verenUserId','==',user.uid).get().then(snap => {
       const islemSayisi = snap.size;
-      const rozet = rozetHesapla(islemSayisi);
+      const rozet = rozetHesapla(islemSayisi, user.email);
       if (!rozet.uzman) {
         alert('Uzman oyu vermek için en az 10 işlem yapmanız gerekiyor!\n\nŞu anki işlem sayınız: ' + islemSayisi);
         return;
@@ -2599,7 +2615,42 @@
   const urlParams = new URLSearchParams(window.location.search);
   const ilanParam = urlParams.get('ilan');
 
-  // Gerçek istatistikleri yükle
+  // ETİKET SEÇİMİ
+  window._seciliEtiketler = [];
+  function etiketSec(btn, etiket) {
+    const idx = window._seciliEtiketler.indexOf(etiket);
+    if (idx > -1) {
+      window._seciliEtiketler.splice(idx, 1);
+      btn.style.background = 'transparent';
+      btn.style.color = 'var(--text2)';
+      btn.style.borderColor = 'var(--border2)';
+    } else {
+      window._seciliEtiketler.push(etiket);
+      btn.style.background = 'var(--blue-bg)';
+      btn.style.color = 'var(--blue)';
+      btn.style.borderColor = 'var(--blue-border)';
+    }
+  }
+  window.etiketSec = etiketSec;
+
+  // PUSH BİLDİRİM İZNİ İSTE
+  // PUSH BİLDİRİM
+  function pushIzniIste() {
+    if ('Notification' in window && Notification.permission === 'default') {
+      Notification.requestPermission().then(permission => {
+        if (permission === 'granted') {
+          new Notification('arıyorum 🎉', { body: 'Yeni teklif gelince haber vereceğiz!' });
+        }
+      });
+    }
+  }
+  function pushGonder(baslik, mesaj) {
+    if ('Notification' in window && Notification.permission === 'granted') {
+      new Notification(baslik, { body: mesaj });
+    }
+  }
+  window.pushGonder = pushGonder;
+
   function statsYukle() {
     Promise.all([
       db.collection('ilanlar').get(),
